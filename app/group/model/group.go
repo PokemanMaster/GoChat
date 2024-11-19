@@ -11,14 +11,18 @@ import (
 // GroupBasic 群模块
 type GroupBasic struct {
 	gorm.Model
-	Name    string
-	OwnerId uint
-	Img     string
-	Desc    string
+	Name           string `json:"name" gorm:"uniqueIndex:idx_name"` // 群组名称
+	Description    string `json:"description"`                      // 群组描述
+	OwnerID        uint   `json:"owner_id"`                         // 群主的用户ID
+	AvatarURL      string `json:"avatar_url"`                       // 群头像的URL
+	MaxMembers     uint   `json:"max_members" gorm:"default:60"`    // 群组成员上限
+	CurrentMembers uint   `json:"current_members"`                  // 当前群成员数
+	IsPublic       bool   `json:"is_public" gorm:"default:true"`    // 是否公开群组
+	IsActive       bool   `json:"is_active" gorm:"default:true"`    // 群组是否可用
 }
 
-// CreateCommunity 创建群
-func CreateCommunity(community GroupBasic) (int, string) {
+// CreateGroup 创建群
+func CreateGroup(group GroupBasic) (int, string) {
 	tx := db.DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -26,20 +30,20 @@ func CreateCommunity(community GroupBasic) (int, string) {
 		}
 	}()
 
-	if len(community.Name) == 0 {
+	if len(group.Name) == 0 {
 		return -1, "群名称不能为空"
 	}
-	if community.OwnerId == 0 {
+	if group.OwnerID == 0 {
 		return -1, "请先登录"
 	}
-	if err := db.DB.Create(&community).Error; err != nil {
+	if err := db.DB.Create(&group).Error; err != nil {
 		fmt.Println(err)
 		tx.Rollback()
 		return -1, "建群失败"
 	}
 	contact := model.Contact{}
-	contact.OwnerId = community.OwnerId
-	contact.TargetId = community.ID
+	contact.OwnerId = group.OwnerID
+	contact.TargetId = group.ID
 	contact.Type = 2 //群关系
 	if err := db.DB.Create(&contact).Error; err != nil {
 		tx.Rollback()
@@ -49,8 +53,8 @@ func CreateCommunity(community GroupBasic) (int, string) {
 	return 0, "建群成功"
 }
 
-// LoadCommunity 查找群
-func LoadCommunity(ownerId uint) ([]*GroupBasic, string) {
+// LoadGroup 查找群
+func LoadGroup(ownerId uint) ([]*GroupBasic, string) {
 	contacts := make([]model.Contact, 0)
 	objIds := make([]uint64, 0)
 	db.DB.Where("owner_id = ? and type = 2", ownerId).Find(&contacts)

@@ -15,7 +15,7 @@ import (
 func Router() *gin.Engine {
 	r := gin.Default()
 	r.Use(utils.CORS())
-	docs.SwaggerInfo.BasePath = "" // 设置 Swagger 文档的基础路径。
+	docs.SwaggerInfo.BasePath = ""
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	v1 := r.Group("/api/v1")
 	{
