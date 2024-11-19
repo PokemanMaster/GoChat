@@ -33,9 +33,9 @@ func Router() *gin.Engine {
 		v1.POST("/group/friend/lists", GroupApi.GroupFriendLists) // 群聊好友
 
 		// 好友
-		v1.POST("/friend/create", FriendApi.CreateFriend) // 添加好友
-		v1.POST("/friend/lists", FriendApi.FriendLists)   // 好友列表
-		v1.POST("/friend/search", FriendApi.SearchFriend) // 搜索好友
+		v1.POST("/friend/create", FriendApi.CreateFriend)  // 添加好友
+		v1.GET("/friend/lists/:id", FriendApi.FriendLists) // 好友列表
+		v1.POST("/friend/search", FriendApi.SearchFriend)  // 搜索好友
 
 		// 聊天
 		v1.GET("/chat/send", ChatApi.SendMessage)    // 发送且接收消息
