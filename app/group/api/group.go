@@ -35,7 +35,7 @@ func JoinGroup(ctx *gin.Context) {
 		ctx.JSON(400, resp.ErrorResponse(err))
 		logging.Info(err)
 	} else {
-		res := services.Join(ctx)
+		res := services.Join()
 		ctx.JSON(200, res)
 	}
 }

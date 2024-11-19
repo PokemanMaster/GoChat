@@ -51,20 +51,3 @@ func CreateGroup(group GroupBasic) (status int, message string) {
 	tx.Commit()
 	return 200, "创建成功"
 }
-
-// JoinGroup 加入群
-func JoinGroup(UserID uint, GroupID uint) (int, string) {
-	// 存储关系数据
-	contact := model.Contact{}
-	contact.OwnerID = UserID
-	contact.Type = 2
-
-	db.DB.Where("owner_id=? and target_id=? and type = 2 ", UserID, GroupID).Find(&contact)
-	if !contact.CreatedAt.IsZero() {
-		return 100, "已加过此群"
-	} else {
-		contact.TargetID = GroupID
-		db.DB.Create(&contact)
-		return 200, "加群成功"
-	}
-}

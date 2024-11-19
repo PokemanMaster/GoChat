@@ -1,11 +1,10 @@
 package service
 
 import (
-	"IMProject/app/group/model"
+	"IMProject/app/user/model"
+	"IMProject/common/db"
 	"IMProject/pkg/e"
-	"IMProject/pkg/utils"
 	"IMProject/resp"
-	"github.com/gin-gonic/gin"
 )
 
 type JoinGroupService struct {
@@ -14,21 +13,29 @@ type JoinGroupService struct {
 }
 
 // Join  加入群聊
-func (service *JoinGroupService) Join(c *gin.Context) *resp.Response {
+func (service *JoinGroupService) Join() *resp.Response {
 	// 获取数据
 	UserID := service.UserID
 	GroupID := service.GroupID
 
+	// 存储数据
+	var contact model.Contact
+	contact.OwnerID = UserID
+	contact.TargetID = GroupID
+	contact.Type = 2
+
 	// 逻辑处理
-	data, msg := model.JoinGroup(UserID, GroupID)
-	if data == 0 {
-		utils.RespOK(c.Writer, data, msg)
-	} else {
-		utils.RespFail(c.Writer, msg)
+	err := db.DB.Model(&contact).Create(&contact).Error
+	if err != nil {
+		return &resp.Response{
+			Status: e.ERROR_DATABASE,
+			Msg:    e.GetMsg(e.ERROR_DATABASE),
+		}
 	}
-	code := e.SUCCESS
+
+	// 返回数据
 	return &resp.Response{
-		Status: code,
-		Msg:    e.GetMsg(code),
+		Status: e.SUCCESS,
+		Msg:    e.GetMsg(e.SUCCESS),
 	}
 }
