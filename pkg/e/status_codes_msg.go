@@ -23,6 +23,7 @@ var MsgFlags = map[int]string{
 	ERROR_NOT_EXIST_PRODUCT: "产品不存在",
 	ERROR_NOT_EXIST_ADDRESS: "地址不存在",
 	ERROR_EXIST_FAVORITE:    "收藏已存在",
+	ERROR_NOT_EXIST_FRIEND:  "好友不存在",
 
 	ERROR_AUTH_TOKEN_FAIL:    "用户认证失败",
 	ERROR_AUTH_TOKEN_TIMEOUT: "用户认证超时",

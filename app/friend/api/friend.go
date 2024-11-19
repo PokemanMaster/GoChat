@@ -39,3 +39,16 @@ func SearchFriend(ctx *gin.Context) {
 		ctx.JSON(200, res)
 	}
 }
+
+// DeleteFriend 删除好友
+func DeleteFriend(ctx *gin.Context) {
+	services := service.DeleteFriendService{}
+	err := ctx.ShouldBind(&services)
+	if err != nil {
+		ctx.JSON(400, resp.ErrorResponse(err))
+		logging.Info(err)
+	} else {
+		res := services.Delete()
+		ctx.JSON(200, res)
+	}
+}
