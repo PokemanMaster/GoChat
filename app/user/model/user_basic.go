@@ -56,14 +56,6 @@ func FindUserByName(name string) UserBasic {
 	db.DB.Where("name = ?", name).First(&user)
 	return user
 }
-func FindUserByPhone(phone string) *gorm.DB {
-	user := UserBasic{}
-	return db.DB.Where("Phone = ?", phone).First(&user)
-}
-func FindUserByEmail(email string) *gorm.DB {
-	user := UserBasic{}
-	return db.DB.Where("email = ?", email).First(&user)
-}
 func CreateUser(user UserBasic) *gorm.DB {
 	return db.DB.Create(&user)
 }
@@ -100,16 +92,16 @@ func AddFriend(userId uint, targetName string) (int, string) {
 				}
 			}()
 			contact := Contact{}
-			contact.OwnerId = userId
-			contact.TargetId = targetUser.ID
+			contact.OwnerID = userId
+			contact.TargetID = targetUser.ID
 			contact.Type = 1
 			if err := db.DB.Create(&contact).Error; err != nil {
 				tx.Rollback()
 				return -1, "添加好友失败"
 			}
 			contact1 := Contact{}
-			contact1.OwnerId = targetUser.ID
-			contact1.TargetId = userId
+			contact1.OwnerID = targetUser.ID
+			contact1.TargetID = userId
 			contact1.Type = 1
 			if err := db.DB.Create(&contact1).Error; err != nil {
 				tx.Rollback()

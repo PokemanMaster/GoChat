@@ -3,9 +3,7 @@ package service
 import (
 	"IMProject/app/group/model"
 	"IMProject/pkg/e"
-	"IMProject/pkg/utils"
 	"IMProject/resp"
-	"github.com/gin-gonic/gin"
 )
 
 type CreateGroupService struct {
@@ -16,7 +14,7 @@ type CreateGroupService struct {
 }
 
 // Create 添加群聊
-func (service *CreateGroupService) Create(c *gin.Context) *resp.Response {
+func (service *CreateGroupService) Create() *resp.Response {
 	// 获取数据
 	name := service.Name
 	ownerId := service.OwnerID
@@ -32,10 +30,11 @@ func (service *CreateGroupService) Create(c *gin.Context) *resp.Response {
 
 	// 逻辑处理
 	code, msg := model.CreateGroup(group)
-	if code == 0 {
-		utils.RespOK(c.Writer, code, msg)
-	} else {
-		utils.RespFail(c.Writer, msg)
+	if code != 200 {
+		return &resp.Response{
+			Status: code,
+			Msg:    msg,
+		}
 	}
 
 	// 返回数据

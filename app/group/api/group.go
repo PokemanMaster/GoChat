@@ -15,7 +15,7 @@ func CreateGroup(ctx *gin.Context) {
 		ctx.JSON(400, resp.ErrorResponse(err))
 		logging.Info(err)
 	} else {
-		res := services.Create(ctx)
+		res := services.Create()
 		ctx.JSON(200, res)
 	}
 }
@@ -23,19 +23,13 @@ func CreateGroup(ctx *gin.Context) {
 // GroupLists 群聊列表
 func GroupLists(ctx *gin.Context) {
 	services := service.GroupListsService{}
-	err := ctx.ShouldBind(&services)
-	if err != nil {
-		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
-	} else {
-		res := services.List(ctx)
-		ctx.JSON(200, res)
-	}
+	res := services.List(ctx.Param("id"))
+	ctx.JSON(200, res)
 }
 
 // JoinGroup 加入群聊
 func JoinGroup(ctx *gin.Context) {
-	services := service.JoinGroupsService{}
+	services := service.JoinGroupService{}
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))

@@ -8,16 +8,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type JoinGroupsService struct {
-	UserId uint
-	ComId  string
+type JoinGroupService struct {
+	UserID  uint
+	GroupID uint
 }
 
 // Join  加入群聊
-func (service *JoinGroupsService) Join(c *gin.Context) *resp.Response {
-	userId := service.UserId
-	comId := service.ComId
-	data, msg := model.JoinGroup(userId, comId)
+func (service *JoinGroupService) Join(c *gin.Context) *resp.Response {
+	// 获取数据
+	UserID := service.UserID
+	GroupID := service.GroupID
+
+	// 逻辑处理
+	data, msg := model.JoinGroup(UserID, GroupID)
 	if data == 0 {
 		utils.RespOK(c.Writer, data, msg)
 	} else {

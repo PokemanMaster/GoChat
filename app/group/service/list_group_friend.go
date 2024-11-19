@@ -8,15 +8,15 @@ import (
 )
 
 type GroupFriendListsService struct {
-	TargetId uint
+	TargetID uint
 }
 
 // List 获取群聊里的好友列表
 func (service *GroupFriendListsService) List() resp.Response {
-	targetId := service.TargetId
+	TargetID := service.TargetID
 
 	var contact []model.Contact
-	db.DB.Where("target_id=? and type=2", targetId).Find(&contact)
+	db.DB.Where("target_id=? and type=2", TargetID).Find(&contact)
 
 	code := e.SUCCESS
 	return resp.Response{

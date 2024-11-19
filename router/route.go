@@ -28,7 +28,7 @@ func Router() *gin.Engine {
 
 		// 群聊
 		v1.POST("/group/create", GroupApi.CreateGroup)            // 创建群聊
-		v1.POST("/group/lists", GroupApi.GroupLists)              // 群聊列表
+		v1.GET("/group/lists/:id", GroupApi.GroupLists)           // 群聊列表
 		v1.POST("/group/join", GroupApi.JoinGroup)                // 加入群聊
 		v1.POST("/group/friend/lists", GroupApi.GroupFriendLists) // 群聊好友
 
