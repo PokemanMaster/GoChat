@@ -8,18 +8,16 @@ import (
 )
 
 type SearchFriendService struct {
-	UserID uint // 用户id
-	Name   uint // 好友名字
+	UserID     uint
+	FriendName string
 }
 
 // Search 查找好友
 func (service *SearchFriendService) Search() *resp.Response {
-	UserID := service.UserID
-
-	contacts := make([]model.Contact, 0)
-	list := make([]uint, 0)
-
-	err := db.DB.Model(&model.Contact{}).Where("owner_id = ? and type=1", UserID).Find(&contacts).Error
+	var contactIDs []uint
+	err := db.DB.Model(&model.Contact{}).
+		Where("owner_id = ? AND type = ?", service.UserID, 1).
+		Pluck("target_id", &contactIDs).Error
 	if err != nil {
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
@@ -27,12 +25,21 @@ func (service *SearchFriendService) Search() *resp.Response {
 		}
 	}
 
-	for _, contact := range contacts {
-		list = append(list, contact.TargetID)
+	// 如果没有好友，直接返回空结果
+	if len(contactIDs) == 0 {
+		return &resp.Response{
+			Status: e.SUCCESS,
+			Msg:    e.GetMsg(e.SUCCESS),
+			Data:   []model.UserBasic{},
+		}
 	}
 
-	users := make([]model.UserBasic, 0)
-	err = db.DB.Model(model.UserBasic{}).Where("id in ?", list).Find(&users).Error
+	var users []model.UserBasic
+	query := db.DB.Model(&model.UserBasic{}).
+		Where("id IN ?", contactIDs).
+		Where("name LIKE ?", "%"+service.FriendName+"%")
+
+	err = query.Find(&users).Error
 	if err != nil {
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
@@ -43,5 +50,6 @@ func (service *SearchFriendService) Search() *resp.Response {
 	return &resp.Response{
 		Status: e.SUCCESS,
 		Msg:    e.GetMsg(e.SUCCESS),
+		Data:   users,
 	}
 }
