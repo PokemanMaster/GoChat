@@ -8,7 +8,7 @@ import (
 
 func main() {
 	common.Init() // 初始化配置
-	fmt.Println("123123")
+	fmt.Println("12312123")
 	r := router.Router()  // 初始化路由
 	panic(r.Run(":9000")) // 初始化监听端口
 }
