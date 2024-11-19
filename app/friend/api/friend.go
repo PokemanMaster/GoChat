@@ -16,7 +16,7 @@ func CreateFriend(ctx *gin.Context) {
 		ctx.JSON(400, resp.ErrorResponse(err))
 		logging.Info(err)
 	} else {
-		res := services.Create(ctx)
+		res := services.Create()
 		ctx.JSON(200, res) // 解析数据JSON
 	}
 }
@@ -29,7 +29,7 @@ func FriendLists(ctx *gin.Context) {
 		ctx.JSON(400, resp.ErrorResponse(err))
 		logging.Info(err)
 	} else {
-		res := services.List(ctx)
+		res := services.List()
 		ctx.JSON(200, res) // 解析数据JSON
 	}
 }

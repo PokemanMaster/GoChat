@@ -11,7 +11,6 @@ type Contact struct {
 	OwnerID  uint //谁的关系信息
 	TargetID uint //对应的谁 /群 ID
 	Type     int  //对应的类型  1好友  2群
-	Desc     string
 }
 
 func (table *Contact) TableName() string {
