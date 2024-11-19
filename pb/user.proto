@@ -1,0 +1,37 @@
+syntax = "proto3";
+option go_package = "user/";
+package user;
+
+message UserRequest {
+  uint32 UserID = 1;                // 用户ID
+  string UserName = 2;              // 用户名
+  string PassWord = 3;              // 密码
+  string PasswordConfirm = 4;       // 确认密码
+  string Phone = 5;                 // 电话
+  string Icon = 6;                  // 用户头像
+  string Email = 7;                 // 电子邮件
+}
+
+message UserResponse{
+  int64 UserId=1;
+  string UserName=2;
+  string Identity=3;
+}
+
+message UserCommonResponse{
+  int64 Code=1;
+  string Msg=2;
+  string Data=3;
+}
+
+message UserDetailResponse{
+  int64 Code=1;
+  string Msg=2;
+  UserResponse UserDetail=3;
+}
+
+service UserService {
+  rpc Register(UserRequest) returns (UserCommonResponse);
+  rpc Login(UserRequest) returns (UserDetailResponse);
+  rpc Update(UserRequest) returns (UserDetailResponse);
+}
