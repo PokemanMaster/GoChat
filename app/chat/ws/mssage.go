@@ -14,8 +14,27 @@ import (
 	"time"
 )
 
-var clientMap = make(map[int64]*Node, 0) // 映射关系
-var rwLocker sync.RWMutex                // 读写锁
+var (
+	clientMap = make(map[int64]*Node) // 用户与节点映射
+	rwLocker  sync.RWMutex            // 读写锁
+
+	// Node 对象池
+	nodePool = sync.Pool{
+		New: func() interface{} {
+			return &Node{
+				DataQueue: make(chan []byte, 50),
+				GroupSets: set.New(set.ThreadSafe),
+			}
+		},
+	}
+
+	// Message 对象池
+	messagePool = sync.Pool{
+		New: func() interface{} {
+			return &Message{}
+		},
+	}
+)
 
 // Message 用户发送数据的格式
 type Message struct {
@@ -44,49 +63,48 @@ type Node struct {
 	GroupSets     set.Interface   //好友 / 群
 }
 
+// Chat 处理 WebSocket 连接
 func Chat(writer http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query()
-	Id := query.Get("userId")
-	userId, _ := strconv.ParseInt(Id, 10, 64)
-	isvalida := true
+	id := query.Get("userId")
+	userId, _ := strconv.ParseInt(id, 10, 64)
+	isValid := true
+
 	conn, err := (&websocket.Upgrader{
-		//token 校验
-		CheckOrigin: func(r *http.Request) bool {
-			return isvalida
-		},
+		CheckOrigin: func(r *http.Request) bool { return isValid },
 	}).Upgrade(writer, request, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	//2.获取conn
+
+	// 创建 Node 对象
 	currentTime := uint64(time.Now().Unix())
-	node := &Node{
-		Conn:          conn,
-		Addr:          conn.RemoteAddr().String(), //客户端地址
-		HeartbeatTime: currentTime,                //心跳时间
-		LoginTime:     currentTime,                //登录时间
-		DataQueue:     make(chan []byte, 50),
-		GroupSets:     set.New(set.ThreadSafe),
-	}
-	//3. 用户关系
-	//4. userid 跟 node绑定 并加锁
+	node := nodePool.Get().(*Node)
+	node.Conn = conn
+	node.Addr = conn.RemoteAddr().String()
+	node.HeartbeatTime = currentTime
+	node.LoginTime = currentTime
+
+	// 加入全局映射
 	rwLocker.Lock()
 	clientMap[userId] = node
 	rwLocker.Unlock()
-	//5.完成发送逻辑
+
+	// 启动消息处理逻辑
 	go sendProc(node)
-	//6.完成接受逻辑
 	go recvProc(node)
-	//7.加入在线用户到缓存
-	Muser.SetUserOnlineInfo("online_"+Id, []byte(node.Addr), time.Duration(viper.GetInt("timeout.RedisOnlineTime"))*time.Hour)
+
+	// 缓存用户在线信息
+	Muser.SetUserOnlineInfo("online_"+id, []byte(node.Addr), time.Duration(viper.GetInt("timeout.RedisOnlineTime"))*time.Hour)
 }
 
+// sendProc 处理消息发送
 func sendProc(node *Node) {
+	defer releaseNode(node) // 确保资源释放
 	for {
 		select {
 		case data := <-node.DataQueue:
-			fmt.Println("[ws]sendProc >>>> msg :", string(data))
 			err := node.Conn.WriteMessage(websocket.TextMessage, data)
 			if err != nil {
 				fmt.Println(err)
@@ -96,26 +114,49 @@ func sendProc(node *Node) {
 	}
 }
 
+// recvProc 处理消息接收
 func recvProc(node *Node) {
+	defer func() {
+		// 移除用户映射并释放资源
+		rwLocker.Lock()
+		for id, n := range clientMap {
+			if n == node {
+				delete(clientMap, id)
+			}
+		}
+		rwLocker.Unlock()
+		releaseNode(node)
+	}()
+
 	for {
 		_, data, err := node.Conn.ReadMessage()
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		msg := Message{}
-		err = json.Unmarshal(data, &msg)
+
+		msg := messagePool.Get().(*Message)
+		err = json.Unmarshal(data, msg)
 		if err != nil {
+			messagePool.Put(msg)
 			fmt.Println(err)
+			continue
 		}
-		//心跳检测 msg.Media == -1 || msg.Type == 3
+
+		// 心跳消息处理
 		if msg.Type == 3 {
-			currentTime := uint64(time.Now().Unix())
-			node.Heartbeat(currentTime)
+			node.HeartbeatTime = uint64(time.Now().Unix())
 		} else {
 			dispatch(data)
-			broadMsg(data)
-			fmt.Println("[ws] recvProc <<<<< ", string(data))
 		}
+		messagePool.Put(msg)
 	}
+}
+
+// releaseNode 释放 Node 对象
+func releaseNode(node *Node) {
+	node.Conn = nil
+	node.GroupSets.Clear()
+	close(node.DataQueue)
+	nodePool.Put(node)
 }

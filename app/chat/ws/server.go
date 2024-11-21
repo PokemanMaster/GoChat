@@ -10,22 +10,21 @@ import (
 	"time"
 )
 
-// 后端调度逻辑处理
+// dispatch 消息调度
 func dispatch(data []byte) {
-	// 反序列化
-	msg := Message{}
-	msg.CreateTime = uint64(time.Now().Unix())
-	err := json.Unmarshal(data, &msg)
+	msg := messagePool.Get().(*Message)
+	defer messagePool.Put(msg)
+
+	err := json.Unmarshal(data, msg)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 
 	switch msg.Type {
-	case 1: // 好友发送的消息内容
-		fmt.Println("dispatch  data :", string(data))
+	case 1: // 私信
 		sendMsg(msg.TargetId, data)
-	case 2: // 群发送的消息内容
+	case 2: // 群聊
 		sendGroupMsg(msg.TargetId, data)
 	}
 }
@@ -36,32 +35,32 @@ func sendMsg(userId int64, data []byte) {
 	node, ok := clientMap[userId]
 	rwLocker.RUnlock()
 
-	// 反序列化
-	msg := Message{}
-	err := json.Unmarshal(data, &msg)
+	// 反序列化消息
+	msg := messagePool.Get().(*Message) // 使用对象池
+	defer messagePool.Put(msg)          // 处理完成后放回池中
+
+	err := json.Unmarshal(data, msg)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("Message Unmarshal Error:", err)
 		return
 	}
 
-	// 检查用户是否在线
+	// 检查用户在线状态
 	ctx := context.Background()
 	targetIdStr := strconv.Itoa(int(userId))
 	userIdStr := strconv.Itoa(int(msg.UserId))
 	msg.CreateTime = uint64(time.Now().Unix())
-	online, err := cache.Red.Get(ctx, "online_"+userIdStr).Result() // 获取用户的在线状态
+	online, err := cache.Red.Get(ctx, "online_"+userIdStr).Result()
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("Redis Online Check Error:", err)
 	}
 
-	// 发送消息到在线用户:
-	if online != "" {
-		if ok { // 如果用户在线并且在 clientMap 中找到对应的 Node，则将消息通过 node.DataQueue 发送给用户。
-			node.DataQueue <- data
-		}
+	// 如果用户在线，发送消息到 WebSocket
+	if online != "" && ok {
+		node.DataQueue <- data
 	}
 
-	// 构建消息的存储顺序键
+	// 构建 Redis 的存储键
 	var key string
 	if userId > msg.UserId {
 		key = "msg_" + userIdStr + "_" + targetIdStr
@@ -69,17 +68,12 @@ func sendMsg(userId int64, data []byte) {
 		key = "msg_" + targetIdStr + "_" + userIdStr
 	}
 
-	// 然后将消息添加到 Redis 的有序集合中，以便以后检索历史消息
-	res, err := cache.Red.ZRevRange(ctx, key, 0, -1).Result() // 获取当前对话中的历史消息
+	// 存储消息到 Redis 的有序集合
+	score := float64(time.Now().UnixNano())
+	_, err = cache.Red.ZAdd(ctx, key, &redis.Z{Score: score, Member: data}).Result()
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("Redis ZAdd Error:", err)
 	}
-	score := float64(cap(res)) + 1
-	response, err := cache.Red.ZAdd(ctx, key, &redis.Z{score, data}).Result()
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	fmt.Println(response)
 }
 
 // 发送群消息

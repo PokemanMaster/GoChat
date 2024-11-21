@@ -26,17 +26,17 @@ func Router() *gin.Engine {
 		v1.GET("/user/lists", UserApi.UserLists)        // 用户列表
 		v1.GET("/user/:id", UserApi.UserInfo)           // 用户信息
 
-		// 群聊
-		v1.POST("/group/create", GroupApi.CreateGroup)            // 创建群聊
-		v1.GET("/group/lists/:id", GroupApi.GroupLists)           // 群聊列表
-		v1.POST("/group/join", GroupApi.JoinGroup)                // 加入群聊
-		v1.POST("/group/friend/lists", GroupApi.GroupFriendLists) // 群聊好友
-
 		// 好友
 		v1.POST("/friend/create", FriendApi.CreateFriend)  // 添加好友
 		v1.GET("/friend/lists/:id", FriendApi.FriendLists) // 好友列表
 		v1.POST("/friend/search", FriendApi.SearchFriend)  // 搜索好友
 		v1.POST("/friend/delete", FriendApi.DeleteFriend)  // 删除好友
+
+		// 群聊
+		v1.POST("/group/create", GroupApi.CreateGroup)            // 创建群聊
+		v1.GET("/group/lists/:id", GroupApi.GroupLists)           // 群聊列表
+		v1.POST("/group/join", GroupApi.JoinGroup)                // 加入群聊
+		v1.POST("/group/friend/lists", GroupApi.GroupFriendLists) // 群聊好友
 
 		// 聊天
 		v1.GET("/chat/send", ChatApi.SendMessage)    // 发送且接收消息
