@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+const maxMessageSize = 1024 // 设置每个消息的最大大小为 1KB
+
 // dispatch 消息调度
 func dispatch(data []byte) {
 	msg := messagePool.Get().(*Message)
@@ -23,9 +25,27 @@ func dispatch(data []byte) {
 
 	switch msg.Type {
 	case 1: // 私信
-		sendMsg(msg.TargetId, data)
+		sendSingleChunk(msg.TargetId, data)
 	case 2: // 群聊
 		sendGroupMsg(msg.TargetId, data)
+	}
+}
+
+// 分片发送消息
+func sendSingleChunk(userId int64, data []byte) {
+	if len(data) > maxMessageSize {
+		// 如果消息过大，进行分片发送
+		for i := 0; i < len(data); i += maxMessageSize {
+			end := i + maxMessageSize
+			if end > len(data) {
+				end = len(data)
+			}
+			chunk := data[i:end]
+			sendMsg(userId, chunk)
+		}
+	} else {
+		// 如果消息不大，直接发送
+		sendMsg(userId, data)
 	}
 }
 

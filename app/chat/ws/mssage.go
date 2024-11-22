@@ -18,8 +18,7 @@ var (
 	clientMap = make(map[int64]*Node) // 用户与节点映射
 	rwLocker  sync.RWMutex            // 读写锁
 
-	// Node 对象池
-	nodePool = sync.Pool{
+	nodePool = sync.Pool{ // Node 对象池
 		New: func() interface{} {
 			return &Node{
 				DataQueue: make(chan []byte, 50),
@@ -28,8 +27,7 @@ var (
 		},
 	}
 
-	// Message 对象池
-	messagePool = sync.Pool{
+	messagePool = sync.Pool{ // Message 对象池
 		New: func() interface{} {
 			return &Message{}
 		},
@@ -68,8 +66,8 @@ func Chat(writer http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query()
 	id := query.Get("userId")
 	userId, _ := strconv.ParseInt(id, 10, 64)
-	isValid := true
 
+	isValid := true
 	conn, err := (&websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool { return isValid },
 	}).Upgrade(writer, request, nil)
@@ -116,8 +114,8 @@ func sendProc(node *Node) {
 
 // recvProc 处理消息接收
 func recvProc(node *Node) {
+	// 移除用户映射并释放资源
 	defer func() {
-		// 移除用户映射并释放资源
 		rwLocker.Lock()
 		for id, n := range clientMap {
 			if n == node {
@@ -128,6 +126,9 @@ func recvProc(node *Node) {
 		releaseNode(node)
 	}()
 
+	// 用于存储分片消息的缓存
+	var messageCache = make(map[string][]byte)
+
 	for {
 		_, data, err := node.Conn.ReadMessage()
 		if err != nil {
@@ -135,20 +136,44 @@ func recvProc(node *Node) {
 			return
 		}
 
+		// 从消息中提取分片标识符
 		msg := messagePool.Get().(*Message)
 		err = json.Unmarshal(data, msg)
 		if err != nil {
 			messagePool.Put(msg)
-			fmt.Println(err)
 			continue
 		}
 
 		// 心跳消息处理
 		if msg.Type == 3 {
 			node.HeartbeatTime = uint64(time.Now().Unix())
+		} else if len(data) > maxMessageSize {
+			// 如果消息大于 maxMessageSize，则进行分片处理
+			// 假设消息的 Content 中有一个字段标识分片的唯一 ID 和当前分片的索引
+			// 比如：`messageId` 用于标识分片消息的整体，`chunkIndex` 用于标识每个分片的序号
+			// 这里我们将这个信息保存到缓存中，等所有分片接收完再处理
+
+			// 使用消息中的 `messageId` 来区分不同的分片
+			messageId := msg.Content // 假设 Content 字段是用于标识消息 ID
+			if _, exists := messageCache[messageId]; !exists {
+				messageCache[messageId] = []byte{} // 初始化缓存
+			}
+			// 将当前分片追加到缓存
+			messageCache[messageId] = append(messageCache[messageId], data...)
+
+			// 如果该消息已经接收完（假设可以通过 Content 的长度来判断是否是最后一个分片）
+			// 这里假设每个分片都有一个长度标识，我们用 `msg.Amount` 来表示
+			if len(messageCache[messageId]) == msg.Amount {
+				// 合并所有分片，进行处理
+				completeMessage := messageCache[messageId]
+				dispatch(completeMessage)       // 将合并后的完整消息分发处理
+				delete(messageCache, messageId) // 清理缓存
+			}
 		} else {
+			// 不是分片消息，直接分发处理
 			dispatch(data)
 		}
+
 		messagePool.Put(msg)
 	}
 }
