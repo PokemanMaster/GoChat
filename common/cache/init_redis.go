@@ -5,34 +5,36 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
+	"sync"
 )
 
 var Red *redis.Client
+var once sync.Once // 避免了重复创建连接
 
 const PublishKey = "websocket"
 
 // InitRedis 初始化 Redis
 func InitRedis() {
-	Red = redis.NewClient(&redis.Options{
-		Addr:         viper.GetString("redis.addr"),
-		Password:     viper.GetString("redis.password"),
-		DB:           viper.GetInt("redis.DB"),
-		PoolSize:     viper.GetInt("redis.poolSize"),
-		MinIdleConns: viper.GetInt("redis.minIdleConn"),
+	once.Do(func() {
+		Red = redis.NewClient(&redis.Options{
+			Addr:         viper.GetString("redis.addr"),
+			Password:     viper.GetString("redis.password"),
+			DB:           viper.GetInt("redis.DB"),
+			PoolSize:     viper.GetInt("redis.poolSize"),
+			MinIdleConns: viper.GetInt("redis.minIdleConn"),
+		})
+		pong, err := Red.Ping(context.Background()).Result()
+		if err != nil {
+			fmt.Println("Init Redis err", err)
+		} else {
+			fmt.Println("Init Redis", pong)
+		}
 	})
-	pong, err := Red.Ping(context.Background()).Result()
-	if err != nil {
-		fmt.Println("Init Redis err", err)
-	} else {
-		fmt.Println("Init Redis", pong)
-	}
 }
 
 // Publish 发布消息到Redis
 func Publish(ctx context.Context, channel string, msg string) error {
-	var err error
-	fmt.Println("Publish", msg)
-	err = Red.Publish(ctx, channel, msg).Err()
+	err := Red.Publish(ctx, channel, msg).Err()
 	if err != nil {
 		fmt.Println(err)
 	}
