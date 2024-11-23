@@ -7,6 +7,8 @@ import (
 	UserApi "IMProject/app/user/api"
 	"IMProject/pkg/docs"
 	"IMProject/pkg/utils"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -17,14 +19,18 @@ func Router() *gin.Engine {
 	r.Use(utils.CORS())
 	docs.SwaggerInfo.BasePath = ""
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	store, _ := redis.NewStore(10, "tcp", "47.113.104.184:6379", "123456", []byte("alkdnlakwdlawfhnolaqwfnlawm"))
+	r.Use(sessions.Sessions("mysession", store))
 	v1 := r.Group("/api/v1")
 	{
 		// 用户
-		v1.POST("/user/register", UserApi.UserRegister) // 用户注册
-		v1.POST("/user/login", UserApi.UserLogin)       // 用户登录
-		v1.PUT("/user/update", UserApi.UserUpdate)      // 更新用户
-		v1.GET("/user/lists", UserApi.UserLists)        // 用户列表
-		v1.GET("/user/:id", UserApi.UserInfo)           // 用户信息
+		v1.POST("/user/register", UserApi.UserRegister)     // 用户注册
+		v1.POST("/user/login", UserApi.UserLogin)           // 用户登录
+		v1.PUT("/user/update", UserApi.UserUpdate)          // 更新用户
+		v1.GET("/user/captcha/image", UserApi.CaptchaImage) // 验证码图片
+		v1.GET("/user/lists", UserApi.UserLists)            // 用户列表
+		v1.GET("/user/:id", UserApi.UserInfo)               // 用户信息
+		v1.POST("user/logout", UserApi.UserLogout)          // 用户登出
 
 		// 好友
 		v1.POST("/friend/create", FriendApi.CreateFriend)  // 添加好友

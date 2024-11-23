@@ -5,6 +5,8 @@ import (
 	"IMProject/pkg/e"
 	"IMProject/pkg/utils"
 	"IMProject/resp"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"strings"
 )
 
@@ -13,9 +15,10 @@ type UserLoginService struct {
 	Password string
 }
 
-func (service *UserLoginService) UserLogin() *resp.Response {
+func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
+
 	user := model.UserBasic{}
-	user.Name = strings.TrimSpace(service.UserName) // 去除多余的空格
+	user.Name = strings.TrimSpace(service.UserName)
 	password := service.Password
 
 	// 检查用户名和密码是否为空
@@ -60,6 +63,11 @@ func (service *UserLoginService) UserLogin() *resp.Response {
 			Msg:    e.GetMsg(e.ERROR_PASSWORD),
 		}
 	}
+
+	session := sessions.Default(ctx)
+	session.Options(sessions.Options{MaxAge: 3600 * 6})
+	session.Set("user_"+service.UserName, user)
+	session.Save()
 
 	// 成功返回用户数据
 	return &resp.Response{

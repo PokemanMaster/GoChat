@@ -28,7 +28,20 @@ func UserLogin(ctx *gin.Context) {
 		ctx.JSON(400, resp.ErrorResponse(err))
 		logging.Info(err)
 	} else {
-		res := services.UserLogin()
+		res := services.UserLogin(ctx)
+		ctx.JSON(200, res)
+	}
+}
+
+// UserLogout 用户登出接口
+func UserLogout(ctx *gin.Context) {
+	services := service.UserLogoutService{}
+	err := ctx.ShouldBind(&services)
+	if err != nil {
+		ctx.JSON(400, resp.ErrorResponse(err))
+		logging.Info(err)
+	} else {
+		res := services.UserLogout(ctx)
 		ctx.JSON(200, res)
 	}
 }
@@ -44,6 +57,13 @@ func UserUpdate(ctx *gin.Context) {
 		res := services.UserUpdate(ctx)
 		ctx.JSON(200, res)
 	}
+}
+
+// CaptchaImage 给用户返回base64码的图片
+func CaptchaImage(ctx *gin.Context) {
+	services := service.UserCategoryService{}
+	res := services.UserCategoryImages()
+	ctx.JSON(200, res)
 }
 
 // UserInfo 获取用户信息
