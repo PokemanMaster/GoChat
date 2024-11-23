@@ -3,7 +3,7 @@ package service
 import (
 	"IMProject/app/user/model"
 	"IMProject/pkg/e"
-	"IMProject/pkg/utils"
+	"IMProject/pkg/mid"
 	"IMProject/resp"
 	"fmt"
 	"math/rand"
@@ -58,7 +58,7 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 
 	// 加密密码
 	salt := fmt.Sprintf("%06d", rand.Int31())
-	user.PassWord = utils.MakePassword(password, salt)
+	user.PassWord = mid.MakePassword(password, salt)
 	user.Salt = salt
 	user.LoginTime = time.Now()
 	user.LoginOutTime = time.Now()

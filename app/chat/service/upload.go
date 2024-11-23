@@ -1,7 +1,8 @@
 package service
 
 import (
-	"IMProject/pkg/utils"
+	"IMProject/pkg/e"
+	"IMProject/resp"
 	"fmt"
 	"io"
 	"math/rand"
@@ -18,12 +19,12 @@ type UploadLocalService struct {
 }
 
 // UploadLocal 上传文件到本地
-func (service *UploadLocalService) UploadLocal(c *gin.Context) {
-	w := c.Writer
+func (service *UploadLocalService) UploadLocal(c *gin.Context) resp.Response {
+
 	req := c.Request
 	srcFile, head, err := req.FormFile("file")
 	if err != nil {
-		utils.RespFail(w, err.Error())
+		return resp.Response{}
 	}
 	suffix := ".png"
 	ofilName := head.Filename
@@ -34,23 +35,26 @@ func (service *UploadLocalService) UploadLocal(c *gin.Context) {
 	fileName := fmt.Sprintf("%d%04d%s", time.Now().Unix(), rand.Int31(), suffix)
 	dstFile, err := os.Create("./asset/upload/" + fileName)
 	if err != nil {
-		utils.RespFail(w, err.Error())
+		return resp.Response{}
 	}
 	_, err = io.Copy(dstFile, srcFile)
 	if err != nil {
-		utils.RespFail(w, err.Error())
+		return resp.Response{}
 	}
 	url := "./asset/upload/" + fileName
-	utils.RespOK(w, url, "发送图片成功")
+	return resp.Response{
+		Status: e.SUCCESS,
+		Msg:    e.GetMsg(e.SUCCESS),
+		Data:   url,
+	}
 }
 
 // UploadOOS 上传文件到阿里云服务
-func UploadOOS(c *gin.Context) {
-	w := c.Writer
+func UploadOOS(c *gin.Context) resp.Response {
 	req := c.Request
 	srcFile, head, err := req.FormFile("file")
 	if err != nil {
-		utils.RespFail(w, err.Error())
+		return resp.Response{}
 	}
 	suffix := ".png"
 	ofilName := head.Filename
@@ -82,5 +86,9 @@ func UploadOOS(c *gin.Context) {
 		os.Exit(-1)
 	}
 	url := "http://" + viper.GetString("oos.Bucket") + "." + viper.GetString("oos.EndPoint") + "/" + fileName
-	utils.RespOK(w, url, "发送图片成功")
+	return resp.Response{
+		Status: e.SUCCESS,
+		Msg:    e.GetMsg(e.SUCCESS),
+		Data:   url,
+	}
 }

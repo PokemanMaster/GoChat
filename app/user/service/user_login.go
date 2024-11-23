@@ -3,7 +3,7 @@ package service
 import (
 	"IMProject/app/user/model"
 	"IMProject/pkg/e"
-	"IMProject/pkg/utils"
+	"IMProject/pkg/mid"
 	"IMProject/resp"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -47,7 +47,7 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	}
 
 	// 验证密码
-	if !utils.ValidPassword(password, user.Salt, user.PassWord) {
+	if !mid.ValidPassword(password, user.Salt, user.PassWord) {
 		return &resp.Response{
 			Status: e.ERROR_PASSWORD,
 			Msg:    e.GetMsg(e.ERROR_PASSWORD),
@@ -55,7 +55,7 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	}
 
 	// 生成加密密码并再次查询确认
-	encryptedPwd := utils.MakePassword(password, user.Salt)
+	encryptedPwd := mid.MakePassword(password, user.Salt)
 	user = model.FindUserByNameAndPwd(user.Name, encryptedPwd)
 	if user.Name == "" {
 		return &resp.Response{

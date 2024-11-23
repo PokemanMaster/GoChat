@@ -7,7 +7,7 @@ import (
 	ProductApi "IMProject/app/product/api"
 	UserApi "IMProject/app/user/api"
 	"IMProject/pkg/docs"
-	"IMProject/pkg/utils"
+	"IMProject/pkg/mid"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
@@ -17,7 +17,7 @@ import (
 
 func Router() *gin.Engine {
 	r := gin.Default()
-	r.Use(utils.CORS())
+	r.Use(mid.CORS())
 	docs.SwaggerInfo.BasePath = ""
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	store, _ := redis.NewStore(10, "tcp", "47.113.104.184:6379", "123456", []byte("alkdnlakwdlawfhnolaqwfnlawm"))

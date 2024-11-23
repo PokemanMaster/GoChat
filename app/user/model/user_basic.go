@@ -2,7 +2,7 @@ package model
 
 import (
 	"IMProject/common/db"
-	utils2 "IMProject/pkg/utils"
+	utils2 "IMProject/pkg/mid"
 	"fmt"
 	"gorm.io/gorm"
 	"time"

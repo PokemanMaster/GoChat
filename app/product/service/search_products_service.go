@@ -5,7 +5,7 @@ import (
 	"IMProject/app/product/serializer"
 	"IMProject/pkg/e"
 	"IMProject/pkg/logging"
-	"IMProject/pkg/utils"
+	"IMProject/pkg/mid"
 	"IMProject/resp"
 )
 
@@ -17,7 +17,7 @@ type SearchProductsService struct {
 // Show 搜索商品
 func (service *SearchProductsService) Show() resp.Response {
 
-	validSearch, code, err := utils.ValidateSearchInput(service.Search)
+	validSearch, code, err := mid.ValidateSearchInput(service.Search)
 	if code != e.SUCCESS {
 		logging.Info(err)
 		return resp.Response{
