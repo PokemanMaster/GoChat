@@ -5,8 +5,10 @@ import (
 	MGroupBasic "IMProject/app/group/model"
 	MUserBasic "IMProject/app/user/model"
 	"IMProject/common/cache"
+	"IMProject/common/cache/rabbit"
 	"IMProject/common/db"
 	"IMProject/config"
+	"IMProject/pkg/mid"
 	"IMProject/pkg/utils"
 	"fmt"
 	"github.com/spf13/viper"
@@ -20,6 +22,19 @@ func Init() {
 	cache.InitRedis()   // 初始化 Redis
 	//pb.UserPB()        // 初始化 用户 pb
 	TimingCleanMysql() // 初始化 定时器
+
+	// 初始化布隆过滤器
+	mid.InitBloomFilter(10000, 3)
+	for i := 1; i <= 50; i++ {
+		itemID := fmt.Sprintf("%d", i)
+		mid.BloomFilterGlobal.Add(itemID)
+	}
+
+	// 初始化rabbit消息队列
+	rabbit.InitRabbitMQ()
+	//go dao.Consumer1()
+	//time.Sleep(2 * time.Second)
+	//go dao.Consumer2()
 }
 
 // TimingCleanMysql 初始化定时器，定时清理数据库的超时连接

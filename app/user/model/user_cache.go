@@ -9,5 +9,5 @@ import (
 
 func SetUserOnlineInfo(key string, val []byte, timeTTL time.Duration) {
 	ctx := context.Background()
-	cache.Red.Set(ctx, key, val, timeTTL)
+	cache.RC.Set(ctx, key, val, timeTTL)
 }

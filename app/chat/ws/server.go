@@ -70,7 +70,7 @@ func sendMsg(userId int64, data []byte) {
 	targetIdStr := strconv.Itoa(int(userId))
 	userIdStr := strconv.Itoa(int(msg.UserId))
 	msg.CreateTime = uint64(time.Now().Unix())
-	online, err := cache.Red.Get(ctx, "online_"+userIdStr).Result()
+	online, err := cache.RC.Get(ctx, "online_"+userIdStr).Result()
 	if err != nil {
 		fmt.Println("Redis Online Check Error:", err)
 	}
@@ -90,7 +90,7 @@ func sendMsg(userId int64, data []byte) {
 
 	// 存储消息到 Redis 的有序集合
 	score := float64(time.Now().UnixNano())
-	_, err = cache.Red.ZAdd(ctx, key, &redis.Z{Score: score, Member: data}).Result()
+	_, err = cache.RC.ZAdd(ctx, key, &redis.Z{Score: score, Member: data}).Result()
 	if err != nil {
 		fmt.Println("Redis ZAdd Error:", err)
 	}

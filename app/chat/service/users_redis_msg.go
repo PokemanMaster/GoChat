@@ -28,9 +28,9 @@ func GetMessage(userIdA int64, userIdB int64, start int64, end int64, isRev bool
 	var rels []string
 	var err error
 	if isRev { // key 从低到高
-		rels, err = cache.Red.ZRange(ctx, key, start, end).Result()
+		rels, err = cache.RC.ZRange(ctx, key, start, end).Result()
 	} else { // key 从高到低
-		rels, err = cache.Red.ZRevRange(ctx, key, start, end).Result()
+		rels, err = cache.RC.ZRevRange(ctx, key, start, end).Result()
 	}
 
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	ChatApi "IMProject/app/chat/api"
 	FriendApi "IMProject/app/friend/api"
 	GroupApi "IMProject/app/group/api"
+	ProductApi "IMProject/app/product/api"
 	UserApi "IMProject/app/user/api"
 	"IMProject/pkg/docs"
 	"IMProject/pkg/utils"
@@ -48,6 +49,15 @@ func Router() *gin.Engine {
 		v1.GET("/chat/send", ChatApi.SendMessage)    // 发送且接收消息
 		v1.POST("/chat/message", ChatApi.GetMessage) // 获取聊天历史消息
 		v1.POST("/attach/upload", ChatApi.Upload)    // 上传文件
+
+		v1.GET("/carousels", ProductApi.ListCarousels)             // 获取所有轮播图
+		v1.GET("/products/categories", ProductApi.ListCategories)  // 获取所有商品分类
+		v1.GET("/products", ProductApi.ListProducts)               // 获取所有商品详情
+		v1.GET("/products/:id", ProductApi.ShowProduct)            // 获取某个商品详情
+		v1.GET("/products/param", ProductApi.ListProductsParams)   // 获取所有商品参数
+		v1.GET("/products/:id/param", ProductApi.ShowProductParam) // 获取某个商品参数
+		v1.GET("/products/brand", ProductApi.ListProducts)         // 获取所有商品品牌
+		v1.POST("/searches", ProductApi.SearchProducts)            // 搜索商品
 	}
 	return r
 }

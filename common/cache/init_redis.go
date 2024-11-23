@@ -5,25 +5,34 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
+	"strconv"
 	"sync"
 )
 
-var Red *redis.Client
+var RC *redis.Client
 var once sync.Once // 避免了重复创建连接
 
-const PublishKey = "websocket"
+const (
+	// RankKey 每日排行
+	RankKey = "rank"
+	// ElectricalRank 家电排行
+	ElectricalRank = "elecRank"
+	// AccessoryRank 配件排行
+	AccessoryRank = "acceRank"
+	PublishKey    = "websocket"
+)
 
 // InitRedis 初始化 Redis
 func InitRedis() {
 	once.Do(func() {
-		Red = redis.NewClient(&redis.Options{
+		RC = redis.NewClient(&redis.Options{
 			Addr:         viper.GetString("redis.addr"),
 			Password:     viper.GetString("redis.password"),
 			DB:           viper.GetInt("redis.DB"),
 			PoolSize:     viper.GetInt("redis.poolSize"),
 			MinIdleConns: viper.GetInt("redis.minIdleConn"),
 		})
-		pong, err := Red.Ping(context.Background()).Result()
+		pong, err := RC.Ping(context.Background()).Result()
 		if err != nil {
 			fmt.Println("Init Redis err", err)
 		} else {
@@ -32,9 +41,14 @@ func InitRedis() {
 	})
 }
 
+// ProductViewKey 商品点击数的key
+func ProductViewKey(id uint) string {
+	return fmt.Sprintf("view:product:%s", strconv.Itoa(int(id)))
+}
+
 // Publish 发布消息到Redis
 func Publish(ctx context.Context, channel string, msg string) error {
-	err := Red.Publish(ctx, channel, msg).Err()
+	err := RC.Publish(ctx, channel, msg).Err()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -43,7 +57,7 @@ func Publish(ctx context.Context, channel string, msg string) error {
 
 // Subscribe 订阅Redis消息
 func Subscribe(ctx context.Context, channel string) (string, error) {
-	sub := Red.Subscribe(ctx, channel)
+	sub := RC.Subscribe(ctx, channel)
 	fmt.Println("Subscribe", ctx)
 	msg, err := sub.ReceiveMessage(ctx)
 	if err != nil {

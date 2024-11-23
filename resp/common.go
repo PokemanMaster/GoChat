@@ -1,5 +1,7 @@
 package resp
 
+import "log"
+
 // Response 基础序列化器
 type Response struct {
 	Status int         `json:"status"`
@@ -35,5 +37,22 @@ func BuildListResponse(items interface{}, total uint) Response {
 			Items: items,
 			Total: total,
 		},
+	}
+}
+
+// BuildListsResponse 不带有总数的列表构建器
+func BuildListsResponse(items interface{}) Response {
+	return Response{
+		Status: 200,
+		Msg:    "ok",
+		Data: DataList{
+			Items: items,
+		},
+	}
+}
+
+func FailOnError(err error, msg string) {
+	if err != nil {
+		log.Panicf("%s: %s", msg, err)
 	}
 }

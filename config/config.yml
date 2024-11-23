@@ -21,6 +21,12 @@ redis:
   poolSize: 30
   minIdleConn: 30
 
+rabbit:
+  driverName : amqp
+  userName : guest
+  password: guest
+  address: 47.113.104.184:5672
+
 oss:
   Endpoint: "oss-cn-hangzhou.aliyuncs.com"
   AccessKeyId: "LTAI5tNCXPJwS3MstKoKgixh"
