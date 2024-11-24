@@ -1,6 +1,9 @@
 package resp
 
-import "log"
+import (
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"log"
+)
 
 // Response 基础序列化器
 type Response struct {
@@ -10,8 +13,8 @@ type Response struct {
 	Error  string      `json:"error"`
 }
 
-// DataList 带有总数的Data结构
-type DataList struct {
+// DataTotal 带有总数的Data结构
+type DataTotal struct {
 	Items interface{} `json:"items"`
 	Total uint        `json:"total"`
 }
@@ -28,25 +31,14 @@ type TrackedErrorResponse struct {
 	TrackID string `json:"track_id"`
 }
 
-// BuildListResponse 带有总数的列表构建器
-func BuildListResponse(items interface{}, total uint) Response {
+// BuildResponseTotal 带有总数的列表构建器
+func BuildResponseTotal(items interface{}, total uint) Response {
 	return Response{
-		Status: 200,
-		Msg:    "ok",
-		Data: DataList{
+		Status: e.SUCCESS,
+		Msg:    e.GetMsg(e.SUCCESS),
+		Data: DataTotal{
 			Items: items,
 			Total: total,
-		},
-	}
-}
-
-// BuildListsResponse 不带有总数的列表构建器
-func BuildListsResponse(items interface{}) Response {
-	return Response{
-		Status: 200,
-		Msg:    "ok",
-		Data: DataList{
-			Items: items,
 		},
 	}
 }

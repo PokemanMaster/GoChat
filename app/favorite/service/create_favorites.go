@@ -2,14 +2,14 @@ package service
 
 import (
 	"context"
-	"encoding/json"
+	"errors"
 	"github.com/PokemanMaster/GoChat/app/favorite/model"
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
 	"github.com/PokemanMaster/GoChat/resp"
-	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 
 	"strconv"
 	"time"
@@ -23,8 +23,20 @@ type CreateFavoriteService struct {
 
 func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response {
 	// 检查收藏是否存在
-	favorite, code := model.ShowFavorite(service.UserID, service.ProductID)
-	if code != e.ERROR_NOT_EXIST_FAVORITE {
+	var favorite model.Favorite
+	err := db.DB.Where("user_id = ? AND product_id = ?", service.UserID, service.ProductID).First(&favorite).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			zap.L().Info("favorite不存在", zap.String("app.favorite.service.create_favorites", ""))
+		} else {
+			zap.L().Info("数据查询失败", zap.String("app.favorite.service.create_favorites", err.Error()))
+			return &resp.Response{
+				Status: e.ERROR_DATABASE,
+				Msg:    e.GetMsg(e.ERROR_DATABASE),
+			}
+		}
+	} else {
+		zap.L().Info("favorite已存在", zap.String("app.favorite.service.create_favorites", ""))
 		return &resp.Response{
 			Status: e.ERROR_EXIST_FAVORITE,
 			Msg:    e.GetMsg(e.ERROR_EXIST_FAVORITE),
@@ -35,64 +47,44 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 	favorite.UserID = service.UserID
 	favorite.ProductID = service.ProductID
 	if err := db.DB.Create(&favorite).Error; err != nil {
-		zap.L().Error("favorite 数据库创建/更新失败", zap.String("app.favorite.service", "create_favorites.go"))
+		zap.L().Error("favorite 数据库创建/更新失败", zap.String("app.favorite.service.create_favorites", ""))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(code),
+			Msg:    e.GetMsg(e.ERROR_DATABASE),
 		}
 	}
 
-	// 更新缓存
+	// redis key
 	favoriteRedisKey := "ShowFavorite_" + strconv.Itoa(int(service.UserID))
 
-	// 获取现有的收藏 JSON 数组
-	existingFavoritesJSON, err := cache.RC.Get(ctx, favoriteRedisKey).Result()
-	if err != nil && err != redis.Nil {
-		zap.L().Error("从缓存获取收藏记录失败", zap.String("app.favorite.service", "create_favorites.go"))
-		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
-		}
-	}
-
-	// 反序列化现有的收藏数据
-	var favorites []model.Favorite
-	if existingFavoritesJSON != "" {
-		if err := json.Unmarshal([]byte(existingFavoritesJSON), &favorites); err != nil {
-			zap.L().Error("反序列化收藏记录失败", zap.String("app.favorite.service", "create_favorites.go"))
-			return &resp.Response{
-				Status: e.ERROR_DATABASE,
-				Msg:    e.GetMsg(e.ERROR_DATABASE),
-			}
-		}
-	}
-
-	// 将新收藏追加到数组
-	favorites = append(favorites, favorite)
-
-	// 序列化更新后的收藏数组
-	updatedFavoritesJSON, err := json.Marshal(favorites)
+	// 删除缓存
+	err = cache.RC.Del(ctx, favoriteRedisKey).Err()
 	if err != nil {
-		zap.L().Error("序列化收藏记录失败", zap.String("app.favorite.service", "create_favorites.go"))
+		zap.L().Error("删除缓存失败", zap.String("app.favorite.service.create_favorites", ""))
+	}
+
+	// 更新数据库
+	favorite.UserID = service.UserID
+	favorite.ProductID = service.ProductID
+	if err = db.DB.Create(&favorite).Error; err != nil {
+		zap.L().Error("favorite 数据库创建失败", zap.String("app.favorite.service.create_favorites", ""))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
 		}
 	}
 
-	// 将更新后的数据保存到 Redis
-	err = cache.RC.Set(ctx, favoriteRedisKey, updatedFavoritesJSON, 24*time.Hour).Err()
-	if err != nil {
-		zap.L().Error("favorite 缓存更新失败", zap.String("app.favorite.service", "create_favorites.go"))
-		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+	// 删除缓存
+	go func() {
+		time.Sleep(500 * time.Millisecond)
+		err = cache.RC.Del(ctx, favoriteRedisKey).Err()
+		if err != nil {
+			zap.L().Error("延迟删除缓存失败", zap.String("app.favorite.service.create_favorites", ""))
 		}
-	}
+	}()
 
-	code = e.SUCCESS
 	return &resp.Response{
-		Status: code,
-		Msg:    e.GetMsg(code),
+		Status: e.SUCCESS,
+		Msg:    e.GetMsg(e.SUCCESS),
 	}
 }

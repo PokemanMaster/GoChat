@@ -8,15 +8,14 @@ import (
 
 // Favorite 收藏序列化器
 type Favorite struct {
-	UserID    uint `json:"user_id"`
-	ProductID uint `json:"id"`
-
-	Title    string  `json:"title"`
-	Images   string  `json:"images"`
-	Price    float64 `json:"price"`
-	Param    string  `json:"param"`
-	Saleable bool    `json:"saleable"`
-	Valid    bool    `json:"valid"`
+	UserID    uint    `json:"user_id"`
+	ProductID uint    `json:"id"`
+	Title     string  `json:"title"`
+	Images    string  `json:"images"`
+	Price     float64 `json:"price"`
+	Param     string  `json:"param"`
+	Saleable  bool    `json:"saleable"`
+	Valid     bool    `json:"valid"`
 }
 
 // BuildFavorite 序列化收藏夹
