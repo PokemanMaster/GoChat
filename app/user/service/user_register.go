@@ -77,16 +77,12 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 
 	// 加密密码 并 创建用户
 	Salt := fmt.Sprintf("%06d", rand.Int31())
-	user = model.User{
-		UserName:      UserName,
-		Password:      mid.MakePassword(Password, Salt),
-		Salt:          Salt,
-		LevelID:       1,
-		Money:         0,
-		LoginTime:     time.Now(),
-		LoginOutTime:  time.Now(),
-		HeartbeatTime: time.Now(),
-	}
+	user.UserName = UserName
+	user.Password = mid.MakePassword(Password, Salt)
+	user.Salt = Salt
+	user.LevelID = 1
+	user.Money = 0
+	user.HeartbeatTime = time.Now()
 	err = db.DB.Create(&user).Error
 	if err != nil {
 		zap.L().Error("创建用户失败", zap.String("app.user.service.user_register", err.Error()))

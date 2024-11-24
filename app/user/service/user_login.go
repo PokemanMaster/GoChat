@@ -2,12 +2,15 @@ package service
 
 import (
 	"github.com/PokemanMaster/GoChat/app/user/model"
+	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
 	"github.com/PokemanMaster/GoChat/pkg/mid"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"strings"
+	"time"
 )
 
 type UserLoginService struct {
@@ -16,21 +19,22 @@ type UserLoginService struct {
 }
 
 func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
-
 	user := model.User{}
-	user.UserName = strings.TrimSpace(service.UserName)
-	password := service.Password
+	UserName := strings.TrimSpace(service.UserName)
+	Password := strings.TrimSpace(service.Password)
 
-	// 检查用户名和密码是否为空
-	if user.UserName == "" {
+	// 检查用户名是否为空
+	if UserName == "" {
+		zap.L().Info("用户名不能为空", zap.String("app.user.service.user_login", ""))
 		return &resp.Response{
 			Status: e.ERROR_ACCOUNT_NOT_EMPTY,
 			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EMPTY),
 		}
 	}
 
-	// 检查用户名和密码是否为空
-	if password == "" {
+	// 检查密码是否为空
+	if Password == "" {
+		zap.L().Info("密码不能为空", zap.String("app.user.service.user_login", ""))
 		return &resp.Response{
 			Status: e.ERROR_PASSWORD_NOT_EMPTY,
 			Msg:    e.GetMsg(e.ERROR_PASSWORD_NOT_EMPTY),
@@ -38,8 +42,9 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	}
 
 	// 根据用户名查找用户
-	user = model.FindUserByName(user.UserName)
-	if user.UserName == "" {
+	err := db.DB.Where("user_name = ?", UserName).First(&user).Error
+	if err != nil {
+		zap.L().Info("账号错误", zap.String("app.user.service.user_login", ""))
 		return &resp.Response{
 			Status: e.ERROR_ACCOUNT_NOT_EXIST,
 			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EXIST),
@@ -47,26 +52,28 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	}
 
 	// 验证密码
-	if !mid.ValidPassword(password, user.Salt, user.Password) {
+	if !mid.ValidPassword(Password, user.Salt, user.Password) {
+		zap.L().Info("密码错误", zap.String("app.user.service.user_login", ""))
 		return &resp.Response{
 			Status: e.ERROR_PASSWORD,
 			Msg:    e.GetMsg(e.ERROR_PASSWORD),
 		}
 	}
 
-	// 生成加密密码并再次查询确认
-	encryptedPwd := mid.MakePassword(password, user.Salt)
-	user = model.FindUserByNameAndPwd(user.UserName, encryptedPwd)
-	if user.UserName == "" {
+	// 更新用户登录时间
+	user.LoginTime = time.Now()
+	if err = db.DB.Save(&user).Error; err != nil {
+		zap.L().Error("更新用户失败", zap.String("app.user.service.user_login", err.Error()))
 		return &resp.Response{
-			Status: e.ERROR_PASSWORD,
-			Msg:    e.GetMsg(e.ERROR_PASSWORD),
+			Status: e.ERROR_DATABASE,
+			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Error:  err.Error(),
 		}
 	}
 
 	session := sessions.Default(ctx)
 	session.Options(sessions.Options{MaxAge: 3600 * 6})
-	session.Set("user_"+service.UserName, user)
+	session.Set("user_"+UserName, user)
 	session.Save()
 
 	// 成功返回用户数据
