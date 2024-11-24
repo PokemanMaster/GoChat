@@ -27,19 +27,18 @@ func Router() *gin.Engine {
 	v1 := r.Group("/api/v1")
 	{
 		// 用户
-		v1.POST("/user/register", UserApi.UserRegister)     // 用户注册
-		v1.POST("/user/login", UserApi.UserLogin)           // 用户登录
-		v1.PUT("/user/update", UserApi.UserUpdate)          // 更新用户
-		v1.GET("/user/captcha/image", UserApi.CaptchaImage) // 验证码图片
-		v1.GET("/user/lists", UserApi.UserLists)            // 用户列表
-		v1.GET("/user/:id", UserApi.UserInfo)               // 用户信息
-		v1.POST("user/logout", UserApi.UserLogout)          // 用户登出
+		v1.GET("/captcha/image", UserApi.CaptchaImage)  // 验证码图片
+		v1.POST("/user/register", UserApi.UserRegister) // 用户注册
+		v1.POST("/user/login", UserApi.UserLogin)       // 用户登录
+		v1.POST("user/logout", UserApi.UserLogout)      // 用户登出
+		v1.PUT("/user", UserApi.UserUpdate)             // 更新用户
+		v1.GET("/user/:id", UserApi.UserInfo)           // 用户信息
 
 		// 好友
-		v1.POST("/friend/create", FriendApi.CreateFriend)  // 添加好友
+		v1.POST("/friend", FriendApi.CreateFriend)         // 添加好友
 		v1.GET("/friend/lists/:id", FriendApi.FriendLists) // 好友列表
 		v1.POST("/friend/search", FriendApi.SearchFriend)  // 搜索好友
-		v1.POST("/friend/delete", FriendApi.DeleteFriend)  // 删除好友
+		v1.DELETE("/friend", FriendApi.DeleteFriend)       // 删除好友
 
 		// 群聊
 		v1.POST("/group/create", GroupApi.CreateGroup)            // 创建群聊
@@ -62,6 +61,7 @@ func Router() *gin.Engine {
 		v1.GET("/products/brand", ProductApi.ListProducts)         // 获取所有商品品牌
 		v1.POST("/searches", ProductApi.SearchProducts)            // 搜索商品
 
+		// 商品排行榜
 		v1.GET("rankings", ProductApi.ListRanking)          // 排行榜/热门
 		v1.GET("rankings/elec", ProductApi.ListElecRanking) // 排行榜/家电排行
 		v1.GET("rankings/acce", ProductApi.ListAcceRanking) // 排行榜/配件排行
@@ -82,7 +82,7 @@ func Router() *gin.Engine {
 		v1.GET("orders/:num", OrderApi.ShowOrder)      // 获取订单
 		v1.GET("user/:id/orders", OrderApi.ListOrders) // 获取某个用户所有订单
 
-		// 订单
+		// 支付
 		v1.POST("pay", PaymentApi.CreatePay) // 支付
 	}
 	return r

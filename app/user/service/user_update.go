@@ -1,58 +1,44 @@
 package service
 
 import (
-	"fmt"
 	"github.com/PokemanMaster/GoChat/app/user/model"
 	"github.com/PokemanMaster/GoChat/pkg/e"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/asaskevich/govalidator"
-	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // UserUpdateService 前端请求过来的数据
 type UserUpdateService struct {
-	ID       uint
-	Name     string
-	Password string
-	Phone    string
-	Icon     string
-	Email    string
+	ID        uint
+	UserName  string
+	Password  string
+	Telephone string
+	Avatar    string
+	Email     string
 }
 
-// UserUpdate
-// @Summary 修改用户
-// @Tags 用户模块
-// @param id formData string false "id"
-// @param name formData string false "name"
-// @param password formData string false "password"
-// @param phone formData string false "phone"
-// @param email formData string false "email"
-// @Success 200 {string} json{"code","message"}
-// @Router /user/updateUser [post]
-func (service *UserUpdateService) UserUpdate(c *gin.Context) *resp.Response {
+func (service *UserUpdateService) UserUpdate() *resp.Response {
 	user := model.User{}
 	user.ID = service.ID
-	user.UserName = service.Name
+	user.UserName = service.UserName
 	user.Password = service.Password
-	user.Telephone = service.Phone
-	user.Avatar = service.Icon
+	user.Telephone = service.Telephone
+	user.Avatar = service.Avatar
 	user.Email = service.Email
 
-	code := e.SUCCESS
-
+	// 更新用户
 	_, err := govalidator.ValidateStruct(user)
 	if err != nil {
-		fmt.Println(err)
-		code = e.ERROR_MATCHED_USERNAME
+		zap.L().Error("更新用户失败", zap.String("app.user.service.user_update", err.Error()))
 		return &resp.Response{
-			Status: code,
-			Msg:    e.GetMsg(code),
+			Status: e.ERROR_MATCHED_USERNAME,
+			Msg:    e.GetMsg(e.ERROR_MATCHED_USERNAME),
 		}
-	} else {
+	}
 
-		return &resp.Response{
-			Status: code,
-			Msg:    e.GetMsg(code),
-		}
+	return &resp.Response{
+		Status: e.SUCCESS,
+		Msg:    e.GetMsg(e.SUCCESS),
 	}
 }
