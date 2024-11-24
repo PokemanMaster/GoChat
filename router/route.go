@@ -36,8 +36,8 @@ func Router() *gin.Engine {
 
 		// 好友
 		v1.POST("/friend", FriendApi.CreateFriend)         // 添加好友
-		v1.GET("/friend/lists/:id", FriendApi.FriendLists) // 好友列表
-		v1.POST("/friend/search", FriendApi.SearchFriend)  // 搜索好友
+		v1.GET("/friends/:id", FriendApi.FriendLists)      // 好友列表
+		v1.POST("/friends/search", FriendApi.SearchFriend) // 搜索好友
 		v1.DELETE("/friend", FriendApi.DeleteFriend)       // 删除好友
 
 		// 群聊

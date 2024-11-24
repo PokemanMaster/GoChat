@@ -5,6 +5,7 @@ import (
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 )
 
 type DeleteFriendService struct {
@@ -12,7 +13,6 @@ type DeleteFriendService struct {
 	FriendID uint
 }
 
-// Delete 删除好友
 func (service *DeleteFriendService) Delete() *resp.Response {
 	// 检查好友关系是否存在
 	var contact model.Contact
@@ -20,6 +20,7 @@ func (service *DeleteFriendService) Delete() *resp.Response {
 		Where("owner_id = ? AND target_id = ? AND type = ?", service.UserID, service.FriendID, 1).
 		First(&contact).Error
 	if err != nil {
+		zap.L().Info("好友不存在", zap.String("app.friend.service.delete_friend", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_NOT_EXIST_FRIEND,
 			Msg:    e.GetMsg(e.ERROR_NOT_EXIST_FRIEND),
@@ -32,6 +33,7 @@ func (service *DeleteFriendService) Delete() *resp.Response {
 	err = tx.Delete(&contact).Error
 	if err != nil {
 		tx.Rollback()
+		zap.L().Info("删除好友失败", zap.String("app.friend.service.delete_friend", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -43,6 +45,7 @@ func (service *DeleteFriendService) Delete() *resp.Response {
 		Delete(&model.Contact{}).Error
 	if err != nil {
 		tx.Rollback()
+		zap.L().Info("双向删除好友失败", zap.String("app.friend.service.delete_friend", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),

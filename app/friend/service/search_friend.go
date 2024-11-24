@@ -5,6 +5,7 @@ import (
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 )
 
 type SearchFriendService struct {
@@ -19,6 +20,7 @@ func (service *SearchFriendService) Search() *resp.Response {
 		Where("owner_id = ? AND type = ?", service.UserID, 1).
 		Pluck("target_id", &contactIDs).Error
 	if err != nil {
+		zap.L().Info("查询好友列表失败", zap.String("app.friend.service.search_friend", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -37,10 +39,11 @@ func (service *SearchFriendService) Search() *resp.Response {
 	var users []model.User
 	query := db.DB.Model(&model.User{}).
 		Where("id IN ?", contactIDs).
-		Where("name LIKE ?", "%"+service.FriendName+"%")
+		Where("user_name LIKE ?", "%"+service.FriendName+"%")
 
 	err = query.Find(&users).Error
 	if err != nil {
+		zap.L().Info("搜索好友失败", zap.String("app.friend.service.search_friend", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),

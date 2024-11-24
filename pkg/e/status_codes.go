@@ -25,6 +25,7 @@ const (
 	ERROR_NOT_EXIST_FRIEND   = 20004 // 好友不存在
 	ERROR_CODE               = 20012 // 验证码错误
 	ERROR_NOT_EXIST_FAVORITE = 40403 // 收藏不存在
+	ERROR_ALREADY_FRIENDS    = 20015 //对方已经是您的好友
 
 	ERROR_AUTH_TOKEN_FAIL    = 50001 // 用户认证失败
 	ERROR_AUTH_TOKEN_TIMEOUT = 50002 // 用户认证超时

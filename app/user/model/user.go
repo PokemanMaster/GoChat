@@ -12,7 +12,7 @@ type User struct {
 	gorm.Model
 	UserName      string    `gorm:"type:varchar(200);not null;unique;comment:'用户名'" json:"user_name"`
 	Password      string    `gorm:"type:varchar(2000);not null;comment:'密码(AES加密)'" json:"password"`
-	Telephone     string    `gorm:"type:char(11);unique;comment:'手机号'" json:"telephone"`
+	Telephone     string    `gorm:"type:char(11);comment:'手机号'" json:"telephone"`
 	LevelID       uint      `gorm:"type:int unsigned;comment:'会员等级ID'" json:"level_id"`
 	Avatar        string    `gorm:"type:varchar(200);comment:'用户头像'" json:"avatar"`
 	Money         uint      `gorm:"type:int;comment:'用户金额';index:idx_money" json:"money"`
