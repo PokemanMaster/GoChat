@@ -1,7 +1,7 @@
 package api
 
 import (
-	"IMProject/app/product/service"
+	"github.com/PokemanMaster/GoChat/app/product/service"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,11 +1,11 @@
 package model
 
 import (
-	"IMProject/common/cache"
-	"IMProject/common/db"
-	"IMProject/pkg/e"
-	"IMProject/pkg/logging"
 	"context"
+	"github.com/PokemanMaster/GoChat/common/cache"
+	"github.com/PokemanMaster/GoChat/common/db"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"strconv"
 	"time"
 )

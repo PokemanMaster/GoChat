@@ -1,13 +1,13 @@
 package service
 
 import (
-	"IMProject/app/product/model"
-	"IMProject/app/product/serializer"
-	"IMProject/common/db"
-	"IMProject/pkg/e"
-	"IMProject/pkg/logging"
-	"IMProject/pkg/mid"
-	"IMProject/resp"
+	"github.com/PokemanMaster/GoChat/app/product/model"
+	"github.com/PokemanMaster/GoChat/app/product/serializer"
+	"github.com/PokemanMaster/GoChat/common/db"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/pkg/logging"
+	"github.com/PokemanMaster/GoChat/pkg/mid"
+	"github.com/PokemanMaster/GoChat/resp"
 )
 
 // ShowParamService 商品参数图片详情的服务

@@ -1,11 +1,11 @@
 package service
 
 import (
-	Mgroup "IMProject/app/group/model"
-	Muser "IMProject/app/user/model"
-	"IMProject/common/db"
-	"IMProject/pkg/e"
-	"IMProject/resp"
+	Mgroup "github.com/PokemanMaster/GoChat/app/group/model"
+	Muser "github.com/PokemanMaster/GoChat/app/user/model"
+	"github.com/PokemanMaster/GoChat/common/db"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/resp"
 )
 
 type GroupListsService struct {

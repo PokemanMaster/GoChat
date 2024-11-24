@@ -1,7 +1,7 @@
 package serializer
 
 import (
-	"IMProject/app/user/model"
+	"github.com/PokemanMaster/GoChat/app/user/model"
 	"time"
 )
 

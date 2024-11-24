@@ -1,10 +1,10 @@
 package service
 
 import (
-	"IMProject/app/user/model"
-	"IMProject/common/db"
-	"IMProject/pkg/e"
-	"IMProject/resp"
+	"github.com/PokemanMaster/GoChat/app/user/model"
+	"github.com/PokemanMaster/GoChat/common/db"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/resp"
 )
 
 type FriendListsService struct {

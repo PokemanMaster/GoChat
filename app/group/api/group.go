@@ -1,9 +1,9 @@
 package api
 
 import (
-	"IMProject/app/group/service"
-	"IMProject/pkg/logging"
-	"IMProject/resp"
+	"github.com/PokemanMaster/GoChat/app/group/service"
+	"github.com/PokemanMaster/GoChat/pkg/logging"
+	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,10 +1,10 @@
 package service
 
 import (
-	"IMProject/app/user/model"
-	"IMProject/pkg/e"
-	"IMProject/resp"
 	"fmt"
+	"github.com/PokemanMaster/GoChat/app/user/model"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 )
@@ -32,9 +32,9 @@ type UserUpdateService struct {
 func (service *UserUpdateService) UserUpdate(c *gin.Context) *resp.Response {
 	user := model.UserBasic{}
 	user.ID = service.ID
-	user.Name = service.Name
-	user.PassWord = service.Password
-	user.Phone = service.Phone
+	user.UserName = service.Name
+	user.Password = service.Password
+	user.Telephone = service.Phone
 	user.Avatar = service.Icon
 	user.Email = service.Email
 

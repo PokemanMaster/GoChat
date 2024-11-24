@@ -1,11 +1,11 @@
 package service
 
 import (
-	"IMProject/app/user/model"
-	"IMProject/pkg/e"
-	"IMProject/pkg/mid"
-	"IMProject/resp"
 	"fmt"
+	"github.com/PokemanMaster/GoChat/app/user/model"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/pkg/mid"
+	"github.com/PokemanMaster/GoChat/resp"
 	"math/rand"
 	"strings"
 	"time"
@@ -19,12 +19,12 @@ type UserRegisterService struct {
 
 func (service *UserRegisterService) UserRegister() *resp.Response {
 	user := model.UserBasic{}
-	user.Name = strings.TrimSpace(service.UserName) // 去除多余的空格
+	user.UserName = strings.TrimSpace(service.UserName) // 去除多余的空格
 	password := service.Password
 	repassword := service.Identity
 
 	// 检查用户名和密码是否为空
-	if user.Name == "" || password == "" || repassword == "" {
+	if user.UserName == "" || password == "" || repassword == "" {
 		return &resp.Response{
 			Status: e.ERROR_ACCOUNT_NOT_EXIST,
 			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EXIST),
@@ -39,8 +39,8 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 	}
 
 	// 通过 ORM 查找用户，防止 SQL 注入
-	data := model.FindUserByName(user.Name)
-	if data.Name != "" {
+	data := model.FindUserByName(user.UserName)
+	if data.UserName != "" {
 		return &resp.Response{
 			Status: e.ERROR_ACCOUNT_NOT_EXIST,
 			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EXIST),
@@ -58,7 +58,7 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 
 	// 加密密码
 	salt := fmt.Sprintf("%06d", rand.Int31())
-	user.PassWord = mid.MakePassword(password, salt)
+	user.Password = mid.MakePassword(password, salt)
 	user.Salt = salt
 	user.LoginTime = time.Now()
 	user.LoginOutTime = time.Now()

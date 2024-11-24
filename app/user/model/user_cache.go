@@ -1,8 +1,8 @@
 package model
 
 import (
-	"IMProject/common/cache"
 	"context"
+	"github.com/PokemanMaster/GoChat/common/cache"
 
 	"time"
 )

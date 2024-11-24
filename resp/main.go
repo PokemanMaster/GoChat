@@ -1,10 +1,10 @@
 package resp
 
 import (
-	conf "IMProject/pkg/utils"
 	"encoding/json"
 	"errors"
 	"fmt"
+	conf "github.com/PokemanMaster/GoChat/pkg/utils"
 	"github.com/go-playground/validator/v10"
 )
 

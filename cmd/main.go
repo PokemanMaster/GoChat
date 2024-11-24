@@ -1,8 +1,8 @@
 package main
 
 import (
-	"IMProject/common"
-	"IMProject/router"
+	"github.com/PokemanMaster/GoChat/common"
+	"github.com/PokemanMaster/GoChat/router"
 )
 
 func main() {

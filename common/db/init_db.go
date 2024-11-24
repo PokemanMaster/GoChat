@@ -1,9 +1,9 @@
 package db
 
 import (
-	"IMProject/config"
 	"context"
 	"fmt"
+	"github.com/PokemanMaster/GoChat/config"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

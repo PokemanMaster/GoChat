@@ -1,11 +1,11 @@
 package service
 
 import (
-	"IMProject/app/user/serializer"
-	"IMProject/pkg/e"
-	"IMProject/pkg/logging"
-	"IMProject/pkg/utils"
-	"IMProject/resp"
+	"github.com/PokemanMaster/GoChat/app/user/serializer"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/pkg/logging"
+	"github.com/PokemanMaster/GoChat/pkg/utils"
+	"github.com/PokemanMaster/GoChat/resp"
 )
 
 // UserCategoryService 前端请求过来的数据

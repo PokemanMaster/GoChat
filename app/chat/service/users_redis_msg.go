@@ -1,9 +1,9 @@
 package service
 
 import (
-	"IMProject/common/cache"
 	"context"
 	"fmt"
+	"github.com/PokemanMaster/GoChat/common/cache"
 	"strconv"
 	"sync"
 )

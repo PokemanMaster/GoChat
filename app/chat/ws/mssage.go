@@ -1,9 +1,9 @@
 package ws
 
 import (
-	Muser "IMProject/app/user/model"
 	"encoding/json"
 	"fmt"
+	Muser "github.com/PokemanMaster/GoChat/app/user/model"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/viper"
 	"gopkg.in/fatih/set.v0"

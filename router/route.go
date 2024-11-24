@@ -1,13 +1,17 @@
 package router
 
 import (
-	ChatApi "IMProject/app/chat/api"
-	FriendApi "IMProject/app/friend/api"
-	GroupApi "IMProject/app/group/api"
-	ProductApi "IMProject/app/product/api"
-	UserApi "IMProject/app/user/api"
-	"IMProject/pkg/docs"
-	"IMProject/pkg/mid"
+	CartApi "github.com/PokemanMaster/GoChat/app/cart/api"
+	ChatApi "github.com/PokemanMaster/GoChat/app/chat/api"
+	FavoriteApi "github.com/PokemanMaster/GoChat/app/favorite/api"
+	FriendApi "github.com/PokemanMaster/GoChat/app/friend/api"
+	GroupApi "github.com/PokemanMaster/GoChat/app/group/api"
+	OrderApi "github.com/PokemanMaster/GoChat/app/order/api"
+	PaymentApi "github.com/PokemanMaster/GoChat/app/payment/api"
+	ProductApi "github.com/PokemanMaster/GoChat/app/product/api"
+	UserApi "github.com/PokemanMaster/GoChat/app/user/api"
+	"github.com/PokemanMaster/GoChat/pkg/docs"
+	"github.com/PokemanMaster/GoChat/pkg/mid"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
@@ -50,6 +54,7 @@ func Router() *gin.Engine {
 		v1.POST("/chat/message", ChatApi.GetMessage) // 获取聊天历史消息
 		v1.POST("/attach/upload", ChatApi.Upload)    // 上传文件
 
+		// 商品
 		v1.GET("/carousels", ProductApi.ListCarousels)             // 获取所有轮播图
 		v1.GET("/products/categories", ProductApi.ListCategories)  // 获取所有商品分类
 		v1.GET("/products", ProductApi.ListProducts)               // 获取所有商品详情
@@ -58,6 +63,29 @@ func Router() *gin.Engine {
 		v1.GET("/products/:id/param", ProductApi.ShowProductParam) // 获取某个商品参数
 		v1.GET("/products/brand", ProductApi.ListProducts)         // 获取所有商品品牌
 		v1.POST("/searches", ProductApi.SearchProducts)            // 搜索商品
+
+		v1.GET("rankings", ProductApi.ListRanking)          // 排行榜/热门
+		v1.GET("rankings/elec", ProductApi.ListElecRanking) // 排行榜/家电排行
+		v1.GET("rankings/acce", ProductApi.ListAcceRanking) // 排行榜/配件排行
+
+		// 购物车
+		v1.POST("carts", CartApi.CreateCart)   // 创建购物车
+		v1.GET("carts/:id", CartApi.ShowCart)  // 展示购物车
+		v1.PUT("carts", CartApi.UpdateCart)    // 修改购物车
+		v1.DELETE("carts", CartApi.DeleteCart) // 删除购物车
+
+		// 收藏
+		v1.POST("favorites", FavoriteApi.CreateFavorite)   // 创建收藏夹
+		v1.GET("favorites/:id", FavoriteApi.ShowFavorites) // 展示收藏夹
+		v1.DELETE("favorites", FavoriteApi.DeleteFavorite) // 删除收藏夹
+
+		// 订单
+		v1.POST("orders", OrderApi.CreateOrder)        // 创建订单
+		v1.GET("orders/:num", OrderApi.ShowOrder)      // 获取订单
+		v1.GET("user/:id/orders", OrderApi.ListOrders) // 获取某个用户所有订单
+
+		// 订单
+		v1.POST("pay", PaymentApi.CreatePay) // 支付
 	}
 	return r
 }

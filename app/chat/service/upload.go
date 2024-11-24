@@ -1,9 +1,9 @@
 package service
 
 import (
-	"IMProject/pkg/e"
-	"IMProject/resp"
 	"fmt"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/resp"
 	"io"
 	"math/rand"
 	"os"

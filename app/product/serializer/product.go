@@ -1,6 +1,6 @@
 package serializer
 
-import "IMProject/app/product/model"
+import "github.com/PokemanMaster/GoChat/app/product/model"
 
 // ProductSerialization 商品序列化
 type ProductSerialization struct {

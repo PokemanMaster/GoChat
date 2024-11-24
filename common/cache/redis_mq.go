@@ -1,9 +1,9 @@
 package cache
 
 import (
-	"IMProject/pkg/logging"
 	"context"
 	"fmt"
+	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/go-redis/redis/v8"
 
 	"log"
