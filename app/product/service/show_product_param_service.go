@@ -5,9 +5,9 @@ import (
 	"github.com/PokemanMaster/GoChat/app/product/serializer"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/pkg/mid"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 )
 
 // ShowParamService 商品参数图片详情的服务
@@ -29,7 +29,7 @@ func (service *ShowParamService) Show(id string) resp.Response {
 
 	err := db.DB.Where("id=?", id).Find(&param).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		code = e.ERROR_DATABASE
 		return resp.Response{
 			Status: code,

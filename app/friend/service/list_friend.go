@@ -27,8 +27,8 @@ func (service *FriendListsService) List(id string) *resp.Response {
 		list = append(list, contact.TargetID)
 	}
 
-	users := make([]model.UserBasic, 0)
-	err = db.DB.Model(model.UserBasic{}).Where("id in ?", list).Find(&users).Error
+	users := make([]model.User, 0)
+	err = db.DB.Model(model.User{}).Where("id in ?", list).Find(&users).Error
 	if err != nil {
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,

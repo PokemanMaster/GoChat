@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/PokemanMaster/GoChat/app/user/service"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // UserRegister 用户注册接口
@@ -13,7 +13,7 @@ func UserRegister(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	} else {
 		res := services.UserRegister()
 		ctx.JSON(200, res)
@@ -26,7 +26,7 @@ func UserLogin(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	} else {
 		res := services.UserLogin(ctx)
 		ctx.JSON(200, res)
@@ -39,7 +39,7 @@ func UserLogout(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	} else {
 		res := services.UserLogout(ctx)
 		ctx.JSON(200, res)
@@ -52,7 +52,7 @@ func UserUpdate(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	} else {
 		res := services.UserUpdate(ctx)
 		ctx.JSON(200, res)
@@ -79,7 +79,7 @@ func UserLists(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	} else {
 		res := services.List(ctx)
 		ctx.JSON(200, res)

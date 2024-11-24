@@ -24,7 +24,7 @@ type UserSerialization struct {
 }
 
 // BuildUser 序列化用户
-func BuildUser(user model.UserBasic) UserSerialization {
+func BuildUser(user model.User) UserSerialization {
 	return UserSerialization{
 
 		Avatar: user.Avatar,

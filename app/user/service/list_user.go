@@ -11,7 +11,7 @@ type UserListsService struct {
 }
 
 func (service *UserListsService) List(c *gin.Context) *resp.Response {
-	data := make([]*model.UserBasic, 10)
+	data := make([]*model.User, 10)
 	data = model.GetUserList()
 
 	code := e.SUCCESS

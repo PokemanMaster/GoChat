@@ -11,7 +11,7 @@ type UserInfoService struct {
 }
 
 func (service *UserInfoService) UserInfo(id string) resp.Response {
-	var user model.UserBasic
+	var user model.User
 	db.DB.Model(&user).Where("id = ?", id).First(&user)
 	return resp.Response{
 		Status: e.SUCCESS,

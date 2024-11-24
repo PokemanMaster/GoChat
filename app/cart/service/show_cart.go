@@ -7,8 +7,8 @@ import (
 	"github.com/PokemanMaster/GoChat/app/cart/serializer"
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 
 	"time"
 )
@@ -24,7 +24,7 @@ func (service *ShowCartService) Show(ctx context.Context, id string) resp.Respon
 	CartsCache, err := cache.RC.Get(ctx, CartRedisKey).Result()
 	if err == nil && CartsCache != "" {
 		if err := json.Unmarshal([]byte(CartsCache), &carts); err != nil {
-			logging.Info("Cart 缓存数据解析失败", err)
+			zap.L().Error("Cart 缓存数据解析失败", zap.String("app.cart.service", "show_cart.go"))
 			return resp.Response{
 				Status: e.ERROR_UNMARSHAL_JSON,
 				Msg:    e.GetMsg(e.ERROR_UNMARSHAL_JSON),
@@ -47,7 +47,7 @@ func (service *ShowCartService) Show(ctx context.Context, id string) resp.Respon
 	CartsJSON, _ := json.Marshal(CartsData)
 	err = cache.RC.Set(ctx, CartRedisKey, CartsJSON, 24*time.Hour).Err()
 	if err != nil {
-		logging.Info("Cart 缓存创建/更新失败", err)
+		zap.L().Error("Cart 缓存创建/更新失败", zap.String("app.cart.service", "show_cart.go"))
 		return resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),

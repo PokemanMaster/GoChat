@@ -6,8 +6,8 @@ import (
 	"github.com/PokemanMaster/GoChat/app/product/serializer"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 )
 
 // 商品类
@@ -22,7 +22,7 @@ func (service *ShowProductService) Show(ctx context.Context, id string) resp.Res
 	code := e.SUCCESS
 	err := db.DB.First(&product, id).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		code = e.ERROR_DATABASE
 		return resp.Response{
 			Status: code,

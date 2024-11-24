@@ -8,8 +8,8 @@ import (
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 
 	"strconv"
 	"time"
@@ -37,7 +37,7 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 
 	// 延迟双删 - 删除缓存
 	if err := cache.RC.Del(ctx, orderRedisKey).Err(); err != nil {
-		logging.Info("删除缓存失败，Key:", orderRedisKey, "错误:", err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 	}
 
 	order, code := MOrder.ShowOrder(service.Code)
@@ -56,7 +56,7 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 		}
 	}()
 
-	var user MUser.UserBasic
+	var user MUser.User
 	if err := tx.Where("id=?", service.UserID).First(&user).Error; err != nil {
 		tx.Rollback()
 		return &resp.Response{
@@ -130,7 +130,7 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 	go func() {
 		time.Sleep(200 * time.Millisecond)
 		if err := cache.RC.Del(ctx, orderRedisKey).Err(); err != nil {
-			logging.Info("延迟删除缓存失败，Key:", orderRedisKey, "错误:", err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		}
 	}()
 

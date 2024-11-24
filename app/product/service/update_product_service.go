@@ -4,8 +4,8 @@ import (
 	"github.com/PokemanMaster/GoChat/app/product/model"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 )
 
 type UpdateProductService struct {
@@ -28,7 +28,7 @@ func (service *UpdateProductService) Update() resp.Response {
 	code := e.SUCCESS
 	err := db.DB.Save(&product).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		code = e.ERROR_DATABASE
 		return resp.Response{
 			Status: code,

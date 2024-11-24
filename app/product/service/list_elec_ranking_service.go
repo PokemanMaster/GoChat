@@ -8,8 +8,8 @@ import (
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 
 	"strings"
 )
@@ -29,7 +29,7 @@ func (service *ListElecRankingService) List(ctx context.Context) resp.Response {
 		order := fmt.Sprintf("FIELD(id, %s)", strings.Join(pros, ","))
 		err := db.DB.Where("id in (?)", pros).Order(order).Find(&products).Error
 		if err != nil {
-			logging.Info(err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			code := e.ERROR_DATABASE
 			return resp.Response{
 				Status: code,

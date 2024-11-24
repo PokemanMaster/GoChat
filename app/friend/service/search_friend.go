@@ -30,12 +30,12 @@ func (service *SearchFriendService) Search() *resp.Response {
 		return &resp.Response{
 			Status: e.SUCCESS,
 			Msg:    e.GetMsg(e.SUCCESS),
-			Data:   []model.UserBasic{},
+			Data:   []model.User{},
 		}
 	}
 
-	var users []model.UserBasic
-	query := db.DB.Model(&model.UserBasic{}).
+	var users []model.User
+	query := db.DB.Model(&model.User{}).
 		Where("id IN ?", contactIDs).
 		Where("name LIKE ?", "%"+service.FriendName+"%")
 

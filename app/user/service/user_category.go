@@ -3,9 +3,9 @@ package service
 import (
 	"github.com/PokemanMaster/GoChat/app/user/serializer"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/pkg/utils"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 )
 
 // UserCategoryService 前端请求过来的数据
@@ -16,7 +16,7 @@ func (service *UserCategoryService) UserCategoryImages() resp.Response {
 	codeId, base64, err := utils.CreateCode()
 	code := e.SUCCESS
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		code = e.ERROR
 		return resp.Response{
 			Status: code,

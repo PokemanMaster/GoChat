@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/PokemanMaster/GoChat/app/friend/service"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // CreateFriend 添加用户
@@ -13,7 +13,7 @@ func CreateFriend(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	} else {
 		res := services.Create()
 		ctx.JSON(200, res)
@@ -33,7 +33,7 @@ func SearchFriend(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	} else {
 		res := services.Search()
 		ctx.JSON(200, res)
@@ -46,7 +46,7 @@ func DeleteFriend(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	} else {
 		res := services.Delete()
 		ctx.JSON(200, res)

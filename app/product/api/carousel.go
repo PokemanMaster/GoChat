@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/PokemanMaster/GoChat/app/product/service"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // CreateCarousel 创建轮播图
@@ -15,7 +15,7 @@ func CreateCarousel(c *gin.Context) {
 		c.JSON(200, res)
 	} else {
 		c.JSON(200, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	}
 }
 
@@ -27,6 +27,6 @@ func ListCarousels(c *gin.Context) {
 		c.JSON(200, res)
 	} else {
 		c.JSON(200, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	}
 }

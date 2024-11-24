@@ -7,8 +7,8 @@ import (
 	"github.com/PokemanMaster/GoChat/app/order/model"
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 
 	"time"
 )
@@ -25,7 +25,7 @@ func (service *ListOrdersService) List(ctx context.Context, id string) resp.Resp
 	OrdersCache, err := cache.RC.Get(ctx, OrdersRedisKey).Result()
 	if err == nil && OrdersCache != "" {
 		if err := json.Unmarshal([]byte(OrdersCache), &orders); err != nil {
-			logging.Info("订单JSON解析失败", err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			return resp.Response{
 				Status: e.ERROR_UNMARSHAL_JSON,
 				Msg:    e.GetMsg(e.ERROR_UNMARSHAL_JSON),
@@ -49,7 +49,7 @@ func (service *ListOrdersService) List(ctx context.Context, id string) resp.Resp
 	OrdersJSON, _ := json.Marshal(OrdersData)
 	err = cache.RC.Set(ctx, OrdersRedisKey, OrdersJSON, 24*time.Hour).Err()
 	if err != nil {
-		logging.Info("Order 缓存创建/更新失败", err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		return resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(code),

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type UserBasic struct {
+type User struct {
 	gorm.Model
 	UserName      string    `gorm:"type:varchar(200);not null;unique;comment:'用户名'" json:"user_name"`
 	Password      string    `gorm:"type:varchar(2000);not null;comment:'密码(AES加密)'" json:"password"`
@@ -27,13 +27,9 @@ type UserBasic struct {
 	DeviceInfo    string    `gorm:"type:varchar(500);comment:'设备信息'" json:"device_info"`
 }
 
-func (table *UserBasic) TableName() string {
-	return "user_basic"
-}
-
 // GetUserList 获取用户列表
-func GetUserList() []*UserBasic {
-	data := make([]*UserBasic, 10)
+func GetUserList() []*User {
+	data := make([]*User, 10)
 	db.DB.Find(&data)
 	for _, v := range data {
 		fmt.Println(v)
@@ -41,8 +37,8 @@ func GetUserList() []*UserBasic {
 	return data
 }
 
-func FindUserByNameAndPwd(name string, password string) UserBasic {
-	user := UserBasic{}
+func FindUserByNameAndPwd(name string, password string) User {
+	user := User{}
 	db.DB.Where("name = ? and pass_word=?", name, password).First(&user)
 
 	//token加密
@@ -52,21 +48,21 @@ func FindUserByNameAndPwd(name string, password string) UserBasic {
 	return user
 }
 
-func FindUserByName(name string) UserBasic {
-	user := UserBasic{}
+func FindUserByName(name string) User {
+	user := User{}
 	db.DB.Where("name = ?", name).First(&user)
 	return user
 }
-func CreateUser(user UserBasic) *gorm.DB {
+func CreateUser(user User) *gorm.DB {
 	return db.DB.Create(&user)
 }
-func DeleteUser(user UserBasic) *gorm.DB {
+func DeleteUser(user User) *gorm.DB {
 	return db.DB.Delete(&user)
 }
 
 // FindByID 查找某个用户
-func FindByID(id uint) UserBasic {
-	user := UserBasic{}
+func FindByID(id uint) User {
+	user := User{}
 	db.DB.Where("id = ?", id).First(&user)
 	return user
 }

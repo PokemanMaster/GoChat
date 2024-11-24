@@ -3,8 +3,8 @@ package cache
 import (
 	"context"
 	"fmt"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/go-redis/redis/v8"
+	"go.uber.org/zap"
 
 	"log"
 	"strings"
@@ -32,7 +32,7 @@ func ProductSendMsg(ctx context.Context, streamName string, producer MessageProd
 		MaxLen: 1000,             // 设置最大长度为 1000
 	}).Result()
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 	}
 	fmt.Printf("Message ID added: %s\n", msgID)
 }

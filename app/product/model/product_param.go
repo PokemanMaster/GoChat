@@ -5,7 +5,7 @@ import (
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
+	"go.uber.org/zap"
 	"strconv"
 	"time"
 )
@@ -35,7 +35,7 @@ func SearchProductParam(search string) ([]ProductParam, int, error) {
 	var productParam []ProductParam
 	err := db.DB.Where("title LIKE ?", "%"+search+"%").Find(&productParam).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		return productParam, e.ERROR_DATABASE, err
 	}
 	return productParam, e.SUCCESS, err
@@ -46,7 +46,7 @@ func ShowProductParam(productId uint) (ProductParam, int) {
 	var productParam ProductParam
 	err := db.DB.Where("product_id = ?", productId).First(&productParam).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		return productParam, e.ERROR_DATABASE
 	}
 	return productParam, e.SUCCESS

@@ -17,7 +17,7 @@ type UserLoginService struct {
 
 func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 
-	user := model.UserBasic{}
+	user := model.User{}
 	user.UserName = strings.TrimSpace(service.UserName)
 	password := service.Password
 

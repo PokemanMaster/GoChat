@@ -3,7 +3,7 @@ package model
 import (
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -29,12 +29,12 @@ func ListFavorites(id string, Limit int, Start int) ([]Favorite, int64, int) {
 	var favorites []Favorite
 	var total int64
 	if err := db.DB.Model(&favorites).Where("user_id=?", id).Count(&total).Error; err != nil {
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.favorite.api", "favorite.go"))
 		return favorites, total, e.ERROR_DATABASE
 	}
 	err := db.DB.Where("user_id=?", id).Limit(Limit).Offset(Start).Find(&favorites).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.favorite.api", "favorite.go"))
 		return favorites, total, e.ERROR_DATABASE
 	}
 	return favorites, total, e.SUCCESS

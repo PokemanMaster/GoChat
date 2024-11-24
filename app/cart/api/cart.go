@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/PokemanMaster/GoChat/app/cart/service"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // CreateCart 添加商品到购物车接口
@@ -13,7 +13,7 @@ func CreateCart(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.cart.api", "cart.go"))
 	} else {
 		res := services.Create(ctx)
 		ctx.JSON(200, res)
@@ -26,7 +26,7 @@ func ShowCart(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.cart.api", "cart.go"))
 	} else {
 		res := services.Show(ctx, ctx.Param("id"))
 		ctx.JSON(200, res)
@@ -39,7 +39,7 @@ func UpdateCart(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.cart.api", "cart.go"))
 	} else {
 		res := services.Update(ctx)
 		ctx.JSON(200, res)
@@ -52,7 +52,7 @@ func DeleteCart(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.cart.api", "cart.go"))
 	} else {
 		res := services.Delete(ctx)
 		ctx.JSON(200, res)

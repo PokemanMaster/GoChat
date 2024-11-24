@@ -6,8 +6,8 @@ import (
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/go-redis/redis/v8"
+	"go.uber.org/zap"
 
 	"gorm.io/gorm"
 	"math/rand"
@@ -62,7 +62,7 @@ func ShowOrder(code string) (Order, int) {
 	var order Order
 	err := db.DB.Where("code = ?", code).First(&order).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		return order, e.ERROR_DATABASE
 	}
 	return order, e.SUCCESS
@@ -73,7 +73,7 @@ func ListOrder(id string) ([]Order, int) {
 	var orders []Order
 	err := db.DB.Where("user_id=?", id).Find(&orders).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		return orders, e.ERROR_DATABASE
 	}
 	return orders, e.SUCCESS
@@ -91,22 +91,22 @@ func ListenOrder(ctx context.Context) {
 			}
 			orderList, err := cache.RC.ZRangeByScore(ctx, os.Getenv("REDIS_ZSET_KEY"), &opt).Result()
 			if err != nil {
-				logging.Info("redis err:", err)
+				zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			}
 			if len(orderList) != 0 {
 				var numList []int
 				for _, v := range orderList {
 					i, err := strconv.Atoi(v)
 					if err != nil {
-						logging.Info("Atoi err:", err)
+						zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 					}
 					numList = append(numList, i)
 				}
 				if err := db.DB.Delete(&Order{}, "order_num IN (?)", numList).Error; err != nil {
-					logging.Info("myql err:", err)
+					zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 				}
 				if err := cache.RC.ZRem(ctx, os.Getenv("REDIS_ZSET_KEY"), orderList).Err(); err != nil {
-					logging.Info("redis err:", err)
+					zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 				}
 			}
 		}

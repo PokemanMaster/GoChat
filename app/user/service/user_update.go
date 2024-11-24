@@ -30,7 +30,7 @@ type UserUpdateService struct {
 // @Success 200 {string} json{"code","message"}
 // @Router /user/updateUser [post]
 func (service *UserUpdateService) UserUpdate(c *gin.Context) *resp.Response {
-	user := model.UserBasic{}
+	user := model.User{}
 	user.ID = service.ID
 	user.UserName = service.Name
 	user.Password = service.Password

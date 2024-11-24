@@ -6,6 +6,7 @@ import (
 	"github.com/PokemanMaster/GoChat/pkg/e"
 	"github.com/PokemanMaster/GoChat/pkg/mid"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 	"math/rand"
 	"strings"
 	"time"
@@ -18,13 +19,14 @@ type UserRegisterService struct {
 }
 
 func (service *UserRegisterService) UserRegister() *resp.Response {
-	user := model.UserBasic{}
+	user := model.User{}
 	user.UserName = strings.TrimSpace(service.UserName) // 去除多余的空格
 	password := service.Password
 	repassword := service.Identity
 
 	// 检查用户名和密码是否为空
 	if user.UserName == "" || password == "" || repassword == "" {
+		zap.L().Info("用户名为空", zap.String("app.user.service", "user_register"))
 		return &resp.Response{
 			Status: e.ERROR_ACCOUNT_NOT_EXIST,
 			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EXIST),
@@ -32,6 +34,7 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 	}
 
 	if password == "" || repassword == "" {
+		zap.L().Info("Application started", zap.String("module", "main"))
 		return &resp.Response{
 			Status: e.ERROR_PASSWORD_NOT_EMPTY,
 			Msg:    e.GetMsg(e.ERROR_PASSWORD_NOT_EMPTY),

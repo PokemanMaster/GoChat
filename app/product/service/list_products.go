@@ -5,8 +5,8 @@ import (
 	"github.com/PokemanMaster/GoChat/app/product/serializer"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 )
 
 // ListProductsService 视频列表服务
@@ -29,7 +29,7 @@ func (service *ListProductsService) List() resp.Response {
 	// 0：推荐、1：食品、2：水果、3：男装、4：电脑、5:医药
 	if service.CategoryID == 0 {
 		if err := db.DB.Model(model.ProductParam{}).Count(&total).Error; err != nil {
-			logging.Info(err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			code = e.ERROR_DATABASE
 			return resp.Response{
 				Status: code,
@@ -39,7 +39,7 @@ func (service *ListProductsService) List() resp.Response {
 		}
 
 		if err := db.DB.Limit(service.Limit).Offset(service.Start).Find(&products).Error; err != nil {
-			logging.Info(err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			code = e.ERROR_DATABASE
 			return resp.Response{
 				Status: code,
@@ -49,7 +49,7 @@ func (service *ListProductsService) List() resp.Response {
 		}
 	} else {
 		if err := db.DB.Model(model.Product{}).Where("category_id=?", service.CategoryID).Count(&total).Error; err != nil {
-			logging.Info(err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			code = e.ERROR_DATABASE
 			return resp.Response{
 				Status: code,
@@ -59,7 +59,7 @@ func (service *ListProductsService) List() resp.Response {
 		}
 
 		if err := db.DB.Where("category_id=?", service.CategoryID).Limit(service.Limit).Offset(service.Start).Find(&products).Error; err != nil {
-			logging.Info(err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			code = e.ERROR_DATABASE
 			return resp.Response{
 				Status: code,

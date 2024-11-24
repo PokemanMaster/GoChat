@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/PokemanMaster/GoChat/app/product/service"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // CreateProduct 创建商品
@@ -15,7 +15,7 @@ func CreateProduct(c *gin.Context) {
 		c.JSON(200, res)
 	} else {
 		c.JSON(200, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	}
 }
 
@@ -41,7 +41,7 @@ func UpdateProduct(c *gin.Context) {
 		c.JSON(400, res)
 	} else {
 		c.JSON(200, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	}
 }
 
@@ -60,6 +60,6 @@ func SearchProducts(c *gin.Context) {
 		c.JSON(200, res)
 	} else {
 		c.JSON(200, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.chat.api", "chat.go"))
 	}
 }

@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/PokemanMaster/GoChat/app/group/service"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // CreateGroup 创建群聊
@@ -13,7 +13,7 @@ func CreateGroup(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.group.api", "group.go"))
 	} else {
 		res := services.Create()
 		ctx.JSON(200, res)
@@ -33,7 +33,7 @@ func JoinGroup(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.group.api", "group.go"))
 	} else {
 		res := services.Join()
 		ctx.JSON(200, res)
@@ -46,7 +46,7 @@ func GroupFriendLists(ctx *gin.Context) {
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
-		logging.Info(err)
+		zap.L().Error("请求参数错误", zap.String("app.group.api", "group.go"))
 	} else {
 		res := services.List()
 		ctx.JSON(200, res)

@@ -10,10 +10,9 @@ import (
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/go-redis/redis/v8"
+	"go.uber.org/zap"
 
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
-
 	"strconv"
 	"time"
 )
@@ -50,7 +49,7 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 
 		err := db.DB.Create(&cart).Error
 		if err != nil {
-			logging.Info(err)
+			zap.L().Error("创建购物车失败", zap.String("app.cart.service", "create_cart.go"))
 			code = e.ERROR_DATABASE
 			return &resp.Response{
 				Status: code,
@@ -61,7 +60,7 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 		cart.Num++
 		err := db.DB.Save(&cart).Error
 		if err != nil {
-			logging.Info(err)
+			zap.L().Error("保存购物车失败", zap.String("app.cart.service", "create_cart.go"))
 			code = e.ERROR_DATABASE
 			return &resp.Response{
 				Status: code,
@@ -81,7 +80,7 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 	// 获取现有的收藏 JSON 数组
 	existingCartsJSON, err := cache.RC.Get(ctx, cartRedisKey).Result()
 	if err != nil && err != redis.Nil {
-		logging.Info("从缓存获取购物车记录失败", err)
+		zap.L().Error("获取缓存购物车失败", zap.String("app.cart.service", "create_cart.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -92,7 +91,7 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 	var carts []MCart.Cart
 	if existingCartsJSON != "" {
 		if err := json.Unmarshal([]byte(existingCartsJSON), &carts); err != nil {
-			logging.Info("反序列化购物车记录失败", err)
+			zap.L().Error("反序列化购物车失败", zap.String("app.cart.service", "create_cart.go"))
 			return &resp.Response{
 				Status: e.ERROR_DATABASE,
 				Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -106,7 +105,7 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 	// 序列化更新后的收藏数组
 	updatedCartsJSON, err := json.Marshal(carts)
 	if err != nil {
-		logging.Info("序列化购物车记录失败", err)
+		zap.L().Error("序列化购物车失败", zap.String("app.cart.service", "create_cart.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -116,7 +115,7 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 	// 将更新后的数据保存到 Redis
 	err = cache.RC.Set(ctx, cartRedisKey, updatedCartsJSON, 24*time.Hour).Err()
 	if err != nil {
-		logging.Info("Carts 缓存更新失败", err)
+		zap.L().Error("保存redis失败", zap.String("app.cart.service", "create_cart.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),

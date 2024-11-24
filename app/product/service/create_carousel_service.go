@@ -5,8 +5,8 @@ import (
 	"github.com/PokemanMaster/GoChat/app/product/serializer"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 )
 
 // CreateCarouselService 轮播图创建的服务
@@ -23,7 +23,7 @@ func (service *CreateCarouselService) Create() resp.Response {
 
 	err := db.DB.Create(&carousel).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		code = e.ERROR_DATABASE
 		return resp.Response{
 			Status: code,

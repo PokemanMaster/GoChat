@@ -1,9 +1,18 @@
 package common
 
 import (
+	cart "github.com/PokemanMaster/GoChat/app/cart/model"
 	"github.com/PokemanMaster/GoChat/app/chat/ws"
-	MGroupBasic "github.com/PokemanMaster/GoChat/app/group/model"
-	MUserBasic "github.com/PokemanMaster/GoChat/app/user/model"
+	favorite "github.com/PokemanMaster/GoChat/app/favorite/model"
+	MGroup "github.com/PokemanMaster/GoChat/app/group/model"
+	order "github.com/PokemanMaster/GoChat/app/order/model"
+	product "github.com/PokemanMaster/GoChat/app/product/model"
+	transport "github.com/PokemanMaster/GoChat/app/transport/model"
+	user "github.com/PokemanMaster/GoChat/app/user/model"
+	"github.com/PokemanMaster/GoChat/common/logger"
+	"go.uber.org/zap"
+
+	warehouse "github.com/PokemanMaster/GoChat/app/warehouse/model"
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/cache/rabbit"
 	"github.com/PokemanMaster/GoChat/common/db"
@@ -31,6 +40,16 @@ func Init() {
 		mid.BloomFilterGlobal.Add(itemID)
 	}
 
+	// 初始化日志
+	logger.InitLogger(
+		"./logs/app.log", // 日志文件路径
+		10,               // 每个日志文件最大大小（MB）
+		5,                // 最大保留旧日志文件数量
+		30,               // 最大保留天数
+		true,             // 是否压缩旧日志
+		zap.DebugLevel,   // 日志级别
+	)
+
 	// 初始化rabbit消息队列
 	rabbit.InitRabbitMQ()
 	//go dao.Consumer1()
@@ -49,9 +68,29 @@ func TimingCleanMysql() {
 func migration() {
 	err := db.DB.Set("gorm:table_options", "charset=utf8mb4").
 		AutoMigrate(
-			&MUserBasic.UserBasic{},
-			&MUserBasic.Contact{},
-			&MGroupBasic.GroupBasic{},
+			&user.User{},
+			&user.Contact{},
+			&MGroup.GroupBasic{},
+			&product.Carousel{},
+			&cart.Cart{},
+			&favorite.Favorite{},
+			&order.Order{},
+			&order.OrderDetail{},
+			&product.Product{},              // 商品表
+			&product.ProductBrand{},         // 商品品牌表
+			&product.ProductCategory{},      // 商品分类表
+			&product.ProductCategoryBrand{}, // 商品分类与品牌关联表
+			&product.ProductParam{},         // 商品参数表
+			&product.SpecGroup{},            // 品类表
+			&product.SpecParam{},            // 参数表
+			&transport.TransportBackstock{}, // 退货表
+			&transport.TransportDelivery{},  // 快递表
+			&user.User{},                    // 用户表
+			&user.UserAddress{},             // 用户地址
+			&user.UserLevel{},               // 用户等级
+			&user.UserRating{},              // 用户评价表
+			&warehouse.Warehouse{},          // 仓库表
+			&warehouse.WarehouseProduct{},   // 仓库商品库存表
 		)
 	if err != nil {
 		fmt.Println("err", err)

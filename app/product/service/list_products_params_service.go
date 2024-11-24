@@ -9,8 +9,8 @@ import (
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 	"time"
 )
 
@@ -44,21 +44,21 @@ func (service *ListProductsParamsService) List(ctx context.Context) resp.Respons
 	cachedData, err := cache.RC.Get(ctx, redisKey).Result()
 	if err == nil && cachedData != "" {
 		// 如果缓存命中，直接返回数据
-		logging.Info("命中 Redis 缓存")
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		var cachedProducts []model.ProductParam
 		if err := json.Unmarshal([]byte(cachedData), &cachedProducts); err == nil {
 			return resp.BuildListsResponse(serializer.BuildProductParams(cachedProducts))
 		} else {
-			logging.Error("缓存数据反序列化失败:", err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		}
 	} else {
-		logging.Info("Redis 缓存未命中，查询数据库")
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 	}
 
 	// 如果分类ID为 0，查找所有商品
 	if service.CategoryID == 0 {
 		if err := db.DB.Limit(service.Limit).Offset(service.Start).Find(&productsParam).Error; err != nil {
-			logging.Info(err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			code = e.ERROR_DATABASE
 			return resp.Response{
 				Status: code,
@@ -69,7 +69,7 @@ func (service *ListProductsParamsService) List(ctx context.Context) resp.Respons
 	} else { // 查找对应分类的商品
 		var productIDs []uint
 		if err := db.DB.Model(&model.Product{}).Where("category_id = ?", service.CategoryID).Pluck("id", &productIDs).Error; err != nil {
-			logging.Info(err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			code = e.ERROR_DATABASE
 			return resp.Response{
 				Status: code,
@@ -80,7 +80,7 @@ func (service *ListProductsParamsService) List(ctx context.Context) resp.Respons
 
 		// 根据 productIDs 查找 ProductParam
 		if err := db.DB.Model(&model.ProductParam{}).Where("product_id IN (?)", productIDs).Count(&total).Error; err != nil {
-			logging.Info(err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			code = e.ERROR_DATABASE
 			return resp.Response{
 				Status: code,
@@ -90,7 +90,7 @@ func (service *ListProductsParamsService) List(ctx context.Context) resp.Respons
 		}
 
 		if err := db.DB.Where("product_id IN (?)", productIDs).Limit(service.Limit).Offset(service.Start).Find(&productsParam).Error; err != nil {
-			logging.Info(err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			code = e.ERROR_DATABASE
 			return resp.Response{
 				Status: code,
@@ -105,10 +105,10 @@ func (service *ListProductsParamsService) List(ctx context.Context) resp.Respons
 	if err == nil {
 		err = cache.RC.Set(ctx, redisKey, productsJSON, 10*time.Minute).Err()
 		if err != nil {
-			logging.Error("Redis 缓存更新失败:", err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		}
 	} else {
-		logging.Error("商品列表序列化失败:", err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 	}
 
 	return resp.BuildListsResponse(serializer.BuildProductParams(productsParam))

@@ -17,14 +17,14 @@ func (table *Contact) TableName() string {
 	return "contact"
 }
 
-func SearchFriend(userId uint) []UserBasic {
+func SearchFriend(userId uint) []User {
 	contacts := make([]Contact, 0)
 	objIds := make([]uint64, 0)
 	db.DB.Where("owner_id = ? and type=1", userId).Find(&contacts)
 	for _, v := range contacts {
 		objIds = append(objIds, uint64(v.TargetID))
 	}
-	users := make([]UserBasic, 0)
+	users := make([]User, 0)
 	db.DB.Where("id in ?", objIds).Find(&users)
 	return users
 }

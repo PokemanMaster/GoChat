@@ -3,7 +3,7 @@ package model
 import (
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -22,7 +22,7 @@ func ShowCart(UserId, ProductId uint) (Cart, int, error) {
 	var cart Cart
 	err := db.DB.Where("user_id = ? AND product_id = ?", UserId, ProductId).First(&cart).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Info("获取用户购物车失败", zap.String("app.cart.model", "cart.go"))
 		return cart, e.ERROR_DATABASE, err
 	}
 	return cart, e.SUCCESS, err
@@ -33,7 +33,7 @@ func ListCart(id string) ([]Cart, int) {
 	var cart []Cart
 	err := db.DB.Where("user_id = ?", id).Find(&cart).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Info("获取用户的购物车列表失败", zap.String("app.cart.model", "cart.go"))
 		return cart, e.ERROR_DATABASE
 	}
 	return cart, e.SUCCESS

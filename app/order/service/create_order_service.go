@@ -8,9 +8,9 @@ import (
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/go-redis/redis/v8"
+	"go.uber.org/zap"
 
 	"strconv"
 	"time"
@@ -53,7 +53,7 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	// 存入数据库
 	err := db.DB.Create(&order).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		code = e.ERROR_DATABASE
 		return &resp.Response{
 			Status: code,
@@ -93,7 +93,7 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 
 	err = db.DB.Create(&orderDetail).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		code = e.ERROR_DATABASE
 		return &resp.Response{
 			Status: code,
@@ -108,7 +108,7 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	// 获取现有的收藏 JSON 数组
 	existingOrderJSON, err := cache.RC.Get(ctx, orderRedisKey).Result()
 	if err != nil && err != redis.Nil {
-		logging.Info("从缓存获取收藏记录失败", err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -119,7 +119,7 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	var orders []model.Order
 	if existingOrderJSON != "" {
 		if err := json.Unmarshal([]byte(existingOrderJSON), &orders); err != nil {
-			logging.Info("反序列化订单记录失败", err)
+			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 			return &resp.Response{
 				Status: e.ERROR_DATABASE,
 				Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -133,7 +133,7 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	// 序列化更新后的收藏数组
 	updatedOrderJSON, err := json.Marshal(orders)
 	if err != nil {
-		logging.Info("序列化订单记录失败", err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -143,7 +143,7 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	// 将更新后的数据保存到 Redis
 	err = cache.RC.Set(ctx, orderRedisKey, updatedOrderJSON, 24*time.Hour).Err()
 	if err != nil {
-		logging.Info("Order 缓存更新失败", err)
+		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
