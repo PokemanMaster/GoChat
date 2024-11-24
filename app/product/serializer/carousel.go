@@ -1,7 +1,7 @@
 package serializer
 
 import (
-	"IMProject/app/product/model"
+	"github.com/PokemanMaster/GoChat/app/product/model"
 )
 
 // Carousel 轮播图序列化器

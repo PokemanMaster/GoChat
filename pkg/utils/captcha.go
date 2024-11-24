@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"IMProject/pkg/e"
+	"github.com/PokemanMaster/GoChat/pkg/e"
 	"github.com/mojocn/base64Captcha"
 
 	"time"
