@@ -1,9 +1,9 @@
 package service
 
 import (
-	"IMProject/app/group/model"
-	"IMProject/pkg/e"
-	"IMProject/resp"
+	"github.com/PokemanMaster/GoChat/app/group/model"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/resp"
 )
 
 type CreateGroupService struct {

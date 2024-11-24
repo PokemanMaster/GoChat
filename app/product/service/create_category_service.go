@@ -1,8 +1,8 @@
 package service
 
 import (
-	"IMProject/pkg/e"
-	"IMProject/resp"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/resp"
 )
 
 // CreateCategoryService 收藏创建的服务

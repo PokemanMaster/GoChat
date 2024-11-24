@@ -1,7 +1,7 @@
 package model
 
 import (
-	"IMProject/common/db"
+	"github.com/PokemanMaster/GoChat/common/db"
 	"gorm.io/gorm"
 )
 

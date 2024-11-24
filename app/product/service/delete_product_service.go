@@ -1,11 +1,11 @@
 package service
 
 import (
-	"IMProject/app/product/model"
-	"IMProject/common/db"
-	"IMProject/pkg/e"
-	"IMProject/pkg/logging"
-	"IMProject/resp"
+	"github.com/PokemanMaster/GoChat/app/product/model"
+	"github.com/PokemanMaster/GoChat/common/db"
+	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/pkg/logging"
+	"github.com/PokemanMaster/GoChat/resp"
 )
 
 // DeleteProductService 删除商品的服务

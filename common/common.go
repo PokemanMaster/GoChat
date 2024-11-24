@@ -1,15 +1,16 @@
 package common
 
 import (
-	"IMProject/app/chat/ws"
-	MGroupBasic "IMProject/app/group/model"
-	MUserBasic "IMProject/app/user/model"
-	"IMProject/common/cache"
-	"IMProject/common/cache/rabbit"
-	"IMProject/common/db"
-	"IMProject/config"
-	"IMProject/pkg/mid"
-	"IMProject/pkg/utils"
+	"github.com/PokemanMaster/GoChat/app/chat/ws"
+	MGroupBasic "github.com/PokemanMaster/GoChat/app/group/model"
+	MUserBasic "github.com/PokemanMaster/GoChat/app/user/model"
+	"github.com/PokemanMaster/GoChat/common/cache"
+	"github.com/PokemanMaster/GoChat/common/cache/rabbit"
+	"github.com/PokemanMaster/GoChat/common/db"
+	"github.com/PokemanMaster/GoChat/config"
+	"github.com/PokemanMaster/GoChat/pkg/mid"
+	"github.com/PokemanMaster/GoChat/pkg/utils"
+
 	"fmt"
 	"github.com/spf13/viper"
 	"time"
