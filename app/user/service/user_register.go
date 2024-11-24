@@ -1,74 +1,101 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"github.com/PokemanMaster/GoChat/app/user/model"
+	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
 	"github.com/PokemanMaster/GoChat/pkg/mid"
 	"github.com/PokemanMaster/GoChat/resp"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 	"math/rand"
 	"strings"
 	"time"
 )
 
 type UserRegisterService struct {
-	UserName string
-	Password string
-	Identity string
+	UserName   string
+	Password   string
+	RePassword string
 }
 
 func (service *UserRegisterService) UserRegister() *resp.Response {
 	user := model.User{}
-	user.UserName = strings.TrimSpace(service.UserName) // 去除多余的空格
-	password := service.Password
-	repassword := service.Identity
+	UserName := strings.TrimSpace(service.UserName)
+	Password := strings.TrimSpace(service.Password)
+	RePassword := strings.TrimSpace(service.RePassword)
 
-	// 检查用户名和密码是否为空
-	if user.UserName == "" || password == "" || repassword == "" {
-		zap.L().Info("用户名为空", zap.String("app.user.service", "user_register"))
+	// 检查用户名是否为空
+	if UserName == "" {
+		zap.L().Info("用户名不能为空", zap.String("app.user.service.user_register", ""))
 		return &resp.Response{
-			Status: e.ERROR_ACCOUNT_NOT_EXIST,
-			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EXIST),
+			Status: e.ERROR_ACCOUNT_NOT_EMPTY,
+			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EMPTY),
 		}
 	}
 
-	if password == "" || repassword == "" {
-		zap.L().Info("Application started", zap.String("module", "main"))
+	// 检查密码和重复密码是否为空
+	if Password == "" || RePassword == "" {
+		zap.L().Info("密码不能为空", zap.String("app.user.service.user_register", ""))
 		return &resp.Response{
 			Status: e.ERROR_PASSWORD_NOT_EMPTY,
 			Msg:    e.GetMsg(e.ERROR_PASSWORD_NOT_EMPTY),
 		}
 	}
 
-	// 通过 ORM 查找用户，防止 SQL 注入
-	data := model.FindUserByName(user.UserName)
-	if data.UserName != "" {
-		return &resp.Response{
-			Status: e.ERROR_ACCOUNT_NOT_EXIST,
-			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EXIST),
-		}
-	}
-
 	// 检查密码和确认密码是否一致
-	if password != repassword {
-		code := e.ERROR_PASSWORD_CONFIRM
+	if Password != RePassword {
+		zap.L().Info("两次密码不一致", zap.String("app.user.service.user_register", ""))
 		return &resp.Response{
-			Status: code,
-			Msg:    e.GetMsg(code),
+			Status: e.ERROR_PASSWORD_CONFIRM,
+			Msg:    e.GetMsg(e.ERROR_PASSWORD_CONFIRM),
 		}
 	}
 
-	// 加密密码
-	salt := fmt.Sprintf("%06d", rand.Int31())
-	user.Password = mid.MakePassword(password, salt)
-	user.Salt = salt
-	user.LoginTime = time.Now()
-	user.LoginOutTime = time.Now()
-	user.HeartbeatTime = time.Now()
+	// 查询用户是否存在
+	err := db.DB.Where("user_name = ?", UserName).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			zap.L().Info("用户名可用", zap.String("app.user.service.user_register", ""))
+		} else {
+			zap.L().Error("查询用户失败", zap.String("app.user.service.user_register", ""))
+			return &resp.Response{
+				Status: e.ERROR_DATABASE,
+				Msg:    e.GetMsg(e.ERROR_DATABASE),
+				Error:  err.Error(),
+			}
+		}
+	} else {
+		zap.L().Info("用户名已存在", zap.String("app.user.service.user_register", ""))
+		return &resp.Response{
+			Status: e.ERROR_ACCOUNT_EXIST,
+			Msg:    e.GetMsg(e.ERROR_ACCOUNT_EXIST),
+		}
+	}
 
-	// 创建用户
-	model.CreateUser(user)
+	// 加密密码 并 创建用户
+	Salt := fmt.Sprintf("%06d", rand.Int31())
+	user = model.User{
+		UserName:      UserName,
+		Password:      mid.MakePassword(Password, Salt),
+		Salt:          Salt,
+		LevelID:       1,
+		Money:         0,
+		LoginTime:     time.Now(),
+		LoginOutTime:  time.Now(),
+		HeartbeatTime: time.Now(),
+	}
+	err = db.DB.Create(&user).Error
+	if err != nil {
+		zap.L().Error("创建用户失败", zap.String("app.user.service.user_register", err.Error()))
+		return &resp.Response{
+			Status: e.ERROR_DATABASE,
+			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Error:  err.Error(),
+		}
+	}
 
 	// 注册成功
 	return &resp.Response{
