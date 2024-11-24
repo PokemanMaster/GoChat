@@ -7,9 +7,9 @@ import (
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
 	"github.com/go-redis/redis/v8"
+	"go.uber.org/zap"
 
 	"strconv"
 	"time"
@@ -35,7 +35,7 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 	favorite.UserID = service.UserID
 	favorite.ProductID = service.ProductID
 	if err := db.DB.Create(&favorite).Error; err != nil {
-		logging.Info("favorite 数据库创建/更新失败", err)
+		zap.L().Error("favorite 数据库创建/更新失败", zap.String("app.favorite.service", "create_favorites.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(code),
@@ -48,7 +48,7 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 	// 获取现有的收藏 JSON 数组
 	existingFavoritesJSON, err := cache.RC.Get(ctx, favoriteRedisKey).Result()
 	if err != nil && err != redis.Nil {
-		logging.Info("从缓存获取收藏记录失败", err)
+		zap.L().Error("从缓存获取收藏记录失败", zap.String("app.favorite.service", "create_favorites.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -59,7 +59,7 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 	var favorites []model.Favorite
 	if existingFavoritesJSON != "" {
 		if err := json.Unmarshal([]byte(existingFavoritesJSON), &favorites); err != nil {
-			logging.Info("反序列化收藏记录失败", err)
+			zap.L().Error("反序列化收藏记录失败", zap.String("app.favorite.service", "create_favorites.go"))
 			return &resp.Response{
 				Status: e.ERROR_DATABASE,
 				Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -73,7 +73,7 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 	// 序列化更新后的收藏数组
 	updatedFavoritesJSON, err := json.Marshal(favorites)
 	if err != nil {
-		logging.Info("序列化收藏记录失败", err)
+		zap.L().Error("序列化收藏记录失败", zap.String("app.favorite.service", "create_favorites.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -83,7 +83,7 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 	// 将更新后的数据保存到 Redis
 	err = cache.RC.Set(ctx, favoriteRedisKey, updatedFavoritesJSON, 24*time.Hour).Err()
 	if err != nil {
-		logging.Info("favorite 缓存更新失败", err)
+		zap.L().Error("favorite 缓存更新失败", zap.String("app.favorite.service", "create_favorites.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),

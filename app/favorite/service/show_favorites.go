@@ -7,8 +7,8 @@ import (
 	"github.com/PokemanMaster/GoChat/app/favorite/serializer"
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 
 	"time"
 )
@@ -30,7 +30,7 @@ func (service *ShowFavoritesService) Show(ctx context.Context, id string) resp.R
 	favoriteJSON, err := cache.RC.Get(ctx, favoriteRedisKey).Result()
 	if err == nil && favoriteJSON != "" {
 		if err := json.Unmarshal([]byte(favoriteJSON), &favorites); err != nil {
-			logging.Info("favorite 缓存数据解析失败", err)
+			zap.L().Error("favorite 缓存数据解析失败", zap.String("app.favorite.service", "show_favorites.go"))
 			return resp.Response{
 				Status: e.ERROR_UNMARSHAL_JSON,
 				Msg:    e.GetMsg(e.ERROR_UNMARSHAL_JSON),
@@ -52,7 +52,7 @@ func (service *ShowFavoritesService) Show(ctx context.Context, id string) resp.R
 	favoritesJSON, _ := json.Marshal(favorites)
 	err = cache.RC.Set(ctx, favoriteRedisKey, favoritesJSON, 24*time.Hour).Err()
 	if err != nil {
-		logging.Info("favorite 缓存创建/更新失败", err)
+		zap.L().Error("favorite 缓存创建/更新失败", zap.String("app.favorite.service", "show_favorites.go"))
 		return resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(code),

@@ -6,8 +6,8 @@ import (
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 	"strconv"
 )
 
@@ -31,7 +31,7 @@ func (service *DeleteCartService) Delete(ctx context.Context) *resp.Response {
 	// 删除购物车
 	err = db.DB.Delete(&cart).Error
 	if err != nil {
-		logging.Info(err)
+		zap.L().Error("删除Cart数据购物车失败", zap.String("app.cart.service", "delete_cart.go"))
 		code = e.ERROR_DATABASE
 		return &resp.Response{
 			Status: code,
@@ -43,7 +43,7 @@ func (service *DeleteCartService) Delete(ctx context.Context) *resp.Response {
 	CartRedisKey := "ShowCart_" + strconv.Itoa(int(service.UserID))
 	err = cache.RC.Del(ctx, CartRedisKey).Err()
 	if err != nil {
-		logging.Info("删除 Cart 缓存失败", err)
+		zap.L().Error("删除Cart缓存失败", zap.String("app.cart.service", "delete_cart.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),

@@ -10,7 +10,6 @@ import (
 	PaymentApi "github.com/PokemanMaster/GoChat/app/payment/api"
 	ProductApi "github.com/PokemanMaster/GoChat/app/product/api"
 	UserApi "github.com/PokemanMaster/GoChat/app/user/api"
-	"github.com/PokemanMaster/GoChat/pkg/docs"
 	"github.com/PokemanMaster/GoChat/pkg/mid"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
@@ -22,7 +21,6 @@ import (
 func Router() *gin.Engine {
 	r := gin.Default()
 	r.Use(mid.CORS())
-	docs.SwaggerInfo.BasePath = ""
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	store, _ := redis.NewStore(10, "tcp", "47.113.104.184:6379", "123456", []byte("alkdnlakwdlawfhnolaqwfnlawm"))
 	r.Use(sessions.Sessions("mysession", store))

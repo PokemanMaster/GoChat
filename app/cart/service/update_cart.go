@@ -8,8 +8,8 @@ import (
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/logging"
 	"github.com/PokemanMaster/GoChat/resp"
+	"go.uber.org/zap"
 
 	"strconv"
 	"time"
@@ -34,7 +34,7 @@ func (service *UpdateCartService) Update(ctx context.Context) *resp.Response {
 		// 如果 Redis 存在缓存，解析购物车列表
 		err = json.Unmarshal([]byte(cartJSON), &carts)
 		if err != nil {
-			logging.Info("购物车缓存数据解析失败", err)
+			zap.L().Error("购物车缓存数据解析失败", zap.String("app.cart.service", "update_cart.go"))
 			return &resp.Response{
 				Status: e.ERROR_UNMARSHAL_JSON,
 				Msg:    e.GetMsg(e.ERROR_UNMARSHAL_JSON),
@@ -59,7 +59,7 @@ func (service *UpdateCartService) Update(ctx context.Context) *resp.Response {
 	// 更新数据库中的购物车信息
 	err = db.DB.Save(&carts).Error
 	if err != nil {
-		logging.Info("数据库更新购物车信息失败", err)
+		zap.L().Error("数据库更新购物车信息失败", zap.String("app.cart.service", "update_cart.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -69,7 +69,7 @@ func (service *UpdateCartService) Update(ctx context.Context) *resp.Response {
 	// 更新 Redis 缓存中的购物车列表
 	cartCache, err := json.Marshal(carts)
 	if err != nil {
-		logging.Info("购物车列表序列化失败", err)
+		zap.L().Error("购物车列表序列化失败", zap.String("app.cart.service", "update_cart.go"))
 		return &resp.Response{
 			Status: e.ERROR_UNMARSHAL_JSON,
 			Msg:    e.GetMsg(e.ERROR_UNMARSHAL_JSON),
@@ -79,7 +79,7 @@ func (service *UpdateCartService) Update(ctx context.Context) *resp.Response {
 	// 将修改后的购物车列表重新存入 Redis
 	err = cache.RC.Set(ctx, cartRedisKey, cartCache, 24*time.Hour).Err()
 	if err != nil {
-		logging.Info("更新购物车缓存失败", err)
+		zap.L().Error("更新购物车缓存失败", zap.String("app.cart.service", "update_cart.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
