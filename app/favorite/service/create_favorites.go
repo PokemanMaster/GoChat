@@ -43,31 +43,11 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 		}
 	}
 
-	// 创建新的收藏
-	favorite.UserID = service.UserID
-	favorite.ProductID = service.ProductID
-	if err := db.DB.Create(&favorite).Error; err != nil {
-		zap.L().Error("favorite 数据库创建/更新失败", zap.String("app.favorite.service.create_favorites", ""))
-		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
-		}
-	}
-
-	// redis key
-	favoriteRedisKey := "ShowFavorite_" + strconv.Itoa(int(service.UserID))
-
-	// 删除缓存
-	err = cache.RC.Del(ctx, favoriteRedisKey).Err()
-	if err != nil {
-		zap.L().Error("删除缓存失败", zap.String("app.favorite.service.create_favorites", ""))
-	}
-
 	// 更新数据库
 	favorite.UserID = service.UserID
 	favorite.ProductID = service.ProductID
 	if err = db.DB.Create(&favorite).Error; err != nil {
-		zap.L().Error("favorite 数据库创建失败", zap.String("app.favorite.service.create_favorites", ""))
+		zap.L().Error("数据创建失败", zap.String("app.favorite.service.create_favorites", ""))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
@@ -75,6 +55,7 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 	}
 
 	// 删除缓存
+	favoriteRedisKey := "ShowFavorite_" + strconv.Itoa(int(service.UserID))
 	go func() {
 		time.Sleep(500 * time.Millisecond)
 		err = cache.RC.Del(ctx, favoriteRedisKey).Err()
