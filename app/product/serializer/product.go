@@ -1,6 +1,9 @@
 package serializer
 
-import "github.com/PokemanMaster/GoChat/app/product/model"
+import (
+	model2 "github.com/PokemanMaster/GoChat/app/category/model"
+	"github.com/PokemanMaster/GoChat/app/product/model"
+)
 
 // ProductSerialization 商品序列化
 type ProductSerialization struct {
@@ -78,7 +81,7 @@ type ProductCategorySerialization struct {
 }
 
 // BuildProductCategory 序列化分类
-func BuildProductCategory(item model.ProductCategory) ProductCategorySerialization {
+func BuildProductCategory(item model2.ProductCategory) ProductCategorySerialization {
 	return ProductCategorySerialization{
 		ID:       item.ID,
 		Name:     item.Name,
@@ -89,7 +92,7 @@ func BuildProductCategory(item model.ProductCategory) ProductCategorySerializati
 }
 
 // BuildProductCategorys 序列化分类列表
-func BuildProductCategorys(items []model.ProductCategory) (categories []ProductCategorySerialization) {
+func BuildProductCategorys(items []model2.ProductCategory) (categories []ProductCategorySerialization) {
 	for _, item := range items {
 		category := BuildProductCategory(item)
 		categories = append(categories, category)

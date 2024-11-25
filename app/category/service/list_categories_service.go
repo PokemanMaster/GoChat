@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/PokemanMaster/GoChat/app/product/model"
+	"github.com/PokemanMaster/GoChat/app/category/model"
 	"github.com/PokemanMaster/GoChat/app/product/serializer"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"

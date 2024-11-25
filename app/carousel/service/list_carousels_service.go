@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"github.com/PokemanMaster/GoChat/app/product/model"
-	"github.com/PokemanMaster/GoChat/app/product/serializer"
+	"github.com/PokemanMaster/GoChat/app/carousel/model"
+	"github.com/PokemanMaster/GoChat/app/carousel/serializer"
 	"github.com/PokemanMaster/GoChat/common/cache"
 	"github.com/PokemanMaster/GoChat/common/db"
 	"github.com/PokemanMaster/GoChat/pkg/e"

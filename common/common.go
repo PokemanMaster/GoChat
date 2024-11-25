@@ -1,7 +1,9 @@
 package common
 
 import (
+	"github.com/PokemanMaster/GoChat/app/carousel/model"
 	cart "github.com/PokemanMaster/GoChat/app/cart/model"
+	model2 "github.com/PokemanMaster/GoChat/app/category/model"
 	"github.com/PokemanMaster/GoChat/app/chat/ws"
 	favorite "github.com/PokemanMaster/GoChat/app/favorite/model"
 	MGroup "github.com/PokemanMaster/GoChat/app/group/model"
@@ -71,18 +73,16 @@ func migration() {
 			&user.User{},
 			&user.Contact{},
 			&MGroup.GroupBasic{},
-			&product.Carousel{},
+			&model.Carousel{},
 			&cart.Cart{},
 			&favorite.Favorite{},
 			&order.Order{},
 			&order.OrderDetail{},
 			&product.Product{},              // 商品表
 			&product.ProductBrand{},         // 商品品牌表
-			&product.ProductCategory{},      // 商品分类表
+			&model2.ProductCategory{},       // 商品分类表
 			&product.ProductCategoryBrand{}, // 商品分类与品牌关联表
 			&product.ProductParam{},         // 商品参数表
-			&product.SpecGroup{},            // 品类表
-			&product.SpecParam{},            // 参数表
 			&transport.TransportBackstock{}, // 退货表
 			&transport.TransportDelivery{},  // 快递表
 			&user.User{},                    // 用户表

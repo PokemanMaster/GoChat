@@ -47,7 +47,7 @@ func (service *ListProductsParamsService) List(ctx context.Context) resp.Respons
 		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		var cachedProducts []model.ProductParam
 		if err := json.Unmarshal([]byte(cachedData), &cachedProducts); err == nil {
-			return resp.BuildListsResponse(serializer.BuildProductParams(cachedProducts))
+			return resp.BuildResponseTotal(serializer.BuildProductParams(cachedProducts), uint(len(cachedProducts)))
 		} else {
 			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		}
@@ -111,5 +111,5 @@ func (service *ListProductsParamsService) List(ctx context.Context) resp.Respons
 		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 	}
 
-	return resp.BuildListsResponse(serializer.BuildProductParams(productsParam))
+	return resp.BuildResponseTotal(serializer.BuildProductParams(productsParam), uint(len(productsParam)))
 }

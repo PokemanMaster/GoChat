@@ -32,7 +32,7 @@ func (service *ListOrdersService) List(ctx context.Context, id string) resp.Resp
 				Error:  err.Error(),
 			}
 		}
-		resp.BuildListResponse(build.ResUserOrders(orders), uint(len(orders)))
+		resp.BuildResponseTotal(build.ResUserOrders(orders), uint(len(orders)))
 	}
 
 	// 如果缓存未命中，则从数据库查询
@@ -56,5 +56,5 @@ func (service *ListOrdersService) List(ctx context.Context, id string) resp.Resp
 		}
 	}
 
-	return resp.BuildListResponse(build.ResUserOrders(OrdersData), uint(len(orders)))
+	return resp.BuildResponseTotal(build.ResUserOrders(OrdersData), uint(len(orders)))
 }

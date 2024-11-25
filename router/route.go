@@ -1,7 +1,9 @@
 package router
 
 import (
+	"github.com/PokemanMaster/GoChat/app/carousel/api"
 	CartApi "github.com/PokemanMaster/GoChat/app/cart/api"
+	api2 "github.com/PokemanMaster/GoChat/app/category/api"
 	ChatApi "github.com/PokemanMaster/GoChat/app/chat/api"
 	FavoriteApi "github.com/PokemanMaster/GoChat/app/favorite/api"
 	FriendApi "github.com/PokemanMaster/GoChat/app/friend/api"
@@ -52,8 +54,8 @@ func Router() *gin.Engine {
 		v1.POST("/attach/upload", ChatApi.Upload)    // 上传文件
 
 		// 商品
-		v1.GET("/carousels", ProductApi.ListCarousels)             // 获取所有轮播图
-		v1.GET("/products/categories", ProductApi.ListCategories)  // 获取所有商品分类
+		v1.GET("/carousels", api.ListCarousels)                    // 获取所有轮播图
+		v1.GET("/products/categories", api2.ListCategories)        // 获取所有商品分类
 		v1.GET("/products", ProductApi.ListProducts)               // 获取所有商品详情
 		v1.GET("/products/:id", ProductApi.ShowProduct)            // 获取某个商品详情
 		v1.GET("/products/param", ProductApi.ListProductsParams)   // 获取所有商品参数

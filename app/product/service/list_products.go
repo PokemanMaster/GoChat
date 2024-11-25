@@ -69,5 +69,5 @@ func (service *ListProductsService) List() resp.Response {
 		}
 	}
 
-	return resp.BuildListResponse(serializer.BuildProducts(products), uint(total))
+	return resp.BuildResponseTotal(serializer.BuildProducts(products), uint(total))
 }

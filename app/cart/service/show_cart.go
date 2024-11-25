@@ -31,7 +31,7 @@ func (service *ShowCartService) Show(ctx context.Context, id string) resp.Respon
 				Error:  err.Error(),
 			}
 		}
-		resp.BuildListResponse(serializer.BuildCarts(carts), uint(len(carts)))
+		resp.BuildResponseTotal(serializer.BuildCarts(carts), uint(len(carts)))
 	}
 
 	// 如果缓存未命中，则从数据库查询
@@ -54,5 +54,5 @@ func (service *ShowCartService) Show(ctx context.Context, id string) resp.Respon
 		}
 	}
 
-	return resp.BuildListResponse(serializer.BuildCarts(carts), uint(len(carts)))
+	return resp.BuildResponseTotal(serializer.BuildCarts(carts), uint(len(carts)))
 }
