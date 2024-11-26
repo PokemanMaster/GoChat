@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/PokemanMaster/GoChat/server/common"
-	"github.com/PokemanMaster/GoChat/server/router"
+	"github.com/PokemanMaster/GoChat/server/server/common"
+	"github.com/PokemanMaster/GoChat/server/server/router"
 )
 
 func main() {
