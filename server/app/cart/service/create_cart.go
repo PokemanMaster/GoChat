@@ -10,6 +10,7 @@ import (
 	"github.com/PokemanMaster/GoChat/server/server/common/db"
 	"github.com/PokemanMaster/GoChat/server/server/pkg/e"
 	"github.com/PokemanMaster/GoChat/server/server/resp"
+	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 
 	"strconv"

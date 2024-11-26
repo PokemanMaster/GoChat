@@ -6,6 +6,7 @@ import (
 	"github.com/PokemanMaster/GoChat/server/server/common/cache"
 	"github.com/PokemanMaster/GoChat/server/server/common/db"
 	"github.com/PokemanMaster/GoChat/server/server/pkg/e"
+	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 
 	"gorm.io/gorm"
