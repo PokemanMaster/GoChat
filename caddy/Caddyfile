@@ -1,0 +1,23 @@
+http:// {
+    root * /usr/share/caddy
+    encode gzip
+    file_server
+}
+
+www.lvyouwang.xyz {
+    route /api/* {
+        reverse_proxy 47.113.104.184:3000
+    }
+    route /* {
+        root * /usr/share/caddy
+        try_files {path} /index.html
+        file_server
+    }
+}
+
+ee.lvyouwang.xyz {
+    reverse_proxy 47.113.104.184:3000
+    encode gzip
+}
+
+

@@ -1,0 +1,48 @@
+version: '4'
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: client
+    restart: always
+    ports:
+      - "80:80"
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: server
+    restart: always
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - "3000:3000"
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    hostname: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql/data:/var/lib/mysql
+      - ./data/mysql/init:/docker-entrypoint-initdb.d
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: tourist
+  redis:
+    image: redis:7.0.15
+    container_name: redis
+    restart: unless-stopped
+    volumes:
+      - ./data/redis/conf:/usr/local/etc/redis
+      - ./data/redis/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+
+
