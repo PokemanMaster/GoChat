@@ -2,7 +2,7 @@ package model
 
 import (
 	"context"
-	"github.com/PokemanMaster/GoChat/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
 
 	"time"
 )

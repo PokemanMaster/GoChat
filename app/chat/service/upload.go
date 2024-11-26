@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"io"
 	"math/rand"
 	"os"
@@ -43,8 +43,8 @@ func (service *UploadLocalService) UploadLocal(c *gin.Context) resp.Response {
 	}
 	url := "./asset/upload/" + fileName
 	return resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 		Data:   url,
 	}
 }
@@ -87,8 +87,8 @@ func UploadOOS(c *gin.Context) resp.Response {
 	}
 	url := "http://" + viper.GetString("oos.Bucket") + "." + viper.GetString("oos.EndPoint") + "/" + fileName
 	return resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 		Data:   url,
 	}
 }

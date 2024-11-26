@@ -3,7 +3,7 @@ package ws
 import (
 	"encoding/json"
 	"fmt"
-	Muser "github.com/PokemanMaster/GoChat/app/user/model"
+	Muser "github.com/PokemanMaster/GoChat/server/app/user/model"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/viper"
 	"gopkg.in/fatih/set.v0"

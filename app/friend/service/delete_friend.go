@@ -1,10 +1,10 @@
 package service
 
 import (
-	"github.com/PokemanMaster/GoChat/app/user/model"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/user/model"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"go.uber.org/zap"
 )
 
@@ -22,8 +22,8 @@ func (service *DeleteFriendService) Delete() *resp.Response {
 	if err != nil {
 		zap.L().Info("好友不存在", zap.String("app.friend.service.delete_friend", err.Error()))
 		return &resp.Response{
-			Status: e.ERROR_NOT_EXIST_FRIEND,
-			Msg:    e.GetMsg(e.ERROR_NOT_EXIST_FRIEND),
+			Status: e2.ERROR_NOT_EXIST_FRIEND,
+			Msg:    e2.GetMsg(e2.ERROR_NOT_EXIST_FRIEND),
 		}
 	}
 
@@ -35,8 +35,8 @@ func (service *DeleteFriendService) Delete() *resp.Response {
 		tx.Rollback()
 		zap.L().Info("删除好友失败", zap.String("app.friend.service.delete_friend", err.Error()))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
@@ -47,15 +47,15 @@ func (service *DeleteFriendService) Delete() *resp.Response {
 		tx.Rollback()
 		zap.L().Info("双向删除好友失败", zap.String("app.friend.service.delete_friend", err.Error()))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
 	tx.Commit()
 
 	return &resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 	}
 }

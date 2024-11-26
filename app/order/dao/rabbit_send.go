@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/PokemanMaster/GoChat/common/cache/rabbit"
-	"github.com/PokemanMaster/GoChat/resp"
+	rabbit2 "github.com/PokemanMaster/GoChat/server/common/cache/rabbit"
+	"github.com/PokemanMaster/GoChat/server/resp"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 	"time"
@@ -13,8 +13,8 @@ import (
 
 // Product1 发送消息
 func Product1(message interface{}) error {
-	ch := rabbit.RMQ
-	constant := rabbit.Constant{
+	ch := rabbit2.RMQ
+	constant := rabbit2.Constant{
 		ExchangeType:      "topic",
 		NormalExchange:    "exchange.yna",
 		DeadExchange:      "exchange.dead.yna",
@@ -26,7 +26,7 @@ func Product1(message interface{}) error {
 		ConsumerName:      "yna1",
 	}
 	// 声明交换机
-	err := rabbit.DeclareExchange(ch, constant.NormalExchange, constant.ExchangeType)
+	err := rabbit2.DeclareExchange(ch, constant.NormalExchange, constant.ExchangeType)
 	resp.FailOnError(err, "Failed to declare a Exchange")
 
 	// 设置超时上下文.

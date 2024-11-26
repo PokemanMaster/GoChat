@@ -1,8 +1,8 @@
 package serializer
 
 import (
-	model2 "github.com/PokemanMaster/GoChat/app/category/model"
-	"github.com/PokemanMaster/GoChat/app/product/model"
+	model2 "github.com/PokemanMaster/GoChat/server/app/category/model"
+	model3 "github.com/PokemanMaster/GoChat/server/app/product/model"
 )
 
 // ProductSerialization 商品序列化
@@ -18,7 +18,7 @@ type ProductSerialization struct {
 }
 
 // BuildProduct 序列化商品
-func BuildProduct(item model.Product) ProductSerialization {
+func BuildProduct(item model3.Product) ProductSerialization {
 	return ProductSerialization{
 		ID:         item.ID,
 		CategoryID: item.CategoryID,
@@ -32,7 +32,7 @@ func BuildProduct(item model.Product) ProductSerialization {
 }
 
 // BuildProducts 序列化商品列表
-func BuildProducts(items []model.Product) (products []ProductSerialization) {
+func BuildProducts(items []model3.Product) (products []ProductSerialization) {
 	for _, item := range items {
 		product := BuildProduct(item)
 		products = append(products, product)
@@ -51,7 +51,7 @@ type ProductBrandSerialization struct {
 }
 
 // BuildProductBrand 序列化商品品牌
-func BuildProductBrand(item model.ProductBrand) ProductBrandSerialization {
+func BuildProductBrand(item model3.ProductBrand) ProductBrandSerialization {
 	return ProductBrandSerialization{
 		ID:     item.ID,
 		Name:   item.Name,
@@ -61,7 +61,7 @@ func BuildProductBrand(item model.ProductBrand) ProductBrandSerialization {
 }
 
 // BuildProductBrands 序列化商品品牌
-func BuildProductBrands(items []model.ProductBrand) (categories []ProductBrandSerialization) {
+func BuildProductBrands(items []model3.ProductBrand) (categories []ProductBrandSerialization) {
 	for _, item := range items {
 		category := BuildProductBrand(item)
 		categories = append(categories, category)
@@ -115,7 +115,7 @@ type ProductParamSerialization struct {
 }
 
 // BuildProductParam 序列化商品图片
-func BuildProductParam(item model.ProductParam) ProductParamSerialization {
+func BuildProductParam(item model3.ProductParam) ProductParamSerialization {
 	return ProductParamSerialization{
 		ID:        item.ID,
 		ProductID: item.ProductID,
@@ -129,7 +129,7 @@ func BuildProductParam(item model.ProductParam) ProductParamSerialization {
 }
 
 // BuildProductParams 序列化商品图片列表
-func BuildProductParams(items []model.ProductParam) (Params []ProductParamSerialization) {
+func BuildProductParams(items []model3.ProductParam) (Params []ProductParamSerialization) {
 	for _, item := range items {
 		Param := BuildProductParam(item)
 		Params = append(Params, Param)

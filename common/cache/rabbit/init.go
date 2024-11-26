@@ -1,7 +1,7 @@
 package rabbit
 
 import (
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/spf13/viper"
 )

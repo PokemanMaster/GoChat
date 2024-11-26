@@ -2,13 +2,13 @@ package service
 
 import (
 	"context"
-	MOrder "github.com/PokemanMaster/GoChat/app/order/model"
-	MTransport "github.com/PokemanMaster/GoChat/app/transport/model"
-	MUser "github.com/PokemanMaster/GoChat/app/user/model"
-	"github.com/PokemanMaster/GoChat/common/cache"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	MOrder "github.com/PokemanMaster/GoChat/server/app/order/model"
+	MTransport "github.com/PokemanMaster/GoChat/server/app/transport/model"
+	MUser "github.com/PokemanMaster/GoChat/server/app/user/model"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"go.uber.org/zap"
 
 	"strconv"
@@ -41,10 +41,10 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 	}
 
 	order, code := MOrder.ShowOrder(service.Code)
-	if code != e.SUCCESS {
+	if code != e2.SUCCESS {
 		return &resp.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    e2.GetMsg(code),
 		}
 	}
 
@@ -60,8 +60,8 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 	if err := tx.Where("id=?", service.UserID).First(&user).Error; err != nil {
 		tx.Rollback()
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 			Error:  err.Error(),
 		}
 	}
@@ -70,8 +70,8 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 	if user.Money < ProductMoney {
 		tx.Rollback()
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
@@ -80,8 +80,8 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 	if UserMoney < service.Price {
 		tx.Rollback()
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
@@ -91,8 +91,8 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 	if err := tx.Save(&order).Error; err != nil {
 		tx.Rollback()
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 			Error:  err.Error(),
 		}
 	}
@@ -112,16 +112,16 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 	if err := tx.Create(&delivery).Error; err != nil {
 		tx.Rollback()
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 			Error:  err.Error(),
 		}
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 			Error:  err.Error(),
 		}
 	}
@@ -136,6 +136,6 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 
 	return &resp.Response{
 		Status: code,
-		Msg:    e.GetMsg(code),
+		Msg:    e2.GetMsg(code),
 	}
 }

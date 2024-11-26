@@ -1,11 +1,11 @@
 package service
 
 import (
-	Mgroup "github.com/PokemanMaster/GoChat/app/group/model"
-	Muser "github.com/PokemanMaster/GoChat/app/user/model"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	Mgroup "github.com/PokemanMaster/GoChat/server/app/group/model"
+	Muser "github.com/PokemanMaster/GoChat/server/app/user/model"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 )
 
 type GroupListsService struct {
@@ -20,8 +20,8 @@ func (service *GroupListsService) List(id string) resp.Response {
 		Find(&contacts).Error
 	if err != nil {
 		return resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
@@ -38,14 +38,14 @@ func (service *GroupListsService) List(id string) resp.Response {
 		Find(&groups).Error
 	if err != nil {
 		return resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
 	return resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 		Data:   groups,
 	}
 }

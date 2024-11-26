@@ -1,18 +1,18 @@
 package router
 
 import (
-	"github.com/PokemanMaster/GoChat/app/carousel/api"
-	CartApi "github.com/PokemanMaster/GoChat/app/cart/api"
-	api2 "github.com/PokemanMaster/GoChat/app/category/api"
-	ChatApi "github.com/PokemanMaster/GoChat/app/chat/api"
-	FavoriteApi "github.com/PokemanMaster/GoChat/app/favorite/api"
-	FriendApi "github.com/PokemanMaster/GoChat/app/friend/api"
-	GroupApi "github.com/PokemanMaster/GoChat/app/group/api"
-	OrderApi "github.com/PokemanMaster/GoChat/app/order/api"
-	PaymentApi "github.com/PokemanMaster/GoChat/app/payment/api"
-	ProductApi "github.com/PokemanMaster/GoChat/app/product/api"
-	UserApi "github.com/PokemanMaster/GoChat/app/user/api"
-	"github.com/PokemanMaster/GoChat/pkg/mid"
+	"github.com/PokemanMaster/GoChat/server/app/carousel/api"
+	CartApi "github.com/PokemanMaster/GoChat/server/app/cart/api"
+	api2 "github.com/PokemanMaster/GoChat/server/app/category/api"
+	ChatApi "github.com/PokemanMaster/GoChat/server/app/chat/api"
+	FavoriteApi "github.com/PokemanMaster/GoChat/server/app/favorite/api"
+	FriendApi "github.com/PokemanMaster/GoChat/server/app/friend/api"
+	GroupApi "github.com/PokemanMaster/GoChat/server/app/group/api"
+	OrderApi "github.com/PokemanMaster/GoChat/server/app/order/api"
+	PaymentApi "github.com/PokemanMaster/GoChat/server/app/payment/api"
+	api3 "github.com/PokemanMaster/GoChat/server/app/product/api"
+	UserApi "github.com/PokemanMaster/GoChat/server/app/user/api"
+	"github.com/PokemanMaster/GoChat/server/pkg/mid"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
@@ -54,19 +54,19 @@ func Router() *gin.Engine {
 		v1.POST("/attach/upload", ChatApi.Upload)    // 上传文件
 
 		// 商品
-		v1.GET("/carousels", api.ListCarousels)                    // 获取所有轮播图
-		v1.GET("/products/categories", api2.ListCategories)        // 获取所有商品分类
-		v1.GET("/products", ProductApi.ListProducts)               // 获取所有商品详情
-		v1.GET("/products/:id", ProductApi.ShowProduct)            // 获取某个商品详情
-		v1.GET("/products/param", ProductApi.ListProductsParams)   // 获取所有商品参数
-		v1.GET("/products/:id/param", ProductApi.ShowProductParam) // 获取某个商品参数
-		v1.GET("/products/brand", ProductApi.ListProducts)         // 获取所有商品品牌
-		v1.POST("/searches", ProductApi.SearchProducts)            // 搜索商品
+		v1.GET("/carousels", api.ListCarousels)              // 获取所有轮播图
+		v1.GET("/products/categories", api2.ListCategories)  // 获取所有商品分类
+		v1.GET("/products", api3.ListProducts)               // 获取所有商品详情
+		v1.GET("/products/:id", api3.ShowProduct)            // 获取某个商品详情
+		v1.GET("/products/param", api3.ListProductsParams)   // 获取所有商品参数
+		v1.GET("/products/:id/param", api3.ShowProductParam) // 获取某个商品参数
+		v1.GET("/products/brand", api3.ListProducts)         // 获取所有商品品牌
+		v1.POST("/searches", api3.SearchProducts)            // 搜索商品
 
 		// 商品排行榜
-		v1.GET("rankings", ProductApi.ListRanking)          // 排行榜/热门
-		v1.GET("rankings/elec", ProductApi.ListElecRanking) // 排行榜/家电排行
-		v1.GET("rankings/acce", ProductApi.ListAcceRanking) // 排行榜/配件排行
+		v1.GET("rankings", api3.ListRanking)          // 排行榜/热门
+		v1.GET("rankings/elec", api3.ListElecRanking) // 排行榜/家电排行
+		v1.GET("rankings/acce", api3.ListAcceRanking) // 排行榜/配件排行
 
 		// 购物车
 		v1.POST("carts", CartApi.CreateCart)   // 创建购物车

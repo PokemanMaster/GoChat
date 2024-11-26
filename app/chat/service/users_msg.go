@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 )
 
 type GetMessageService struct {
@@ -24,8 +24,8 @@ func (service *GetMessageService) Get() *resp.Response {
 	res := GetMessage(int64(userIdA), int64(userIdB), int64(start), int64(end), isRev)
 	// 将查询到的消息结果返回给客户端
 	return &resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 		Data:   res,
 	}
 }

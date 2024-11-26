@@ -1,6 +1,8 @@
 package serializer
 
-import "github.com/PokemanMaster/GoChat/app/user/model"
+import (
+	"github.com/PokemanMaster/GoChat/server/app/user/model"
+)
 
 // GroupSerialization 用户序列化器
 type GroupSerialization struct {

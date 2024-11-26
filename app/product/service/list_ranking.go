@@ -3,12 +3,12 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/PokemanMaster/GoChat/app/product/model"
-	"github.com/PokemanMaster/GoChat/app/product/serializer"
-	"github.com/PokemanMaster/GoChat/common/cache"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/product/model"
+	"github.com/PokemanMaster/GoChat/server/app/product/serializer"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"go.uber.org/zap"
 	"strings"
 )
@@ -21,7 +21,7 @@ type ListRankingService struct {
 func (service *ListRankingService) List(ctx context.Context) resp.Response {
 	var products []model.ProductParam
 
-	code := e.SUCCESS
+	code := e2.SUCCESS
 	// 从redis读取点击前十的视频
 	pros, _ := cache.RC.ZRevRange(ctx, cache.RankKey, 0, 9).Result()
 
@@ -30,10 +30,10 @@ func (service *ListRankingService) List(ctx context.Context) resp.Response {
 		err := db.DB.Where("product_id in (?)", pros).Order(order).Find(&products).Error
 		if err != nil {
 			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
-			code := e.ERROR_DATABASE
+			code := e2.ERROR_DATABASE
 			return resp.Response{
 				Status: code,
-				Msg:    e.GetMsg(code),
+				Msg:    e2.GetMsg(code),
 				Error:  err.Error(),
 			}
 		}
@@ -41,7 +41,7 @@ func (service *ListRankingService) List(ctx context.Context) resp.Response {
 
 	return resp.Response{
 		Status: code,
-		Msg:    e.GetMsg(code),
+		Msg:    e2.GetMsg(code),
 		Data:   serializer.BuildProductParams(products),
 	}
 }

@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/PokemanMaster/GoChat/app/carousel/service"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/carousel/service"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

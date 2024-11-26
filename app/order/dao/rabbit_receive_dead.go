@@ -1,15 +1,15 @@
 package dao
 
 import (
-	"github.com/PokemanMaster/GoChat/common/cache/rabbit"
-	"github.com/PokemanMaster/GoChat/resp"
+	rabbit2 "github.com/PokemanMaster/GoChat/server/common/cache/rabbit"
+	"github.com/PokemanMaster/GoChat/server/resp"
 
 	"log"
 )
 
 func Consumer2() {
-	ch := rabbit.RMQ
-	constant := rabbit.Constant{
+	ch := rabbit2.RMQ
+	constant := rabbit2.Constant{
 		ExchangeType:     "topic",
 		NormalExchange:   "exchange.yna",
 		DeadExchange:     "exchange.dead.yna",
@@ -21,11 +21,11 @@ func Consumer2() {
 	}
 
 	// 声明死信交换机
-	err := rabbit.DeclareExchange(ch, constant.DeadExchange, constant.ExchangeType)
+	err := rabbit2.DeclareExchange(ch, constant.DeadExchange, constant.ExchangeType)
 	resp.FailOnError(err, "Failed to Declare a exchange")
 
 	// 声明消费者
-	msgs, err := rabbit.DeclareConsume(ch, constant.DeadQueue, constant.ConsumerName)
+	msgs, err := rabbit2.DeclareConsume(ch, constant.DeadQueue, constant.ConsumerName)
 	resp.FailOnError(err, "Failed to consume messages")
 
 	var forever chan struct{}

@@ -1,4 +1,4 @@
-module github.com/PokemanMaster/GoChat
+module github.com/PokemanMaster/GoChat/server
 
 go 1.23
 

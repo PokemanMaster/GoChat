@@ -3,12 +3,12 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"github.com/PokemanMaster/GoChat/app/cart/model"
-	"github.com/PokemanMaster/GoChat/app/cart/serializer"
-	"github.com/PokemanMaster/GoChat/common/cache"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/cart/model"
+	"github.com/PokemanMaster/GoChat/server/app/cart/serializer"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"go.uber.org/zap"
 
 	"strconv"
@@ -36,14 +36,14 @@ func (service *UpdateCartService) Update(ctx context.Context) *resp.Response {
 		if err != nil {
 			zap.L().Error("购物车缓存数据解析失败", zap.String("app.cart.service", "update_cart.go"))
 			return &resp.Response{
-				Status: e.ERROR_UNMARSHAL_JSON,
-				Msg:    e.GetMsg(e.ERROR_UNMARSHAL_JSON),
+				Status: e2.ERROR_UNMARSHAL_JSON,
+				Msg:    e2.GetMsg(e2.ERROR_UNMARSHAL_JSON),
 			}
 		}
 	} else {
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
@@ -61,8 +61,8 @@ func (service *UpdateCartService) Update(ctx context.Context) *resp.Response {
 	if err != nil {
 		zap.L().Error("数据库更新购物车信息失败", zap.String("app.cart.service", "update_cart.go"))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
@@ -71,8 +71,8 @@ func (service *UpdateCartService) Update(ctx context.Context) *resp.Response {
 	if err != nil {
 		zap.L().Error("购物车列表序列化失败", zap.String("app.cart.service", "update_cart.go"))
 		return &resp.Response{
-			Status: e.ERROR_UNMARSHAL_JSON,
-			Msg:    e.GetMsg(e.ERROR_UNMARSHAL_JSON),
+			Status: e2.ERROR_UNMARSHAL_JSON,
+			Msg:    e2.GetMsg(e2.ERROR_UNMARSHAL_JSON),
 		}
 	}
 
@@ -81,15 +81,15 @@ func (service *UpdateCartService) Update(ctx context.Context) *resp.Response {
 	if err != nil {
 		zap.L().Error("更新购物车缓存失败", zap.String("app.cart.service", "update_cart.go"))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
 	// 返回最新的购物车信息
 	return &resp.Response{
-		Status: e.SUCCESS,
+		Status: e2.SUCCESS,
 		Data:   serializer.BuildCarts(carts), // 返回更新后的购物车列表
-		Msg:    e.GetMsg(e.SUCCESS),
+		Msg:    e2.GetMsg(e2.SUCCESS),
 	}
 }

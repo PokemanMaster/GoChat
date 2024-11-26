@@ -3,11 +3,11 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/PokemanMaster/GoChat/app/favorite/model"
-	"github.com/PokemanMaster/GoChat/common/cache"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/favorite/model"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 
@@ -31,15 +31,15 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 		} else {
 			zap.L().Info("数据查询失败", zap.String("app.favorite.service.create_favorites", err.Error()))
 			return &resp.Response{
-				Status: e.ERROR_DATABASE,
-				Msg:    e.GetMsg(e.ERROR_DATABASE),
+				Status: e2.ERROR_DATABASE,
+				Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 			}
 		}
 	} else {
 		zap.L().Info("favorite已存在", zap.String("app.favorite.service.create_favorites", ""))
 		return &resp.Response{
-			Status: e.ERROR_EXIST_FAVORITE,
-			Msg:    e.GetMsg(e.ERROR_EXIST_FAVORITE),
+			Status: e2.ERROR_EXIST_FAVORITE,
+			Msg:    e2.GetMsg(e2.ERROR_EXIST_FAVORITE),
 		}
 	}
 
@@ -49,8 +49,8 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 	if err = db.DB.Create(&favorite).Error; err != nil {
 		zap.L().Error("数据创建失败", zap.String("app.favorite.service.create_favorites", ""))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
@@ -65,7 +65,7 @@ func (service *CreateFavoriteService) Create(ctx context.Context) *resp.Response
 	}()
 
 	return &resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 	}
 }

@@ -1,11 +1,11 @@
 package service
 
 import (
-	"github.com/PokemanMaster/GoChat/app/product/model"
-	"github.com/PokemanMaster/GoChat/app/product/serializer"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/mid"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/product/model"
+	"github.com/PokemanMaster/GoChat/server/app/product/serializer"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/pkg/mid"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"go.uber.org/zap"
 )
 
@@ -18,27 +18,27 @@ type SearchProductsService struct {
 func (service *SearchProductsService) Show() resp.Response {
 
 	validSearch, code, err := mid.ValidateSearchInput(service.Search)
-	if code != e.SUCCESS {
+	if code != e2.SUCCESS {
 		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
 		return resp.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    e2.GetMsg(code),
 			Error:  err.Error(),
 		}
 	}
 
 	productParam, code, err := model.SearchProductParam(validSearch)
-	if code != e.SUCCESS {
+	if code != e2.SUCCESS {
 		return resp.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    e2.GetMsg(code),
 			Error:  err.Error(),
 		}
 	}
 
 	return resp.Response{
 		Status: code,
-		Msg:    e.GetMsg(code),
+		Msg:    e2.GetMsg(code),
 		Data:   serializer.BuildProductParams(productParam),
 	}
 }

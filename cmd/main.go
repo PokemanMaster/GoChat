@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/PokemanMaster/GoChat/common"
-	"github.com/PokemanMaster/GoChat/router"
+	"github.com/PokemanMaster/GoChat/server/common"
+	"github.com/PokemanMaster/GoChat/server/router"
 )
 
 func main() {

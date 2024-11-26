@@ -2,9 +2,9 @@ package model
 
 import (
 	"context"
-	"github.com/PokemanMaster/GoChat/common/cache"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	"github.com/PokemanMaster/GoChat/server/pkg/e"
 	"go.uber.org/zap"
 	"strconv"
 	"time"

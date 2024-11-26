@@ -3,12 +3,12 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"github.com/PokemanMaster/GoChat/app/carousel/model"
-	"github.com/PokemanMaster/GoChat/app/carousel/serializer"
-	"github.com/PokemanMaster/GoChat/common/cache"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/carousel/model"
+	"github.com/PokemanMaster/GoChat/server/app/carousel/serializer"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"go.uber.org/zap"
 
 	"time"
@@ -20,7 +20,7 @@ type ListCarouselsService struct {
 // List 视频列表
 func (service *ListCarouselsService) List(ctx context.Context) resp.Response {
 	var carousels []model.Carousel
-	code := e.SUCCESS
+	code := e2.SUCCESS
 
 	// Redis key
 	redisKey := "ListCarousels"
@@ -33,17 +33,17 @@ func (service *ListCarouselsService) List(ctx context.Context) resp.Response {
 		err = json.Unmarshal([]byte(cachedData), &carousels)
 		if err != nil {
 			zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
-			code = e.ERROR
+			code = e2.ERROR
 			return resp.Response{
 				Status: code,
-				Msg:    e.GetMsg(code),
+				Msg:    e2.GetMsg(code),
 				Error:  err.Error(),
 			}
 		}
 		// 返回缓存的数据
 		return resp.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    e2.GetMsg(code),
 			Data:   serializer.BuildCarousels(carousels),
 		}
 	}
@@ -51,10 +51,10 @@ func (service *ListCarouselsService) List(ctx context.Context) resp.Response {
 	// 如果 Redis 中没有数据，查询数据库
 	if err := db.DB.Find(&carousels).Error; err != nil {
 		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
-		code = e.ERROR_DATABASE
+		code = e2.ERROR_DATABASE
 		return resp.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    e2.GetMsg(code),
 			Error:  err.Error(),
 		}
 	}
@@ -63,10 +63,10 @@ func (service *ListCarouselsService) List(ctx context.Context) resp.Response {
 	cachedDataBytes, err := json.Marshal(carousels)
 	if err != nil {
 		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
-		code = e.ERROR
+		code = e2.ERROR
 		return resp.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    e2.GetMsg(code),
 			Error:  err.Error(),
 		}
 	}
@@ -75,10 +75,10 @@ func (service *ListCarouselsService) List(ctx context.Context) resp.Response {
 	err = cache.RC.Set(ctx, redisKey, cachedDataBytes, time.Hour*114514).Err()
 	if err != nil {
 		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
-		code = e.ERROR
+		code = e2.ERROR
 		return resp.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    e2.GetMsg(code),
 			Error:  err.Error(),
 		}
 	}
@@ -86,7 +86,7 @@ func (service *ListCarouselsService) List(ctx context.Context) resp.Response {
 	// 返回数据库查询的数据
 	return resp.Response{
 		Status: code,
-		Msg:    e.GetMsg(code),
+		Msg:    e2.GetMsg(code),
 		Data:   serializer.BuildCarousels(carousels),
 	}
 }

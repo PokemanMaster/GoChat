@@ -1,7 +1,7 @@
 package resp
 
 import (
-	"github.com/PokemanMaster/GoChat/pkg/e"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
 	"log"
 )
 
@@ -34,8 +34,8 @@ type TrackedErrorResponse struct {
 // BuildResponseTotal 带有总数的列表构建器
 func BuildResponseTotal(items interface{}, total uint) Response {
 	return Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 		Data: DataTotal{
 			Items: items,
 			Total: total,

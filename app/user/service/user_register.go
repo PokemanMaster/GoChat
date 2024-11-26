@@ -3,11 +3,11 @@ package service
 import (
 	"errors"
 	"fmt"
-	"github.com/PokemanMaster/GoChat/app/user/model"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/mid"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/user/model"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/pkg/mid"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"math/rand"
@@ -31,8 +31,8 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 	if UserName == "" {
 		zap.L().Info("用户名不能为空", zap.String("app.user.service.user_register", ""))
 		return &resp.Response{
-			Status: e.ERROR_ACCOUNT_NOT_EMPTY,
-			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EMPTY),
+			Status: e2.ERROR_ACCOUNT_NOT_EMPTY,
+			Msg:    e2.GetMsg(e2.ERROR_ACCOUNT_NOT_EMPTY),
 		}
 	}
 
@@ -40,8 +40,8 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 	if Password == "" || RePassword == "" {
 		zap.L().Info("密码不能为空", zap.String("app.user.service.user_register", ""))
 		return &resp.Response{
-			Status: e.ERROR_PASSWORD_NOT_EMPTY,
-			Msg:    e.GetMsg(e.ERROR_PASSWORD_NOT_EMPTY),
+			Status: e2.ERROR_PASSWORD_NOT_EMPTY,
+			Msg:    e2.GetMsg(e2.ERROR_PASSWORD_NOT_EMPTY),
 		}
 	}
 
@@ -49,8 +49,8 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 	if Password != RePassword {
 		zap.L().Info("两次密码不一致", zap.String("app.user.service.user_register", ""))
 		return &resp.Response{
-			Status: e.ERROR_PASSWORD_CONFIRM,
-			Msg:    e.GetMsg(e.ERROR_PASSWORD_CONFIRM),
+			Status: e2.ERROR_PASSWORD_CONFIRM,
+			Msg:    e2.GetMsg(e2.ERROR_PASSWORD_CONFIRM),
 		}
 	}
 
@@ -62,16 +62,16 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 		} else {
 			zap.L().Error("查询用户失败", zap.String("app.user.service.user_register", ""))
 			return &resp.Response{
-				Status: e.ERROR_DATABASE,
-				Msg:    e.GetMsg(e.ERROR_DATABASE),
+				Status: e2.ERROR_DATABASE,
+				Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 				Error:  err.Error(),
 			}
 		}
 	} else {
 		zap.L().Info("用户名已存在", zap.String("app.user.service.user_register", ""))
 		return &resp.Response{
-			Status: e.ERROR_ACCOUNT_EXIST,
-			Msg:    e.GetMsg(e.ERROR_ACCOUNT_EXIST),
+			Status: e2.ERROR_ACCOUNT_EXIST,
+			Msg:    e2.GetMsg(e2.ERROR_ACCOUNT_EXIST),
 		}
 	}
 
@@ -87,15 +87,15 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 	if err != nil {
 		zap.L().Error("创建用户失败", zap.String("app.user.service.user_register", err.Error()))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 			Error:  err.Error(),
 		}
 	}
 
 	// 注册成功
 	return &resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 	}
 }

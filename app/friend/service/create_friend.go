@@ -2,10 +2,10 @@ package service
 
 import (
 	"errors"
-	"github.com/PokemanMaster/GoChat/app/user/model"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/user/model"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -30,16 +30,16 @@ func (service *CreateFriendService) Create() *resp.Response {
 		} else {
 			zap.L().Error("查询用户失败", zap.String("app.friend.service.create_friend", err.Error()))
 			return &resp.Response{
-				Status: e.ERROR_DATABASE,
-				Msg:    e.GetMsg(e.ERROR_DATABASE),
+				Status: e2.ERROR_DATABASE,
+				Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 				Error:  err.Error(),
 			}
 		}
 	} else {
 		zap.L().Info("好友已存在", zap.String("app.user.service.user_register", ""))
 		return &resp.Response{
-			Status: e.ERROR_ALREADY_FRIENDS,
-			Msg:    e.GetMsg(e.ERROR_ALREADY_FRIENDS),
+			Status: e2.ERROR_ALREADY_FRIENDS,
+			Msg:    e2.GetMsg(e2.ERROR_ALREADY_FRIENDS),
 		}
 	}
 
@@ -53,14 +53,14 @@ func (service *CreateFriendService) Create() *resp.Response {
 	if err != nil {
 		zap.L().Error("创建用户失败", zap.String("app.friend.service.create_friend", err.Error()))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
 	// 添加成功
 	return &resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 	}
 }

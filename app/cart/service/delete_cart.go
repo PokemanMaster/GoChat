@@ -2,11 +2,11 @@ package service
 
 import (
 	"context"
-	"github.com/PokemanMaster/GoChat/app/cart/model"
-	"github.com/PokemanMaster/GoChat/common/cache"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/cart/model"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"go.uber.org/zap"
 	"strconv"
 )
@@ -20,10 +20,10 @@ type DeleteCartService struct {
 func (service *DeleteCartService) Delete(ctx context.Context) *resp.Response {
 	// 查询购物车
 	cart, code, err := model.ShowCart(service.UserID, service.ProductID)
-	if code != e.SUCCESS {
+	if code != e2.SUCCESS {
 		return &resp.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    e2.GetMsg(code),
 			Error:  err.Error(),
 		}
 	}
@@ -32,10 +32,10 @@ func (service *DeleteCartService) Delete(ctx context.Context) *resp.Response {
 	err = db.DB.Delete(&cart).Error
 	if err != nil {
 		zap.L().Error("删除Cart数据购物车失败", zap.String("app.cart.service", "delete_cart.go"))
-		code = e.ERROR_DATABASE
+		code = e2.ERROR_DATABASE
 		return &resp.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    e2.GetMsg(code),
 		}
 	}
 
@@ -45,14 +45,14 @@ func (service *DeleteCartService) Delete(ctx context.Context) *resp.Response {
 	if err != nil {
 		zap.L().Error("删除Cart缓存失败", zap.String("app.cart.service", "delete_cart.go"))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
-	code = e.SUCCESS
+	code = e2.SUCCESS
 	return &resp.Response{
 		Status: code,
-		Msg:    e.GetMsg(code),
+		Msg:    e2.GetMsg(code),
 	}
 }

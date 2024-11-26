@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/PokemanMaster/GoChat/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
 	"strconv"
 	"sync"
 )

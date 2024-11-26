@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	"github.com/PokemanMaster/GoChat/server/pkg/e"
 )
 
 // OrderDetail 订单详情表

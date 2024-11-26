@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/PokemanMaster/GoChat/app/user/model"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/user/model"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"github.com/asaskevich/govalidator"
 	"go.uber.org/zap"
 )
@@ -32,13 +32,13 @@ func (service *UserUpdateService) UserUpdate() *resp.Response {
 	if err != nil {
 		zap.L().Error("更新用户失败", zap.String("app.user.service.user_update", err.Error()))
 		return &resp.Response{
-			Status: e.ERROR_MATCHED_USERNAME,
-			Msg:    e.GetMsg(e.ERROR_MATCHED_USERNAME),
+			Status: e2.ERROR_MATCHED_USERNAME,
+			Msg:    e2.GetMsg(e2.ERROR_MATCHED_USERNAME),
 		}
 	}
 
 	return &resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 	}
 }

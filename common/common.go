@@ -1,26 +1,25 @@
 package common
 
 import (
-	"github.com/PokemanMaster/GoChat/app/carousel/model"
-	cart "github.com/PokemanMaster/GoChat/app/cart/model"
-	model2 "github.com/PokemanMaster/GoChat/app/category/model"
-	"github.com/PokemanMaster/GoChat/app/chat/ws"
-	favorite "github.com/PokemanMaster/GoChat/app/favorite/model"
-	MGroup "github.com/PokemanMaster/GoChat/app/group/model"
-	order "github.com/PokemanMaster/GoChat/app/order/model"
-	product "github.com/PokemanMaster/GoChat/app/product/model"
-	transport "github.com/PokemanMaster/GoChat/app/transport/model"
-	user "github.com/PokemanMaster/GoChat/app/user/model"
-	"github.com/PokemanMaster/GoChat/common/logger"
+	"github.com/PokemanMaster/GoChat/server/app/carousel/model"
+	cart "github.com/PokemanMaster/GoChat/server/app/cart/model"
+	model2 "github.com/PokemanMaster/GoChat/server/app/category/model"
+	"github.com/PokemanMaster/GoChat/server/app/chat/ws"
+	favorite "github.com/PokemanMaster/GoChat/server/app/favorite/model"
+	MGroup "github.com/PokemanMaster/GoChat/server/app/group/model"
+	model5 "github.com/PokemanMaster/GoChat/server/app/order/model"
+	model3 "github.com/PokemanMaster/GoChat/server/app/product/model"
+	model7 "github.com/PokemanMaster/GoChat/server/app/transport/model"
+	model4 "github.com/PokemanMaster/GoChat/server/app/user/model"
+	model6 "github.com/PokemanMaster/GoChat/server/app/warehouse/model"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/cache/rabbit"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	"github.com/PokemanMaster/GoChat/server/common/logger"
+	"github.com/PokemanMaster/GoChat/server/config"
+	"github.com/PokemanMaster/GoChat/server/pkg/mid"
+	"github.com/PokemanMaster/GoChat/server/pkg/utils"
 	"go.uber.org/zap"
-
-	warehouse "github.com/PokemanMaster/GoChat/app/warehouse/model"
-	"github.com/PokemanMaster/GoChat/common/cache"
-	"github.com/PokemanMaster/GoChat/common/cache/rabbit"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/config"
-	"github.com/PokemanMaster/GoChat/pkg/mid"
-	"github.com/PokemanMaster/GoChat/pkg/utils"
 
 	"fmt"
 	"github.com/spf13/viper"
@@ -70,27 +69,27 @@ func TimingCleanMysql() {
 func migration() {
 	err := db.DB.Set("gorm:table_options", "charset=utf8mb4").
 		AutoMigrate(
-			&user.User{},
-			&user.Contact{},
+			&model4.User{},
+			&model4.Contact{},
 			&MGroup.GroupBasic{},
 			&model.Carousel{},
 			&cart.Cart{},
 			&favorite.Favorite{},
-			&order.Order{},
-			&order.OrderDetail{},
-			&product.Product{},              // 商品表
-			&product.ProductBrand{},         // 商品品牌表
-			&model2.ProductCategory{},       // 商品分类表
-			&product.ProductCategoryBrand{}, // 商品分类与品牌关联表
-			&product.ProductParam{},         // 商品参数表
-			&transport.TransportBackstock{}, // 退货表
-			&transport.TransportDelivery{},  // 快递表
-			&user.User{},                    // 用户表
-			&user.UserAddress{},             // 用户地址
-			&user.UserLevel{},               // 用户等级
-			&user.UserRating{},              // 用户评价表
-			&warehouse.Warehouse{},          // 仓库表
-			&warehouse.WarehouseProduct{},   // 仓库商品库存表
+			&model5.Order{},
+			&model5.OrderDetail{},
+			&model3.Product{},              // 商品表
+			&model3.ProductBrand{},         // 商品品牌表
+			&model2.ProductCategory{},      // 商品分类表
+			&model3.ProductCategoryBrand{}, // 商品分类与品牌关联表
+			&model3.ProductParam{},         // 商品参数表
+			&model7.TransportBackstock{},   // 退货表
+			&model7.TransportDelivery{},    // 快递表
+			&model4.User{},                 // 用户表
+			&model4.UserAddress{},          // 用户地址
+			&model4.UserLevel{},            // 用户等级
+			&model4.UserRating{},           // 用户评价表
+			&model6.Warehouse{},            // 仓库表
+			&model6.WarehouseProduct{},     // 仓库商品库存表
 		)
 	if err != nil {
 		fmt.Println("err", err)

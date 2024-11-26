@@ -2,8 +2,8 @@ package model
 
 import (
 	"fmt"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/mid"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	"github.com/PokemanMaster/GoChat/server/pkg/mid"
 	"gorm.io/gorm"
 	"time"
 )

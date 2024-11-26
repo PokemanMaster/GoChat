@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	conf "github.com/PokemanMaster/GoChat/pkg/utils"
+	conf "github.com/PokemanMaster/GoChat/server/pkg/utils"
 	"github.com/go-playground/validator/v10"
 )
 

@@ -1,11 +1,11 @@
 package service
 
 import (
-	"github.com/PokemanMaster/GoChat/app/user/model"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/pkg/mid"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/user/model"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/pkg/mid"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -27,8 +27,8 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	if UserName == "" {
 		zap.L().Info("用户名不能为空", zap.String("app.user.service.user_login", ""))
 		return &resp.Response{
-			Status: e.ERROR_ACCOUNT_NOT_EMPTY,
-			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EMPTY),
+			Status: e2.ERROR_ACCOUNT_NOT_EMPTY,
+			Msg:    e2.GetMsg(e2.ERROR_ACCOUNT_NOT_EMPTY),
 		}
 	}
 
@@ -36,8 +36,8 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	if Password == "" {
 		zap.L().Info("密码不能为空", zap.String("app.user.service.user_login", ""))
 		return &resp.Response{
-			Status: e.ERROR_PASSWORD_NOT_EMPTY,
-			Msg:    e.GetMsg(e.ERROR_PASSWORD_NOT_EMPTY),
+			Status: e2.ERROR_PASSWORD_NOT_EMPTY,
+			Msg:    e2.GetMsg(e2.ERROR_PASSWORD_NOT_EMPTY),
 		}
 	}
 
@@ -46,8 +46,8 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	if err != nil {
 		zap.L().Info("账号错误", zap.String("app.user.service.user_login", ""))
 		return &resp.Response{
-			Status: e.ERROR_ACCOUNT_NOT_EXIST,
-			Msg:    e.GetMsg(e.ERROR_ACCOUNT_NOT_EXIST),
+			Status: e2.ERROR_ACCOUNT_NOT_EXIST,
+			Msg:    e2.GetMsg(e2.ERROR_ACCOUNT_NOT_EXIST),
 		}
 	}
 
@@ -55,8 +55,8 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	if !mid.ValidPassword(Password, user.Salt, user.Password) {
 		zap.L().Info("密码错误", zap.String("app.user.service.user_login", ""))
 		return &resp.Response{
-			Status: e.ERROR_PASSWORD,
-			Msg:    e.GetMsg(e.ERROR_PASSWORD),
+			Status: e2.ERROR_PASSWORD,
+			Msg:    e2.GetMsg(e2.ERROR_PASSWORD),
 		}
 	}
 
@@ -65,8 +65,8 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	if err = db.DB.Save(&user).Error; err != nil {
 		zap.L().Error("更新用户失败", zap.String("app.user.service.user_login", err.Error()))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 			Error:  err.Error(),
 		}
 	}
@@ -78,8 +78,8 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 
 	// 成功返回用户数据
 	return &resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 		Data:   user,
 	}
 }

@@ -1,10 +1,10 @@
 package build
 
 import (
-	MOrder "github.com/PokemanMaster/GoChat/app/order/model"
-	MProduct "github.com/PokemanMaster/GoChat/app/product/model"
-	MTransport "github.com/PokemanMaster/GoChat/app/transport/model"
-	"github.com/PokemanMaster/GoChat/common/db"
+	"github.com/PokemanMaster/GoChat/server/app/order/model"
+	MProduct "github.com/PokemanMaster/GoChat/server/app/product/model"
+	MTransport "github.com/PokemanMaster/GoChat/server/app/transport/model"
+	"github.com/PokemanMaster/GoChat/server/common/db"
 )
 
 // UserOrdersSerialization 某个用户的所有订单
@@ -23,7 +23,7 @@ type UserOrdersSerialization struct {
 }
 
 // ResUserOrder 序列化某个用户的所有订单
-func ResUserOrder(item1 MOrder.Order, item2 MOrder.OrderDetail, item3 MProduct.ProductParam) UserOrdersSerialization {
+func ResUserOrder(item1 model.Order, item2 model.OrderDetail, item3 MProduct.ProductParam) UserOrdersSerialization {
 	return UserOrdersSerialization{
 		ID:          item1.ID,
 		Code:        item1.Code,
@@ -39,9 +39,9 @@ func ResUserOrder(item1 MOrder.Order, item2 MOrder.OrderDetail, item3 MProduct.P
 }
 
 // ResUserOrders 序列化订单
-func ResUserOrders(items []MOrder.Order) (orders []UserOrdersSerialization) {
+func ResUserOrders(items []model.Order) (orders []UserOrdersSerialization) {
 	for _, item1 := range items {
-		item2 := MOrder.OrderDetail{}
+		item2 := model.OrderDetail{}
 		item3 := MProduct.ProductParam{}
 		err := db.DB.First(&item2, item1.ID).Error
 		err = db.DB.First(&item3, item2.ProductID).Error
@@ -84,7 +84,7 @@ type OrderSerialization struct {
 }
 
 // ResOrder 序列化订单
-func ResOrder(item1 MOrder.Order, item2 MOrder.OrderDetail, item3 MProduct.ProductParam, item4 MTransport.TransportDelivery) OrderSerialization {
+func ResOrder(item1 model.Order, item2 model.OrderDetail, item3 MProduct.ProductParam, item4 MTransport.TransportDelivery) OrderSerialization {
 	return OrderSerialization{
 		ID:          item1.ID,
 		Code:        item1.Code,

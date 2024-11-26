@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/PokemanMaster/GoChat/app/group/model"
-	"github.com/PokemanMaster/GoChat/pkg/e"
-	"github.com/PokemanMaster/GoChat/resp"
+	"github.com/PokemanMaster/GoChat/server/app/group/model"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 )
 
 type CreateGroupService struct {
@@ -39,7 +39,7 @@ func (service *CreateGroupService) Create() *resp.Response {
 
 	// 返回数据
 	return &resp.Response{
-		Status: e.SUCCESS,
-		Msg:    e.GetMsg(e.SUCCESS),
+		Status: e2.SUCCESS,
+		Msg:    e2.GetMsg(e2.SUCCESS),
 	}
 }

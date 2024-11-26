@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/PokemanMaster/GoChat/app/chat/service"
-	"github.com/PokemanMaster/GoChat/app/chat/ws"
-	"github.com/PokemanMaster/GoChat/resp"
+	service2 "github.com/PokemanMaster/GoChat/server/app/chat/service"
+	"github.com/PokemanMaster/GoChat/server/app/chat/ws"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -15,7 +15,7 @@ func SendMessage(ctx *gin.Context) {
 
 // GetMessage 获取用户A、B的消息
 func GetMessage(ctx *gin.Context) {
-	services := service.GetMessageService{}
+	services := service2.GetMessageService{}
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))
@@ -28,7 +28,7 @@ func GetMessage(ctx *gin.Context) {
 
 // Upload 上传文件
 func Upload(ctx *gin.Context) {
-	services := service.UploadLocalService{}
+	services := service2.UploadLocalService{}
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		ctx.JSON(400, resp.ErrorResponse(err))

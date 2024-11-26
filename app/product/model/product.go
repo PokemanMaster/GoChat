@@ -2,7 +2,7 @@ package model
 
 import (
 	"context"
-	"github.com/PokemanMaster/GoChat/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
 	"gorm.io/gorm"
 
 	"strconv"
@@ -10,8 +10,6 @@ import (
 
 // Product 产品表结构 (Spu)
 type Product struct {
-	// 比如，去年有一件风衣卖得很火，今年不太行了。
-	// 商家不打算卖了，就删除该产品。但是还关联了那么多的订单，我们不能物理删除，就使用它逻辑删除。
 	gorm.Model
 	Title      string `gorm:"type:varchar(200);not null;comment:'标题'"`
 	SubTitle   string `gorm:"type:varchar(200);comment:'副标题'"`

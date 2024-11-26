@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/PokemanMaster/GoChat/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
 	"github.com/go-redis/redis/v8"
 	"strconv"
 	"time"

@@ -3,16 +3,16 @@ package service
 import (
 	"context"
 	"encoding/json"
-	MCart "github.com/PokemanMaster/GoChat/app/cart/model"
-	"github.com/PokemanMaster/GoChat/app/cart/serializer"
-	MProduct "github.com/PokemanMaster/GoChat/app/product/model"
-	"github.com/PokemanMaster/GoChat/common/cache"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/resp"
+	MCart "github.com/PokemanMaster/GoChat/server/app/cart/model"
+	"github.com/PokemanMaster/GoChat/server/app/cart/serializer"
+	MProduct "github.com/PokemanMaster/GoChat/server/app/product/model"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	e2 "github.com/PokemanMaster/GoChat/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 
-	"github.com/PokemanMaster/GoChat/pkg/e"
 	"strconv"
 	"time"
 )
@@ -27,10 +27,10 @@ type CreateCartService struct {
 func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 	// 查询商品
 	productParam, code := MProduct.ShowProductParam(service.ProductID)
-	if code != e.SUCCESS {
+	if code != e2.SUCCESS {
 		return &resp.Response{
 			Status: code,
-			Msg:    e.GetMsg(code),
+			Msg:    e2.GetMsg(code),
 		}
 	}
 
@@ -50,10 +50,10 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 		err := db.DB.Create(&cart).Error
 		if err != nil {
 			zap.L().Error("创建购物车失败", zap.String("app.cart.service", "create_cart.go"))
-			code = e.ERROR_DATABASE
+			code = e2.ERROR_DATABASE
 			return &resp.Response{
 				Status: code,
-				Msg:    e.GetMsg(code),
+				Msg:    e2.GetMsg(code),
 			}
 		}
 	} else if cart.Num < cart.MaxNum {
@@ -61,10 +61,10 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 		err := db.DB.Save(&cart).Error
 		if err != nil {
 			zap.L().Error("保存购物车失败", zap.String("app.cart.service", "create_cart.go"))
-			code = e.ERROR_DATABASE
+			code = e2.ERROR_DATABASE
 			return &resp.Response{
 				Status: code,
-				Msg:    e.GetMsg(code),
+				Msg:    e2.GetMsg(code),
 			}
 		}
 	} else {
@@ -82,8 +82,8 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 	if err != nil && err != redis.Nil {
 		zap.L().Error("获取缓存购物车失败", zap.String("app.cart.service", "create_cart.go"))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
@@ -93,8 +93,8 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 		if err := json.Unmarshal([]byte(existingCartsJSON), &carts); err != nil {
 			zap.L().Error("反序列化购物车失败", zap.String("app.cart.service", "create_cart.go"))
 			return &resp.Response{
-				Status: e.ERROR_DATABASE,
-				Msg:    e.GetMsg(e.ERROR_DATABASE),
+				Status: e2.ERROR_DATABASE,
+				Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 			}
 		}
 	}
@@ -107,8 +107,8 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 	if err != nil {
 		zap.L().Error("序列化购物车失败", zap.String("app.cart.service", "create_cart.go"))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
@@ -117,16 +117,16 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 	if err != nil {
 		zap.L().Error("保存redis失败", zap.String("app.cart.service", "create_cart.go"))
 		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Status: e2.ERROR_DATABASE,
+			Msg:    e2.GetMsg(e2.ERROR_DATABASE),
 		}
 	}
 
-	code = e.SUCCESS
+	code = e2.SUCCESS
 
 	return &resp.Response{
 		Status: code,
-		Msg:    e.GetMsg(code),
+		Msg:    e2.GetMsg(code),
 		Data:   serializer.BuildCart(cart, productParam),
 	}
 }

@@ -3,7 +3,7 @@ package mid
 import (
 	"encoding/base64"
 	"errors"
-	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/pkg/e"
 
 	"golang.org/x/exp/rand"
 

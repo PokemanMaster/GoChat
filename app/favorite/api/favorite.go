@@ -1,15 +1,15 @@
 package api
 
 import (
-	"github.com/PokemanMaster/GoChat/app/favorite/service"
-	"github.com/PokemanMaster/GoChat/resp"
+	service2 "github.com/PokemanMaster/GoChat/server/app/favorite/service"
+	"github.com/PokemanMaster/GoChat/server/resp"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
 // CreateFavorite 创建收藏接口
 func CreateFavorite(ctx *gin.Context) {
-	services := service.CreateFavoriteService{}
+	services := service2.CreateFavoriteService{}
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		zap.L().Error("请求参数错误", zap.String("app.favorite.api.favorite.go", ""))
@@ -22,7 +22,7 @@ func CreateFavorite(ctx *gin.Context) {
 
 // ShowFavorites 展示收藏夹接口
 func ShowFavorites(ctx *gin.Context) {
-	services := service.ShowFavoritesService{}
+	services := service2.ShowFavoritesService{}
 	if err := ctx.ShouldBind(&services); err != nil {
 		zap.L().Error("请求参数错误", zap.String("app.favorite.api.favorite.go", ""))
 		ctx.JSON(00, resp.ErrorResponse(err))
@@ -35,7 +35,7 @@ func ShowFavorites(ctx *gin.Context) {
 
 // DeleteFavorite 删除收藏夹的接口
 func DeleteFavorite(ctx *gin.Context) {
-	services := service.DeleteFavoriteService{}
+	services := service2.DeleteFavoriteService{}
 	err := ctx.ShouldBind(&services)
 	if err != nil {
 		zap.L().Error("请求参数错误", zap.String("app.favorite.api.favorite.go", ""))

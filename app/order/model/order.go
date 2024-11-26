@@ -3,9 +3,9 @@ package model
 import (
 	"context"
 	"fmt"
-	"github.com/PokemanMaster/GoChat/common/cache"
-	"github.com/PokemanMaster/GoChat/common/db"
-	"github.com/PokemanMaster/GoChat/pkg/e"
+	"github.com/PokemanMaster/GoChat/server/common/cache"
+	"github.com/PokemanMaster/GoChat/server/common/db"
+	"github.com/PokemanMaster/GoChat/server/pkg/e"
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 

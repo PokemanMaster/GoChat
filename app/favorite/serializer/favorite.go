@@ -1,9 +1,9 @@
 package serializer
 
 import (
-	MFavorite "github.com/PokemanMaster/GoChat/app/favorite/model"
-	MProduct "github.com/PokemanMaster/GoChat/app/product/model"
-	"github.com/PokemanMaster/GoChat/common/db"
+	MFavorite "github.com/PokemanMaster/GoChat/server/app/favorite/model"
+	MProduct "github.com/PokemanMaster/GoChat/server/app/product/model"
+	"github.com/PokemanMaster/GoChat/server/common/db"
 )
 
 // Favorite 收藏序列化器
