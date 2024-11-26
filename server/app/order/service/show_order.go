@@ -1,12 +1,12 @@
 package service
 
 import (
-	"github.com/PokemanMaster/GoChat/server/server/app/order/build"
-	model2 "github.com/PokemanMaster/GoChat/server/server/app/order/model"
-	MProduct "github.com/PokemanMaster/GoChat/server/server/app/product/model"
-	MTransport "github.com/PokemanMaster/GoChat/server/server/app/transport/model"
-	"github.com/PokemanMaster/GoChat/server/server/pkg/e"
-	"github.com/PokemanMaster/GoChat/server/server/resp"
+	"github.com/PokemanMaster/GoChat/v1/server/app/order/build"
+	model2 "github.com/PokemanMaster/GoChat/v1/server/app/order/model"
+	MProduct "github.com/PokemanMaster/GoChat/v1/server/app/product/model"
+	MTransport "github.com/PokemanMaster/GoChat/v1/server/app/transport/model"
+	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/v1/server/resp"
 
 	"strconv"
 )

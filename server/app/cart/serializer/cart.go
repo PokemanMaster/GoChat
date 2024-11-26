@@ -1,9 +1,9 @@
 package serializer
 
 import (
-	MCart "github.com/PokemanMaster/GoChat/server/server/app/cart/model"
-	MProduct "github.com/PokemanMaster/GoChat/server/server/app/product/model"
-	"github.com/PokemanMaster/GoChat/server/server/common/db"
+	MCart "github.com/PokemanMaster/GoChat/v1/server/app/cart/model"
+	MProduct "github.com/PokemanMaster/GoChat/v1/server/app/product/model"
+	"github.com/PokemanMaster/GoChat/v1/server/common/db"
 )
 
 // CartSerialization 购物车序列化器

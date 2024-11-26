@@ -1,8 +1,8 @@
 package serializer
 
 import (
-	model2 "github.com/PokemanMaster/GoChat/server/server/app/category/model"
-	"github.com/PokemanMaster/GoChat/server/server/app/product/model"
+	model2 "github.com/PokemanMaster/GoChat/v1/server/app/category/model"
+	"github.com/PokemanMaster/GoChat/v1/server/app/product/model"
 )
 
 // ProductSerialization 商品序列化

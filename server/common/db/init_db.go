@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
-	"github.com/PokemanMaster/GoChat/server/server/config"
+	"github.com/PokemanMaster/GoChat/v1/server/config"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

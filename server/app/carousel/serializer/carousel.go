@@ -1,7 +1,7 @@
 package serializer
 
 import (
-	"github.com/PokemanMaster/GoChat/server/server/app/carousel/model"
+	"github.com/PokemanMaster/GoChat/v1/server/app/carousel/model"
 )
 
 // Carousel 轮播图序列化器

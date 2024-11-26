@@ -3,12 +3,12 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"github.com/PokemanMaster/GoChat/server/server/app/favorite/model"
-	"github.com/PokemanMaster/GoChat/server/server/app/favorite/serializer"
-	"github.com/PokemanMaster/GoChat/server/server/common/cache"
-	"github.com/PokemanMaster/GoChat/server/server/common/db"
-	"github.com/PokemanMaster/GoChat/server/server/pkg/e"
-	"github.com/PokemanMaster/GoChat/server/server/resp"
+	"github.com/PokemanMaster/GoChat/v1/server/app/favorite/model"
+	"github.com/PokemanMaster/GoChat/v1/server/app/favorite/serializer"
+	"github.com/PokemanMaster/GoChat/v1/server/common/cache"
+	"github.com/PokemanMaster/GoChat/v1/server/common/db"
+	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/v1/server/resp"
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 

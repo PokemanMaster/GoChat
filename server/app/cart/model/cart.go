@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/PokemanMaster/GoChat/server/server/common/db"
-	"github.com/PokemanMaster/GoChat/server/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/v1/server/common/db"
+	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )

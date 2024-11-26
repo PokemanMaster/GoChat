@@ -1,0 +1,136 @@
+.Body {
+  height: 100vh;
+}
+
+//头部
+.TopHeader {
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 2px solid #ff6700;
+
+  .CartHeader {
+    display: flex;
+    justify-content: center;
+    height: 100px;
+    background-color: #ffffff;
+    margin: 0 auto;
+    position: relative;
+
+    .Logo {
+      height: 60px;
+      width: 100px;
+      margin-top: 22px;
+      margin-right: 20px;
+
+      img {
+        height: 60px;
+      }
+    }
+
+    p {
+      margin-top: 23px;
+      font-size: 28px;
+      line-height: 58px;
+      float: left;
+      font-weight: normal;
+      color: #424242;
+    }
+
+    .CartHeaderContent span {
+      color: #757575;
+      font-size: 12px;
+      float: left;
+      height: 20px;
+      line-height: 20px;
+      margin-top: 48px;
+      margin-left: 15px;
+    }
+  }
+}
+
+//收藏
+.Favorite {
+  max-width: 1277px;
+  margin: 0 auto;
+
+  .Products {
+    display: flex;
+    flex-wrap: wrap;
+
+    .Product {
+      display: flex;
+      flex-direction: column;
+      margin: 10px 10px;
+      background-color: #fff;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+
+
+      .ProductImage {
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .ProductIntroduce {
+        .ProductIntroduceName {
+          text-align: center;
+          margin-left: 7px;
+          margin-top: 12px;
+          white-space: nowrap; /* 防止文字换行 */
+          overflow: hidden; /* 隐藏溢出的文字 */
+          text-overflow: ellipsis; /* 显示省略号 */
+        }
+
+        .ProductIntroduceValue {
+          display: flex;
+          color: #e02e24;
+          margin-top: 10px;
+          justify-content: center;
+          font-size: 25px;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+  //空白
+  .EmptyCart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin: 20vh auto;
+
+
+    .EmptyCartImg {
+      height: 5.7rem;
+      width: 5.7rem;
+    }
+
+    .EmptyCartText1 {
+      font-size: 1.7rem;
+      color: #666;
+      padding: .7rem 0;
+    }
+
+    .EmptyCartText2 {
+      color: #888;
+      font-size: .7rem;
+      margin-bottom: .7rem;
+    }
+  }
+}
+
+// 用户没登陆显示
+.Empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding-bottom: 10vh;
+}
+
+
+
+

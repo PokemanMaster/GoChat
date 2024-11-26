@@ -2,13 +2,13 @@ package service
 
 import (
 	"context"
-	MOrder "github.com/PokemanMaster/GoChat/server/server/app/order/model"
-	MTransport "github.com/PokemanMaster/GoChat/server/server/app/transport/model"
-	MUser "github.com/PokemanMaster/GoChat/server/server/app/user/model"
-	"github.com/PokemanMaster/GoChat/server/server/common/cache"
-	"github.com/PokemanMaster/GoChat/server/server/common/db"
-	"github.com/PokemanMaster/GoChat/server/server/pkg/e"
-	"github.com/PokemanMaster/GoChat/server/server/resp"
+	MOrder "github.com/PokemanMaster/GoChat/v1/server/app/order/model"
+	MTransport "github.com/PokemanMaster/GoChat/v1/server/app/transport/model"
+	MUser "github.com/PokemanMaster/GoChat/v1/server/app/user/model"
+	"github.com/PokemanMaster/GoChat/v1/server/common/cache"
+	"github.com/PokemanMaster/GoChat/v1/server/common/db"
+	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/v1/server/resp"
 	"go.uber.org/zap"
 
 	"strconv"

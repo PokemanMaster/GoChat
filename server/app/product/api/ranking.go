@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/PokemanMaster/GoChat/server/server/app/product/service"
+	"github.com/PokemanMaster/GoChat/v1/server/app/product/service"
 	"github.com/gin-gonic/gin"
 )
 

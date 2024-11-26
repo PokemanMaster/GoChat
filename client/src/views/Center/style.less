@@ -1,0 +1,99 @@
+.CenterLayout {
+  max-width: 1225px;
+  margin: 0 auto;
+}
+
+.CenterContent {
+  background-color: #ffffff;
+  width: 100%;
+
+  .CenterUser {
+    width: 100%;
+    padding-top: 50px;
+    border-bottom: 1px solid #c2c4ca;
+
+    .User {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 27px;
+
+      .UserAvator {
+        margin-top: 20px;
+        width: 150px;
+        height: 150px;
+        margin-right: 20px;
+        border-radius: 50%;
+        padding: 5px;
+        border: 1px solid #ddd;
+
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      }
+
+      .UserInfo {
+        line-height: 30px;
+        margin-left: 15px;
+        padding: 0;
+      }
+    }
+
+    .MSG {
+      margin: 50px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+
+
+      .account-security {
+        .security-level, .bound-info {
+          margin-bottom: 10px;
+        }
+
+        .high-security {
+          color: #52c41a; // 绿色
+        }
+      }
+
+    }
+  }
+
+
+  .UserDetails {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 47px 0;
+
+    .Operate {
+      line-height: 30px;
+
+      .OperTitle {
+        font-size: 20px;
+        color: #7b7f86;
+      }
+
+      .OperHref {
+        font-size: 15px;
+        color: #7b7f86;
+
+        &:hover {
+          color: #ff6700;
+        }
+      }
+    }
+  }
+}
+
+
+// 用户没登陆显示
+.Empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding-bottom: 10vh;
+}

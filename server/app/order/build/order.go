@@ -1,10 +1,10 @@
 package build
 
 import (
-	model2 "github.com/PokemanMaster/GoChat/server/server/app/order/model"
-	MProduct "github.com/PokemanMaster/GoChat/server/server/app/product/model"
-	MTransport "github.com/PokemanMaster/GoChat/server/server/app/transport/model"
-	"github.com/PokemanMaster/GoChat/server/server/common/db"
+	model2 "github.com/PokemanMaster/GoChat/v1/server/app/order/model"
+	MProduct "github.com/PokemanMaster/GoChat/v1/server/app/product/model"
+	MTransport "github.com/PokemanMaster/GoChat/v1/server/app/transport/model"
+	"github.com/PokemanMaster/GoChat/v1/server/common/db"
 )
 
 // UserOrdersSerialization 某个用户的所有订单

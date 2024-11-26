@@ -3,9 +3,9 @@ package utils
 import (
 	"context"
 	"fmt"
-	"github.com/PokemanMaster/GoChat/server/server/app/warehouse/model"
-	"github.com/PokemanMaster/GoChat/server/server/common/cache"
-	"github.com/PokemanMaster/GoChat/server/server/common/db"
+	"github.com/PokemanMaster/GoChat/v1/server/app/warehouse/model"
+	"github.com/PokemanMaster/GoChat/v1/server/common/cache"
+	"github.com/PokemanMaster/GoChat/v1/server/common/db"
 	"github.com/go-redis/redis/v8"
 	"log"
 	"math"

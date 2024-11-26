@@ -1,11 +1,11 @@
 package service
 
 import (
-	"github.com/PokemanMaster/GoChat/server/server/app/user/model"
-	"github.com/PokemanMaster/GoChat/server/server/common/db"
-	"github.com/PokemanMaster/GoChat/server/server/pkg/e"
-	"github.com/PokemanMaster/GoChat/server/server/pkg/mid"
-	"github.com/PokemanMaster/GoChat/server/server/resp"
+	"github.com/PokemanMaster/GoChat/v1/server/app/user/model"
+	"github.com/PokemanMaster/GoChat/v1/server/common/db"
+	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/v1/server/pkg/mid"
+	"github.com/PokemanMaster/GoChat/v1/server/resp"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

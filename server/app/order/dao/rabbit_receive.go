@@ -3,11 +3,11 @@ package dao
 import (
 	"encoding/json"
 	"fmt"
-	Morder "github.com/PokemanMaster/GoChat/server/server/app/order/model"
-	Mwarehouse "github.com/PokemanMaster/GoChat/server/server/app/warehouse/model"
-	"github.com/PokemanMaster/GoChat/server/server/common/cache/rabbit"
-	"github.com/PokemanMaster/GoChat/server/server/common/db"
-	"github.com/PokemanMaster/GoChat/server/server/resp"
+	Morder "github.com/PokemanMaster/GoChat/v1/server/app/order/model"
+	Mwarehouse "github.com/PokemanMaster/GoChat/v1/server/app/warehouse/model"
+	"github.com/PokemanMaster/GoChat/v1/server/common/cache/rabbit"
+	"github.com/PokemanMaster/GoChat/v1/server/common/db"
+	"github.com/PokemanMaster/GoChat/v1/server/resp"
 
 	"log"
 	"time"

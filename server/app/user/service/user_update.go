@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/PokemanMaster/GoChat/server/server/app/user/model"
-	"github.com/PokemanMaster/GoChat/server/server/pkg/e"
-	"github.com/PokemanMaster/GoChat/server/server/resp"
+	"github.com/PokemanMaster/GoChat/v1/server/app/user/model"
+	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/v1/server/resp"
 	"github.com/asaskevich/govalidator"
 	"go.uber.org/zap"
 )

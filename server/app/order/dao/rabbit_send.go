@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/PokemanMaster/GoChat/server/server/common/cache/rabbit"
-	"github.com/PokemanMaster/GoChat/server/server/resp"
+	"github.com/PokemanMaster/GoChat/v1/server/common/cache/rabbit"
+	"github.com/PokemanMaster/GoChat/v1/server/resp"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 	"time"

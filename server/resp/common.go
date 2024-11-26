@@ -1,7 +1,7 @@
 package resp
 
 import (
-	"github.com/PokemanMaster/GoChat/server/server/pkg/e"
+	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
 	"log"
 )
 
