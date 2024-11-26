@@ -4,7 +4,7 @@ import axios from "axios";
 // https://www.lvyouwang.xyz/
 const instance = axios.create({
     // 确保使用 HTTPS 协议
-    baseURL: 'https://www.lvyouwang.xyz/:3000',
+    baseURL: 'http://localhost:9000',
     // 这个时间是你每次请求过期的时间，请求10秒之后就是失败的
     timeout: 10000,
 });

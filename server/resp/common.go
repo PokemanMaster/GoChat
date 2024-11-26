@@ -19,9 +19,9 @@ type DataTotal struct {
 	Total uint        `json:"total"`
 }
 
-// TokenData 带有token的Data结构
-type TokenData struct {
-	User  interface{} `json:"user"`
+// DataToken 带有token的Data结构
+type DataToken struct {
+	Data  interface{} `json:"data"`
 	Token string      `json:"token"`
 }
 

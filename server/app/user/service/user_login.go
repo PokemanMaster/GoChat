@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/PokemanMaster/GoChat/v1/server/app/user/model"
+	"github.com/PokemanMaster/GoChat/v1/server/app/user/serializer"
 	"github.com/PokemanMaster/GoChat/v1/server/common/db"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/mid"
@@ -71,6 +72,15 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 		}
 	}
 
+	token, err := mid.ReleaseToken(user)
+	if err != nil {
+		zap.L().Error("获取token失败", zap.String("app.user.service.user_login", err.Error()))
+		return &resp.Response{
+			Status: e.ERROR_AUTH_TOKEN_FAIL,
+			Msg:    e.GetMsg(e.ERROR_AUTH_TOKEN_FAIL),
+		}
+	}
+
 	session := sessions.Default(ctx)
 	session.Options(sessions.Options{MaxAge: 3600 * 6})
 	session.Set("user_"+UserName, user)
@@ -80,6 +90,6 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	return &resp.Response{
 		Status: e.SUCCESS,
 		Msg:    e.GetMsg(e.SUCCESS),
-		Data:   user,
+		Data:   resp.DataToken{Data: serializer.BuildUser(user), Token: token},
 	}
 }
