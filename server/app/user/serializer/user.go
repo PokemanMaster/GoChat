@@ -1,7 +1,6 @@
 package serializer
 
 import (
-	"github.com/PokemanMaster/GoChat/v1/server/app/user/model"
 	"time"
 )
 
@@ -21,12 +20,4 @@ type UserSerialization struct {
 	LoginOutTime  time.Time
 	IsLogout      bool
 	DeviceInfo    string
-}
-
-// BuildUser 序列化用户
-func BuildUser(user model.User) UserSerialization {
-	return UserSerialization{
-
-		Avatar: user.Avatar,
-	}
 }

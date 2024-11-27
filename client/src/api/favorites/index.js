@@ -4,8 +4,8 @@ let UserId = '';
 const user = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
 
-if (user && user.id) {
-    UserId = user.id;
+if (user && user.ID) {
+    UserId = user.ID;
 }
 
 

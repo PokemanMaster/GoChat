@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/PokemanMaster/GoChat/v1/server/app/user/model"
-	"github.com/PokemanMaster/GoChat/v1/server/app/user/serializer"
 	"github.com/PokemanMaster/GoChat/v1/server/common/db"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/mid"
@@ -90,6 +89,6 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 	return &resp.Response{
 		Status: e.SUCCESS,
 		Msg:    e.GetMsg(e.SUCCESS),
-		Data:   resp.DataToken{Data: serializer.BuildUser(user), Token: token},
+		Data:   resp.DataToken{Data: user, Token: token},
 	}
 }

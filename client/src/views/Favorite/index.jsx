@@ -2,11 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {ShowFavoritesAPI} from "../../api/favorites";
 import "./style.less"
 import {Button, Col, Empty} from "antd";
-import emptyCart from "../../public/images/cart_empty.png"
 import {Link} from "@mui/joy";
-import clogo from "../../public/images/clogo.png";
 import {useNavigate} from "react-router-dom";
-
 
 export default function Favorite() {
 
@@ -43,7 +40,6 @@ export default function Favorite() {
                         <div className={"CartHeader"}>
                             <div className={"Logo"}>
                                 <Link to="/">
-                                    <img src={clogo} alt=""/>
                                 </Link>
                             </div>
                             <div className={"CartHeaderContent"}>
@@ -76,7 +72,7 @@ export default function Favorite() {
                             ) : (
                                 <div className={"EmptyCart"}>
                                     {/* 此处的图片不能直接写路径，只能通过import的方式将它引入进来 */}
-                                    <img src={emptyCart} alt="" className={"EmptyCartImg"}/>
+                                    {/*<img src={emptyCart} alt="" className={"EmptyCartImg"}/>*/}
                                     <div className={"EmptyCartText1"}>收藏竟然是空的！</div>
                                     <div className={"EmptyCartText2"}>赶紧收藏一下把~</div>
                                 </div>

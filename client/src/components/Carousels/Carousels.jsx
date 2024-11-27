@@ -17,19 +17,19 @@ const CarouselsComponent = () => {
 
     return (
         <Layout>
-            <div>
-                <Content
-                    style={{
-                        margin: 0, minHeight: 280,
-                    }}
-                >
-                    <Carousel autoplay>
-                        {CarouselImages.map((item, index) => (<div key={index}>
-                            <img src={item.img_path} alt={""} style={{width: '100%', height: 'auto'}}/>
-                        </div>))}
-                    </Carousel>
-                </Content>
-            </div>
+            {/*<div>*/}
+            {/*    <Content*/}
+            {/*        style={{*/}
+            {/*            margin: 0, minHeight: 280,*/}
+            {/*        }}*/}
+            {/*    >*/}
+            {/*        <Carousel autoplay>*/}
+            {/*            {CarouselImages.map((item, index) => (<div key={index}>*/}
+            {/*                <img src={item.img_path} alt={""} style={{width: '100%', height: 'auto'}}/>*/}
+            {/*            </div>))}*/}
+            {/*        </Carousel>*/}
+            {/*    </Content>*/}
+            {/*</div>*/}
         </Layout>
     );
 };

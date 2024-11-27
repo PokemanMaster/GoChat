@@ -2,9 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Button, Col, Drawer, Row} from "antd";
 import {useLocation, useNavigate} from "react-router-dom";
 import {ShowAddressesAPI} from "../../api/addresses";
-import { ListOrdersAPI} from "../../api/orders"
 import "./style.less"
-import emptyCart from "../../public/images/cart_empty.png";
 import {CreatePayAPI} from "../../api/pay";
 
 export default function OrderDetails() {
@@ -86,7 +84,7 @@ export default function OrderDetails() {
                     </div>
                 </div>) : <div className={"EmptyCart"}>
                     {/* 此处的图片不能直接写路径，只能通过import的方式将它引入进来 */}
-                    <img src={emptyCart} alt="" className={"EmptyCartImg"}/>
+                    {/*<img src={emptyCart} alt="" className={"EmptyCartImg"}/>*/}
                     <div className={"EmptyCartText1"}>购物车竟然是空的！</div>
                     <div className={"EmptyCartText2"}>再忙，也要记得买点什么犒劳自己~</div>
                 </div>}
@@ -138,7 +136,7 @@ export default function OrderDetails() {
                             </div>
                         </div>))) : <div className={"EmptyCart"}>
                         {/* 此处的图片不能直接写路径，只能通过import的方式将它引入进来 */}
-                        <img src={emptyCart} alt="" className={"EmptyCartImg"}/>
+                        {/*<img src={emptyCart} alt="" className={"EmptyCartImg"}/>*/}
                         <div className={"EmptyCartText1"}>购物车竟然是空的！</div>
                         <div className={"EmptyCartText2"}>再忙，也要记得买点什么犒劳自己~</div>
                     </div>}

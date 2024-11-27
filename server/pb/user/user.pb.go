@@ -375,12 +375,12 @@ var file_user_proto_goTypes = []interface{}{
 }
 var file_user_proto_depIdxs = []int32{
 	1, // 0: user.UserDetailResponse.UserDetail:type_name -> user.UserResponse
-	0, // 1: user.UserService.Register:input_type -> user.UserRequest
-	0, // 2: user.UserService.Login:input_type -> user.UserRequest
-	0, // 3: user.UserService.Update:input_type -> user.UserRequest
-	2, // 4: user.UserService.Register:output_type -> user.UserCommonResponse
-	3, // 5: user.UserService.Login:output_type -> user.UserDetailResponse
-	3, // 6: user.UserService.Update:output_type -> user.UserDetailResponse
+	0, // 1: user.Service.Register:input_type -> user.UserRequest
+	0, // 2: user.Service.Login:input_type -> user.UserRequest
+	0, // 3: user.Service.Update:input_type -> user.UserRequest
+	2, // 4: user.Service.Register:output_type -> user.UserCommonResponse
+	3, // 5: user.Service.Login:output_type -> user.UserDetailResponse
+	3, // 6: user.Service.Update:output_type -> user.UserDetailResponse
 	4, // [4:7] is the sub-list for method output_type
 	1, // [1:4] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

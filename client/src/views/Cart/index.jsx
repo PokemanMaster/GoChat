@@ -3,8 +3,6 @@ import {Button, Col, Modal, Row, Empty} from "antd";
 import {DeleteCartAPI, ShowCartAPI, UpdateCartAPI} from "../../api/carts";
 import {useNavigate} from "react-router-dom";
 import {Link} from "@mui/joy";
-import clogo from "../../public/images/clogo.png"
-import emptyCart from "../../public/images/cart_empty.png";
 import {DeleteOutlined} from "@ant-design/icons";
 import "./style.less"
 import {CreateOrderAPI} from "../../api/orders";
@@ -15,7 +13,6 @@ export default function Cart() {
     const [cart, setCart] = useState([]); // 存放商品
     const [totalPrice, setTotalPrice] = useState(0); // 总价
     const [selectAll, setSelectAll] = useState(false); // 全选按钮
-
 
     // 展示购物车
     useEffect(() => {
@@ -180,7 +177,6 @@ export default function Cart() {
                 <div className={"CartHeader"}>
                     <div className={"Logo"}>
                         <Link to="/">
-                            <img src={clogo} alt=""/>
                         </Link>
                     </div>
                     <div className={"CartHeaderContent"}>
@@ -259,7 +255,7 @@ export default function Cart() {
                     </Col>
                 </div>))) : (<div className={"EmptyCart"}>
                     {/* 此处的图片不能直接写路径，只能通过import的方式将它引入进来 */}
-                    <img src={emptyCart} alt="" className={"EmptyCartImg"}/>
+                    {/*<img src={emptyCart} alt="" className={"EmptyCartImg"}/>*/}
                     <div className={"EmptyCartText1"}>购物车竟然是空的！</div>
                     <div className={"EmptyCartText2"}>再忙，也要记得买点什么犒劳自己~</div>
                 </div>)}

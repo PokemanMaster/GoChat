@@ -33,6 +33,10 @@ func Router() *gin.Engine {
 		v1.POST("/user/register", UserApi.UserRegister) // 用户注册
 		v1.POST("/user/login", UserApi.UserLogin)       // 用户登录
 
+		// 聊天
+		v1.GET("/chat/send", ChatApi.SendMessage)    // 发送且接收消息
+		v1.POST("/chat/message", ChatApi.GetMessage) // 获取聊天历史消息
+
 		// 商品
 		v1.GET("/carousels", api.ListCarousels)              // 获取所有轮播图
 		v1.GET("/products/categories", api2.ListCategories)  // 获取所有商品分类
@@ -56,6 +60,7 @@ func Router() *gin.Engine {
 			authed.POST("user/logout", UserApi.UserLogout) // 用户登出
 			authed.PUT("/user", UserApi.UserUpdate)        // 更新用户
 			authed.GET("/user/:id", UserApi.UserInfo)      // 用户信息
+			authed.POST("/attach/upload", ChatApi.Upload)  // 上传文件
 
 			// 好友
 			authed.POST("/friend", FriendApi.CreateFriend)         // 添加好友
@@ -68,11 +73,6 @@ func Router() *gin.Engine {
 			authed.GET("/group/lists/:id", GroupApi.GroupLists)           // 群聊列表
 			authed.POST("/group/join", GroupApi.JoinGroup)                // 加入群聊
 			authed.POST("/group/friend/lists", GroupApi.GroupFriendLists) // 群聊好友
-
-			// 聊天
-			authed.GET("/chat/send", ChatApi.SendMessage)    // 发送且接收消息
-			authed.POST("/chat/message", ChatApi.GetMessage) // 获取聊天历史消息
-			authed.POST("/attach/upload", ChatApi.Upload)    // 上传文件
 
 			// 购物车
 			authed.POST("carts", CartApi.CreateCart)   // 创建购物车
