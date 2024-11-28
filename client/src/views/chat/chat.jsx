@@ -15,56 +15,117 @@ function Chat() {
     const queryParams = new URLSearchParams(location.search);
     const userId = queryParams.get('userId');
 
-    // Set the app element for accessibility
+    useEffect(() => {
+        console.log('Messages updated:', messages);
+    }, [messages]); // 每当 messages 更新时，会执行这个 effect
+
     useEffect(() => {
         Modal.setAppElement('#root'); // Ensure this matches your root element's ID
     }, []);
-
-    // WebSocket connection
-    // useEffect(() => {
-    //     wsRef.current = new WebSocket(`ws://localhost:9000/api/v1/chat/send?userId=${userId}`);
-    //     wsRef.current.onopen = () => setIsWsOpen(true);
-    //     wsRef.current.onclose = () => setIsWsOpen(false);
-    //     wsRef.current.onerror = (error) => console.error('WebSocket error:', error);
-    //     wsRef.current.onmessage = (event) => {
-    //         try {
-    //             const receivedMessage = JSON.parse(event.data);
-    //             if (receivedMessage.Type === 2) {
-    //                 setMessages((prevMessages) => [...prevMessages, receivedMessage].sort((a, b) => a.CreateTime - b.CreateTime));
-    //             }
-    //         } catch (e) {
-    //             console.error('Error parsing message:', e);
-    //         }
-    //     };
-    // }, [userId]);
 
     // 用户好友列表
     const [userFriendData, setUserFriendData] = useState([]);
     useEffect(() => {
         FriendListsAPI().then(res => {
-            console.log("FriendListsAPI", res)
             setUserFriendData(res.data)
         }).catch(err => console.log(err));
     }, []);
 
+    // 和好友聊天
+    const [userFriendMsg, setUserFriendMsg] = useState([]);
+    const ToChat = (id) => {
+        console.log(userId, id)
+        // 获取聊天记录
+        ChatMessageAPI({
+            "UserIdA": parseInt(userId, 10),
+            "UserIdB": parseInt(id, 10),
+            "Start": 0,
+            "End": -1,
+            "IsRev": true
+        }).then(res => {
+            console.log(res.data);
+            // 假设 res.data 是一个包含 JSON 字符串的数组
+            const messages = res.data.map((msgStr) => {
+                // 解析每个 JSON 字符串为 JavaScript 对象
+                const msgObj = JSON.parse(msgStr);
+                // 返回一个新的对象，提取需要的数据
+                return {
+                    UserId: msgObj.UserId,
+                    TargetId: msgObj.TargetId,
+                    Type: msgObj.Type,
+                    Media: msgObj.Media,
+                    Content: msgObj.Content, // 获取 Content 信息
+                    CreateTime: msgObj.CreateTime,
+                    ReadTime: msgObj.ReadTime,
+                    Pic: msgObj.Pic,
+                    Url: msgObj.Url,
+                    Desc: msgObj.Desc,
+                    Amount: msgObj.Amount
+                };
+            });
+            // 将解析后的消息设置到 state 中
+            setUserFriendMsg(messages);
+        }).catch(err => console.log(err));
+
+
+        // 建立 WebSocket 连接
+        const socket = new WebSocket(`ws://localhost:9000/api/v1/chat/send?userId=${userId}`);
+
+        socket.onopen = () => { // 连接打开后，设置 WebSocket 状态
+            console.log('WebSocket connected');
+            setIsWsOpen(true);
+            socket.send('Hello, WebSocket!'); // 你可以发送一条初始消息（如果需要）
+        };
+
+        socket.onmessage = (event) => { // 监听收到的消息
+            console.log('Received message:', event.data);
+            const receivedMsg = JSON.parse(event.data);
+            setMessages((prevMessages) => [...prevMessages, receivedMsg].sort((a, b) => a.CreateTime - b.CreateTime));
+        };
+
+        socket.onclose = () => { // 连接关闭时
+            console.log('WebSocket connection closed');
+            setIsWsOpen(false);
+        };
+
+        socket.onerror = (error) => { // 错误处理
+            console.error('WebSocket error:', error);
+        };
+
+        wsRef.current = socket; // 保存 WebSocket 实例
+    };
+
     const handleSend = () => {
         if (isWsOpen && wsRef.current && message) {
             const msg = {
-                "TargetId": 1,
-                "Type": 2,
-                "CreateTime": Date.now(),
-                "userId": 1,
-                "Media": 1,
-                "Content": message,
+                "UserId": parseInt(userId, 10), // 用户ID
+                "TargetId": 2, // 目标ID（假设你发送给的好友ID）
+                "Type": 1, // 消息类型
+                "Media": 1, // 媒体类型
+                "Content": message, // 消息内容
+                "CreateTime": Date.now(), // 当前时间戳
+                "ReadTime": 0, // 阅读时间
+                "Pic": null, // 图片（如果有的话）
+                "Url": null, // URL（如果有的话）
+                "Desc": null, // 描述（如果有的话）
+                "Amount": 3 // 数量（如果有的话）
             };
+
+            // 发送消息
             wsRef.current.send(JSON.stringify(msg));
+
+            // 更新消息列表，立刻将新消息添加到当前聊天窗口
             setMessages((prevMessages) => [...prevMessages, msg].sort((a, b) => a.CreateTime - b.CreateTime));
+
+            // 清空输入框
             setMessage('');
         } else {
             console.warn('WebSocket is not open or message is empty');
         }
     };
 
+
+    // Add Friend Modal
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => {
         setIsModalOpen(false);
@@ -89,13 +150,11 @@ function Chat() {
             "UserID": parseInt(userId, 10),
             "TargetID": id,
         }).then(res => {
-            // 显示操作
-            closeModal()
+            closeModal();
         }).catch(err => {
             console.log(err)
         })
     };
-
 
     return (
         <div className="chat-app">
@@ -109,16 +168,14 @@ function Chat() {
                     </div>
                 </div>
                 {userFriendData && userFriendData.length > 0 ? userFriendData.map((item, index) => (
-                    <div className="menu" key={item.ID}>
+                    <div className="menu" key={item.ID} onClick={() => ToChat(item.ID)}>
                         <div className="contact-item">
                             <div className="contact-avatar">AB</div>
                             <div className="contact-info">
                                 <div className="contact-name">{item.user_name}</div>
-                                <div className="contact-last-message">等级：{item.level_id}
-                                </div>
+                                <div className="contact-last-message">等级：{item.level_id}</div>
                                 <div className="contact-time">{item.heartbeat_time}</div>
                             </div>
-                            {/*<div className="unread-messages"></div>*/}
                         </div>
                     </div>
                 )) : <div></div>}
@@ -126,17 +183,14 @@ function Chat() {
 
             <div className="chat-window">
                 <div className="chat-messages">
-                    <div className="chat-message incoming">
-                        <div className="avatar">M</div>
-                        <div className="message-content">Hi Marie, are you all right lately? I miss you very much. Do
-                            you know?
+                    {userFriendMsg.map((msg, index) => (
+                        <div key={index}
+                             className={`chat-message ${msg.UserId === parseInt(userId, 10) ? 'outgoing' : 'incoming'}`}>
+                            <div className="avatar">{msg.UserId}</div>
+                            <div className="message-content">{msg.Content}</div>
+                            {/* 显示 Content */}
                         </div>
-                    </div>
-                    <div className="chat-message outgoing">
-                        <div className="avatar">Y</div>
-                        <div className="message-content">I'm happy to hear you say that. I've been very good lately.
-                        </div>
-                    </div>
+                    ))}
                 </div>
                 <div className="chat-input">
                     <input type="text" value={message} onChange={(e) => setMessage(e.target.value)}
@@ -144,6 +198,7 @@ function Chat() {
                     <button onClick={handleSend}>Send</button>
                 </div>
             </div>
+
 
             {/* Add Friend Modal */}
             <Modal
@@ -192,8 +247,7 @@ function Chat() {
                                 <div className="contact-avatar">AB</div>
                                 <div className="contact-info">
                                     <div className="contact-name">{item.user_name}</div>
-                                    <div className="contact-last-message">等级：{item.level_id}
-                                    </div>
+                                    <div className="contact-last-message">等级：{item.level_id}</div>
                                 </div>
                                 <div className="unread-messages" onClick={() => CreateFriend(item.ID)}>添加好友</div>
                             </div>

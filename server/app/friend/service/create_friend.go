@@ -43,20 +43,39 @@ func (service *CreateFriendService) Create() *resp.Response {
 		}
 	}
 
+	tx := db.DB.Begin()
+
 	// 创建好友关系
 	var contact model.Contact
 	contact.OwnerID = UserID
 	contact.TargetID = TargetID
 	contact.Type = 1
 
-	err = db.DB.Create(&contact).Error
+	err = tx.Create(&contact).Error
 	if err != nil {
+		tx.Rollback()
 		zap.L().Error("创建用户失败", zap.String("app.friend.service.create_friend", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
 		}
 	}
+
+	contact.OwnerID = TargetID
+	contact.TargetID = UserID
+	contact.Type = 1
+
+	err = tx.Create(&contact).Error
+	if err != nil {
+		tx.Rollback()
+		zap.L().Error("创建双向好友失败", zap.String("app.friend.service.create_friend", err.Error()))
+		return &resp.Response{
+			Status: e.ERROR_DATABASE,
+			Msg:    e.GetMsg(e.ERROR_DATABASE),
+		}
+	}
+
+	tx.Commit()
 
 	// 添加成功
 	return &resp.Response{
