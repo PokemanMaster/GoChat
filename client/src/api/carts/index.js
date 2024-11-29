@@ -1,12 +1,9 @@
 import request from '../index'
 
-let UserId = '';
-const user = JSON.parse(localStorage.getItem("user"));
+const queryParams = new URLSearchParams(window.location.search);
+const userId = parseInt(queryParams.get('userId') , 10);
 const token = localStorage.getItem("token");
 
-if (user && user.ID) {
-    UserId = user.ID;
-}
 
 // 创建购物车
 export const CreateCartAPI = (data) => {
@@ -19,7 +16,7 @@ export const CreateCartAPI = (data) => {
 
 // 展示购物车
 export const ShowCartAPI = () => {
-    return request(`api/v1/carts/${UserId}`, {
+    return request(`api/v1/carts/${userId}`, {
         method: 'get', headers: {
             'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json',
         },

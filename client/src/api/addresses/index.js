@@ -1,12 +1,8 @@
 import request from '../index'
 
-let UserId = '';
-const user = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
-
-if (user && user.ID) {
-    UserId = user.ID;
-}
+const queryParams = new URLSearchParams(window.location.search);
+const userId = queryParams.get('userId');
 
 // 创建收货地址
 export const CreateAddressAPI = (data) => {
@@ -20,7 +16,7 @@ export const CreateAddressAPI = (data) => {
 
 // 展示收货地址
 export const ShowAddressesAPI = () => {
-    return request(`api/v1/addresses/${UserId}`, {
+    return request(`api/v1/addresses/${userId}`, {
         method: 'get', headers: {
             'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json',
         },

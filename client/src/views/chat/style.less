@@ -50,8 +50,6 @@
     }
 
     .menu {
-
-
       .contact-item {
         display: flex;
         align-items: center;
@@ -116,6 +114,9 @@
     }
   }
 
+
+
+
   .chat-window {
     flex-grow: 1;
     display: flex;
@@ -124,57 +125,66 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
 
     .chat-messages {
-      flex-grow: 1;
-      overflow-y: auto;
-      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column; /* 垂直排列消息 */
 
       .chat-message {
         display: flex;
         align-items: center;
-        padding: 12px;
-        border-radius: 8px;
         margin-bottom: 10px;
-        font-size: 14px;
-        max-width: 75%; /* Limiting max width of message */
 
-        &.incoming {
-          background-color: #f1faff;
-          align-self: flex-start; /* Aligning incoming messages to left */
+        /* 判断消息是从右侧还是左侧发送 */
+        &.chat-message-left {
+          justify-content: flex-start; /* 头像左对齐，内容右对齐 */
         }
 
-        &.outgoing {
-          background-color: #d1e7dd;
-          align-self: flex-end; /* Aligning outgoing messages to right */
-          text-align: right;
+        &.chat-message-right {
+          justify-content: flex-end; /* 头像右对齐，内容左对齐 */
         }
 
+        .message-content {
+          background-color: #fff;
+          padding: 10px;
+          border-radius: 5px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          max-width: 70%; /* 限制消息框的最大宽度 */
+        }
+
+        /* 头像样式 */
         .avatar {
-          width: 35px;
-          height: 35px;
-          background-color: #007bff;
-          color: #fff;
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 18px;
+          background-color: #007bff;
+          color: #fff;
+          font-size: 16px;
           font-weight: bold;
-          margin-right: 10px; /* Space between avatar and message */
+          margin: 0 10px;
         }
 
-        .message-content {
-          white-space: pre-wrap;
-          word-wrap: break-word;
+        .avatar-left {
+          order: -1; /* 使头像出现在左边 */
+        }
+
+        .avatar-right {
+          order: 1; /* 使头像出现在右边 */
         }
       }
     }
 
+
     .chat-input {
+
       display: flex;
       align-items: center;
-      padding-top: 10px;
+      padding: 10px;
+      z-index: 1000; /* 确保输入框在其他内容上面 */
 
       input {
         width: 100%;
@@ -190,8 +200,36 @@
           box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
       }
+
+      .send-btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 18px;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+
+        svg {
+          font-size: 18px;
+        }
+      }
+
     }
   }
+
+
+
+
+
+
 }
 
 .modal-main {

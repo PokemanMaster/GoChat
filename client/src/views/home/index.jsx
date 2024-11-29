@@ -25,7 +25,7 @@ export default function Home() {
                     <h3>Uncover the latest trends and timeless pieces at your doorstep in
                         Chiyoda, 13. Perfect finds for every style.</h3>
                     <button className={"button"} onClick={() => {
-                        navigateTo("/layout/goods")
+                        navigateTo("/layout/product_sort")
                     }}>
                         Shop Now
                     </button>
@@ -89,7 +89,7 @@ export default function Home() {
                     <h3>Uncover the latest trends and timeless pieces at your doorstep in
                         Chiyoda, 13. Perfect finds for every style.</h3>
                     <button className={"button"} onClick={() => {
-                        navigateTo("/layout/goods")
+                        navigateTo("/layout/product_sort")
                     }}>
                         Shop Now
                     </button>

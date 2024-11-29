@@ -10,7 +10,6 @@ import (
 	"github.com/PokemanMaster/GoChat/v1/server/resp"
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
-
 	"time"
 )
 
@@ -46,9 +45,13 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	number := model.RandomNum(service.ProductID, service.UserID)
 	order.Code = number
 
+	// 开始事务
+	tx := db.DB.Begin()
+
 	// 创建订单数据
 	err := db.DB.Create(&order).Error
 	if err != nil {
+		tx.Rollback()
 		zap.L().Error("创建订单失败", zap.String("app.order.service.order", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
@@ -60,6 +63,7 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	// 查询订单-> 获取订单id存入订单详情
 	err = db.DB.Where("code = ?", order.Code).First(&order).Error
 	if err != nil {
+		tx.Rollback()
 		zap.L().Error("查询订单错误", zap.String("app.order.service.order", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
@@ -78,6 +82,7 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	// 创建订单详情
 	err = db.DB.Create(&orderDetail).Error
 	if err != nil {
+		tx.Rollback()
 		zap.L().Error("创建订单详情错误", zap.String("app.order.service.order", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
@@ -85,6 +90,8 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 			Error:  err.Error(),
 		}
 	}
+
+	tx.Commit()
 
 	// 生产者负责减库存
 	err = dao.Product1(orderDetail)
@@ -102,15 +109,3 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 		Msg:    e.GetMsg(e.SUCCESS),
 	}
 }
-
-// 知识点：
-// TCC 模型：Try/Confirm/Cancel：不使用强一致性的处理方案，最终一致性即可，
-// 下单减库存，成功后生成订单数据，如果此时由于超时导致库存扣成功但是返回失败，
-// 则通过定时任务检查进行数据恢复，如果本条数据执行次数超过某个限制，人工回滚。还库存也是这样。
-// 幂等性：分布式高并发系统如何保证对外接口的幂等性，记录库存流水是实现库存回滚，支持幂等性的一个解决方案，
-// 订单号+skuCode为唯一主键（该表修改频次高，少建索引）
-// 乐观锁：where stock + num>0
-// 消息队列：实现分布式事务 和 异步处理(提升响应速度)
-// redis：限制请求频次，高并发解决方案，提升响应速度
-// 分布式锁：防止重复提交，防止高并发，强制串行化
-// 分布式事务：最终一致性，同步处理(Dubbo)/异步处理（MQ）修改 + 补偿机制

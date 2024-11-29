@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Layout, Menu} from 'antd';
 import {AppstoreOutlined, InsertRowAboveOutlined} from '@ant-design/icons';
 import "./layout.less";
@@ -29,9 +29,9 @@ export default function LayoutView() {
                     </Menu.Item>
 
                     <Menu.Item
-                        key="/layout/goods"
+                        key="/layout/product"
                         icon={<InsertRowAboveOutlined/>}
-                        onClick={() => navigateTo(`/layout/goods?userId=${userId}`)}
+                        onClick={() => navigateTo(`/layout/product?userId=${userId}`)}
                     >
                         商品分类页
                     </Menu.Item>
@@ -42,14 +42,6 @@ export default function LayoutView() {
                         onClick={() => navigateTo(`/layout/personal/center?userId=${userId}`)}
                     >
                         我的个人中心
-                    </Menu.Item>
-
-                    <Menu.Item
-                        key="/layout/personal/favorite"
-                        icon={<AppstoreOutlined/>}
-                        onClick={() => navigateTo(`/layout/personal/favorite?userId=${userId}`)}
-                    >
-                        我的收藏
                     </Menu.Item>
 
                     <Menu.Item

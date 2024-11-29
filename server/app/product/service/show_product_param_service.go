@@ -14,7 +14,7 @@ import (
 type ShowParamService struct {
 }
 
-// Show 商品图片
+// Show 商品
 func (service *ShowParamService) Show(id string) resp.Response {
 	var param []model.ProductParam
 	code := e.SUCCESS

@@ -35,11 +35,6 @@ type CreatePayService struct {
 func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 	orderRedisKey := "ShowOrder_" + strconv.Itoa(int(service.UserID))
 
-	// 延迟双删 - 删除缓存
-	if err := cache.RC.Del(ctx, orderRedisKey).Err(); err != nil {
-		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
-	}
-
 	order, code := MOrder.ShowOrder(service.Code)
 	if code != e.SUCCESS {
 		return &resp.Response{
@@ -76,7 +71,7 @@ func (service *CreatePayService) Create(ctx context.Context) *resp.Response {
 	}
 
 	// 扣款
-	UserMoney := float64(user.Money) // 将用户余额转换为 float64
+	UserMoney := float64(user.Money)
 	if UserMoney < service.Price {
 		tx.Rollback()
 		return &resp.Response{

@@ -30,3 +30,14 @@ func GenerateRandomKey() string {
 	// 返回 base64 编码的密钥
 	return base64.StdEncoding.EncodeToString(key)
 }
+
+// TelephoneNumberIsTure 判断手机号真假
+func TelephoneNumberIsTure(number string) (code int) {
+	phoneNumber := `^1[0-9]{10}$`
+	match, _ := regexp.MatchString(phoneNumber, number)
+	if match {
+		return e.SUCCESS
+	} else {
+		return e.ERROR
+	}
+}

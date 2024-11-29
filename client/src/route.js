@@ -3,24 +3,22 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import LayoutView from "../src/layout";
 
 // 懒加载组件
-const About = lazy(() => import("../src/views/About"));
 const Chat = lazy(() => import("../src/views/chat/chat"));
-const Cart = lazy(() => import("../src/views/Cart"));
-const Center = lazy(() => import("../src/views/User/Center"));
-const ConfirmOrder = lazy(() => import("../src/views/Order/ConfirmOrder"));
-const Details = lazy(() => import("../src/views/Product/Details"));
-const Favorite = lazy(() => import("../src/views/Favorite"));
-const Goods = lazy(() => import("../src/views/Product/Goods"));
-const Home = lazy(() => import("./views/home"));
-const Login = lazy(() => import("../src/views/User/Login"));
-const Order = lazy(() => import("../src/views/Order/list_order"));
-const OrderDetails = lazy(() => import("../src/views/Payment"));
-const Register = lazy(() => import("../src/views/User/Register"));
-const UserAddress = lazy(() => import("../src/views/User/Address"));
-const UserAccount = lazy(() => import("../src/views/User/Account"));
-const UserService = lazy(() => import("../src/views/User/Service"));
-const UserServicePassword = lazy(() => import("../src/views/User/ValidPassword"));
-const UserServiceTelephone = lazy(() => import("../src/views/User/ValidTelephone"));
+const Cart = lazy(() => import("../src/views/cart"));
+const Center = lazy(() => import("../src/views/user/center"));
+const ConfirmOrder = lazy(() => import("./views/order/order_details"));
+const Details = lazy(() => import("../src/views/product/product_details"));
+const Goods = lazy(() => import("./views/product/product_sort"));
+const Home = lazy(() => import("../src/views/home"));
+const Login = lazy(() => import("../src/views/user/login"));
+const Order = lazy(() => import("./views/order/my_orders"));
+const OrderDetails = lazy(() => import("./views/order/order_pay"));
+const Register = lazy(() => import("../src/views/user/register"));
+const UserAddress = lazy(() => import("../src/views/user/address"));
+const UserAccount = lazy(() => import("../src/views/user/account"));
+const UserService = lazy(() => import("../src/views/user/service"));
+const UserServicePassword = lazy(() => import("../src/views/user/service_password"));
+const UserServiceTelephone = lazy(() => import("../src/views/user/service_telephone"));
 
 // 懒加载包装组件
 const withLoadingComponent = (component) => (
@@ -48,7 +46,7 @@ const router = [
                 element: withLoadingComponent(<Home />)
             },
             {
-                path: "goods",
+                path: "product",
                 element: withLoadingComponent(<Goods />)
             },
             {
@@ -57,10 +55,6 @@ const router = [
                     {
                         path: "center",
                         element: withLoadingComponent(<Center />)
-                    },
-                    {
-                        path: "favorite",
-                        element: withLoadingComponent(<Favorite />)
                     },
                     {
                         path: "order",
@@ -98,11 +92,7 @@ const router = [
                 ]
             },
             {
-                path: "about",
-                element: withLoadingComponent(<About />)
-            },
-            {
-                path: "order/details/",
+                path: "order/product_details/",
                 element: withLoadingComponent(<OrderDetails />)
             },
             {
@@ -110,7 +100,7 @@ const router = [
                 element: withLoadingComponent(<ConfirmOrder />)
             },
             {
-                path: "product/:id",
+                path: "product_sort/:id",
                 element: withLoadingComponent(<Details />)
             },
         ]

@@ -5,7 +5,6 @@ import (
 	CartApi "github.com/PokemanMaster/GoChat/v1/server/app/cart/api"
 	api2 "github.com/PokemanMaster/GoChat/v1/server/app/category/api"
 	ChatApi "github.com/PokemanMaster/GoChat/v1/server/app/chat/api"
-	FavoriteApi "github.com/PokemanMaster/GoChat/v1/server/app/favorite/api"
 	FriendApi "github.com/PokemanMaster/GoChat/v1/server/app/friend/api"
 	GroupApi "github.com/PokemanMaster/GoChat/v1/server/app/group/api"
 	OrderApi "github.com/PokemanMaster/GoChat/v1/server/app/order/api"
@@ -62,6 +61,12 @@ func Router() *gin.Engine {
 			authed.GET("/user/:id", UserApi.UserInfo)      // 用户信息
 			authed.POST("/attach/upload", ChatApi.Upload)  // 上传文件
 
+			// 地址
+			authed.POST("addresses", UserApi.CreateAddress)    // 创建收货地址
+			authed.GET("addresses/:id", UserApi.ShowAddresses) // 展示收货地址
+			authed.PUT("addresses", UserApi.UpdateAddress)     // 修改收货地址
+			authed.DELETE("addresses", UserApi.DeleteAddress)  // 删除收货地址
+
 			// 好友
 			authed.POST("/friend", FriendApi.CreateFriend)         // 添加好友
 			authed.GET("/friends/:id", FriendApi.FriendLists)      // 好友列表
@@ -79,11 +84,6 @@ func Router() *gin.Engine {
 			authed.GET("carts/:id", CartApi.ShowCart)  // 展示购物车
 			authed.PUT("carts", CartApi.UpdateCart)    // 修改购物车
 			authed.DELETE("carts", CartApi.DeleteCart) // 删除购物车
-
-			// 收藏
-			authed.POST("favorites", FavoriteApi.CreateFavorite)   // 创建收藏夹
-			authed.GET("favorites/:id", FavoriteApi.ShowFavorites) // 展示收藏夹
-			authed.DELETE("favorites", FavoriteApi.DeleteFavorite) // 删除收藏夹
 
 			// 订单
 			authed.POST("orders", OrderApi.CreateOrder)        // 创建订单

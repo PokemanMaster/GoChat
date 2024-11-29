@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"encoding/json"
 	MCart "github.com/PokemanMaster/GoChat/v1/server/app/cart/model"
 	"github.com/PokemanMaster/GoChat/v1/server/app/cart/serializer"
 	MProduct "github.com/PokemanMaster/GoChat/v1/server/app/product/model"
@@ -10,11 +9,9 @@ import (
 	"github.com/PokemanMaster/GoChat/v1/server/common/db"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
 	"github.com/PokemanMaster/GoChat/v1/server/resp"
-	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 
 	"strconv"
-	"time"
 )
 
 // CreateCartService 购物车创建的服务
@@ -74,48 +71,13 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 		}
 	}
 
-	// 更新缓存
+	// 删除缓存
 	cartRedisKey := "ShowCart_" + strconv.Itoa(int(service.UserID))
 
-	// 获取现有的收藏 JSON 数组
-	existingCartsJSON, err := cache.RC.Get(ctx, cartRedisKey).Result()
-	if err != nil && err != redis.Nil {
-		zap.L().Error("获取缓存购物车失败", zap.String("app.cart.service", "create_cart.go"))
-		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
-		}
-	}
-
-	// 反序列化现有的收藏数据
-	var carts []MCart.Cart
-	if existingCartsJSON != "" {
-		if err := json.Unmarshal([]byte(existingCartsJSON), &carts); err != nil {
-			zap.L().Error("反序列化购物车失败", zap.String("app.cart.service", "create_cart.go"))
-			return &resp.Response{
-				Status: e.ERROR_DATABASE,
-				Msg:    e.GetMsg(e.ERROR_DATABASE),
-			}
-		}
-	}
-
-	// 将新收藏追加到数组
-	carts = append(carts, cart)
-
-	// 序列化更新后的收藏数组
-	updatedCartsJSON, err := json.Marshal(carts)
+	// 删除对应用户的购物车缓存
+	err := cache.RC.Del(ctx, cartRedisKey).Err()
 	if err != nil {
-		zap.L().Error("序列化购物车失败", zap.String("app.cart.service", "create_cart.go"))
-		return &resp.Response{
-			Status: e.ERROR_DATABASE,
-			Msg:    e.GetMsg(e.ERROR_DATABASE),
-		}
-	}
-
-	// 将更新后的数据保存到 Redis
-	err = cache.RC.Set(ctx, cartRedisKey, updatedCartsJSON, 24*time.Hour).Err()
-	if err != nil {
-		zap.L().Error("保存redis失败", zap.String("app.cart.service", "create_cart.go"))
+		zap.L().Error("删除缓存失败", zap.String("app.cart.service", "create_cart.go"))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),

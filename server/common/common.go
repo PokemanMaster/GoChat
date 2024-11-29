@@ -5,7 +5,6 @@ import (
 	cart "github.com/PokemanMaster/GoChat/v1/server/app/cart/model"
 	model2 "github.com/PokemanMaster/GoChat/v1/server/app/category/model"
 	"github.com/PokemanMaster/GoChat/v1/server/app/chat/ws"
-	favorite "github.com/PokemanMaster/GoChat/v1/server/app/favorite/model"
 	MGroup "github.com/PokemanMaster/GoChat/v1/server/app/group/model"
 	model3 "github.com/PokemanMaster/GoChat/v1/server/app/order/model"
 	model8 "github.com/PokemanMaster/GoChat/v1/server/app/product/model"
@@ -74,7 +73,6 @@ func migration() {
 			&MGroup.GroupBasic{},
 			&model.Carousel{},
 			&cart.Cart{},
-			&favorite.Favorite{},
 			&model3.Order{},
 			&model3.OrderDetail{},
 			&model8.Product{},              // 商品表
