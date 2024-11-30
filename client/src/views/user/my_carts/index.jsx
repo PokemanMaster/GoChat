@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {Button, Col, Modal, Row, Empty} from "antd";
-import {DeleteCartAPI, ShowCartAPI, UpdateCartAPI} from "../../api/carts";
+import {DeleteCartAPI, ShowCartAPI, UpdateCartAPI} from "../../../api/carts";
 import {useLocation, useNavigate} from "react-router-dom";
 import {Link} from "@mui/joy";
 import {DeleteOutlined} from "@ant-design/icons";
 import "./style.less"
-import {CreateOrderAPI} from "../../api/orders";
-import NotLoginComponent from "../../components/not_login/not_login";
-import NotDataComponent from "../../components/not_data/not_data";
+import {CreateOrderAPI} from "../../../api/orders";
+import NotLoginComponent from "../../../components/not_login/not_login";
+import NotDataComponent from "../../../components/not_data/not_data";
 
 export default function Cart() {
     const navigateTo = useNavigate() // 路由
@@ -22,7 +22,6 @@ export default function Cart() {
     useEffect(() => {
         ShowCartAPI()
             .then(res => {
-                console.log(res.data)
                 setCart(res.data.items);
             }).catch(error => {
             console.log(error)
@@ -80,9 +79,10 @@ export default function Cart() {
                 "Price": checkedCart[0].price,
                 "ActualPrice": checkedCart[0].price,
                 "Num": checkedCart[0].num,
-            }).then((res) => {
-                navigateTo(`/layout/personal/order/${userId}`)
-            }).catch((err) => {
+            }).then(res => {
+                console.log(res)
+                navigateTo(`/layout/my/orders?userId=${userId}`)
+            }).catch(err => {
                 console.log(err)
             })
         } else {

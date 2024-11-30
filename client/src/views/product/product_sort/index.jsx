@@ -40,7 +40,7 @@ export default function Goods() {
 
     // 商品详情
     function ShowProduct(value) {
-        navigateTo(`/layout/product/${value.id}?userId=${userId}`);
+        navigateTo(`/layout/product/details/${value.id}?userId=${userId}`);
     }
 
     // 搜索

@@ -46,12 +46,10 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	order.Code = number
 
 	// 开始事务
-	tx := db.DB.Begin()
 
 	// 创建订单数据
 	err := db.DB.Create(&order).Error
 	if err != nil {
-		tx.Rollback()
 		zap.L().Error("创建订单失败", zap.String("app.order.service.order", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
@@ -63,7 +61,6 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	// 查询订单-> 获取订单id存入订单详情
 	err = db.DB.Where("code = ?", order.Code).First(&order).Error
 	if err != nil {
-		tx.Rollback()
 		zap.L().Error("查询订单错误", zap.String("app.order.service.order", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
@@ -82,7 +79,6 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 	// 创建订单详情
 	err = db.DB.Create(&orderDetail).Error
 	if err != nil {
-		tx.Rollback()
 		zap.L().Error("创建订单详情错误", zap.String("app.order.service.order", err.Error()))
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
@@ -91,13 +87,14 @@ func (service *CreateOrderService) Create(ctx context.Context) *resp.Response {
 		}
 	}
 
-	tx.Commit()
-
 	// 生产者负责减库存
-	err = dao.Product1(orderDetail)
-	if err != nil {
-		return nil
-	}
+	go func() {
+		err = dao.Product1(orderDetail)
+		if err != nil {
+			zap.L().Error("删除库存失败", zap.String("app.order.service.order", err.Error()))
+		}
+	}()
+
 	//cache.ProductSendMsg("order", orderDetail)
 
 	// 将订单号存入Redis,并设置过期时间

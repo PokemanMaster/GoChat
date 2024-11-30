@@ -38,11 +38,11 @@ export default function Order() {
 
     function ViewTheOrder(item) {
         if (item.status === 1) {
-            navigateTo(`/layout/order/product_details?userId=${userId}`, {
+            navigateTo(`/layout/order/pay?userId=${userId}`, {
                 state: {Cart: item},
             });
         } else {
-            navigateTo(`/layout/order/confirm/${item.code}?userId=${userId}`, {
+            navigateTo(`/layout/order/details/${item.code}?userId=${userId}`, {
                 state: {orderNum: item.code},
             });
         }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import "./style.less"
-import {CategoryAPI, RegisterAPI} from "../../../api/users";
+import {CategoryAPI, RegisterAPI} from "../../api/users";
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';

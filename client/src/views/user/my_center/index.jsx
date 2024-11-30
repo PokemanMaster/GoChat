@@ -45,7 +45,7 @@ export default function Center() {
                                     <p>
                                         <i
                                             onClick={() => {
-                                                navigateTo("/layout/user/account")
+                                                navigateTo("/layout/my/account")
                                             }}
                                             style={{fontSize: '13px', color: '#ff6700'}}>修改个人信息 &gt;
                                         </i>
@@ -77,7 +77,7 @@ export default function Center() {
                     <Row>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <div className={"UserDetails"} onClick={() => {
-                                navigateTo("/layout/personal/order")
+                                navigateTo("/layout/my/orders")
                             }}>
                                 <div>
                                     <img src="https://s01.mifile.cn/i/user/portal-icon-1.png" alt={""}/>
@@ -93,7 +93,7 @@ export default function Center() {
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <div className={"UserDetails"} onClick={() => {
-                                navigateTo("/layout/personal/order")
+                                navigateTo("/layout/my/orders")
                             }}>
                                 <div>
                                     <img src="https://s01.mifile.cn/i/user/portal-icon-2.png" alt={""}/>
@@ -109,7 +109,7 @@ export default function Center() {
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <div className={"UserDetails"} onClick={() => {
-                                navigateTo("/layout/personal/order")
+                                navigateTo("/layout/my/orders")
                             }}>
                                 <div>
                                     <img src="https://s01.mifile.cn/i/user/portal-icon-3.png" alt={""}/>

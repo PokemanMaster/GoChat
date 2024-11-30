@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import './style.less';
 import {useLocation} from "react-router-dom";
-import {ChatMessageAPI, CreateFriendAPI, FriendListsAPI, SearchFriendAPI} from "../../api/chat";
+import {ChatMessageAPI, CreateFriendAPI, FriendListsAPI, SearchFriendAPI} from "../../../api/chat";
 import Modal from 'react-modal';
 import {SendOutlined} from "@ant-design/icons"; // Importing react-modal
 

@@ -54,7 +54,7 @@ export default function UserDetails() {
     };
 
     return (<>
-        {userId  ? (<div className={"account"}>
+        {userId  ? (<div className={"my_account"}>
             <div className={"UserDetailsContent"}>
                 <div className={"Extra"}></div>
                 <div className={"UserDetailsTitle"}>

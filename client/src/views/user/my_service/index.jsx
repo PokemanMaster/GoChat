@@ -55,7 +55,7 @@ export default function UserService() {
                     <Col span={2}><PhoneOutlined className="icon"/></Col>
                     <Col span={16}><Typography.Text>安全手机</Typography.Text></Col>
                     <Col span={6} className="right-text"
-                         onClick={() => navigateTo("/layout/user/service/telephone")}>点击绑定</Col>
+                         onClick={() => navigateTo("/layout/my/service/telephone")}>点击绑定</Col>
                 </Row>
                 {/*<Row className="item-row" align="middle">*/}
                 {/*    <Col span={2}><MailOutlined className="icon"/></Col>*/}
@@ -66,7 +66,7 @@ export default function UserService() {
                     <Col span={2}><LockOutlined className="icon"/></Col>
                     <Col span={16}><Typography.Text>修改密码</Typography.Text></Col>
                     <Col span={6} className="right-text"
-                         onClick={() => navigateTo("/layout/user/service/password")}>点击重置</Col>
+                         onClick={() => navigateTo("/layout/my/service/password")}>点击重置</Col>
                 </Row>
                 {/*<Row className="item-row" align="middle">*/}
                 {/*    <Col span={2}><UserOutlined className="icon"/></Col>*/}

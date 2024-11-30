@@ -3,22 +3,22 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import LayoutView from "../src/layout";
 
 // 懒加载组件
-const Chat = lazy(() => import("../src/views/chat/chat"));
-const Cart = lazy(() => import("../src/views/cart"));
-const Center = lazy(() => import("../src/views/user/center"));
-const ConfirmOrder = lazy(() => import("./views/order/order_details"));
-const Details = lazy(() => import("../src/views/product/product_details"));
-const Goods = lazy(() => import("./views/product/product_sort"));
+const MyChat = lazy(() => import("../src/views/user/my_chat/chat"));
+const MyCart = lazy(() => import("../src/views/user/my_carts"));
+const MyCenter = lazy(() => import("../src/views/user/my_center"));
+const OrderDetails = lazy(() => import("../src/views/order/order_details"));
+const ProductDetails = lazy(() => import("../src/views/product/product_details"));
+const ProductSort = lazy(() => import("../src/views/product/product_sort"));
 const Home = lazy(() => import("../src/views/home"));
-const Login = lazy(() => import("../src/views/user/login"));
-const Order = lazy(() => import("./views/order/my_orders"));
-const OrderDetails = lazy(() => import("./views/order/order_pay"));
-const Register = lazy(() => import("../src/views/user/register"));
-const UserAddress = lazy(() => import("../src/views/user/address"));
-const UserAccount = lazy(() => import("../src/views/user/account"));
-const UserService = lazy(() => import("../src/views/user/service"));
-const UserServicePassword = lazy(() => import("../src/views/user/service_password"));
-const UserServiceTelephone = lazy(() => import("../src/views/user/service_telephone"));
+const Login = lazy(() => import("../src/views/login"));
+const MyOrders = lazy(() => import("../src/views/order/my_orders"));
+const OrderPay = lazy(() => import("../src/views/order/order_pay"));
+const Register = lazy(() => import("../src/views/register"));
+const MyAddress = lazy(() => import("../src/views/user/my_addresses"));
+const MyAccount = lazy(() => import("../src/views/user/my_account"));
+const MyService = lazy(() => import("../src/views/user/my_service"));
+const MyServicePassword = lazy(() => import("../src/views/user/my_service_password"));
+const MyServiceTelephone = lazy(() => import("../src/views/user/my_service_telephone"));
 
 // 懒加载包装组件
 const withLoadingComponent = (component) => (
@@ -38,70 +38,60 @@ const router = [
         element: <LayoutView />,
         children: [
             {
-                path: "chat",
-                element: withLoadingComponent(<Chat />)
-            },
-            {
-                path: "home",
+                path: "home",  // 首页
                 element: withLoadingComponent(<Home />)
             },
             {
-                path: "product",
-                element: withLoadingComponent(<Goods />)
+                path: "products/sort",  // 商品分类
+                element: withLoadingComponent(<ProductSort />)
             },
             {
-                path: "personal",
-                children: [
-                    {
-                        path: "center",
-                        element: withLoadingComponent(<Center />)
-                    },
-                    {
-                        path: "order",
-                        element: withLoadingComponent(<Order />)
-                    },
-                    {
-                        path: "cart",
-                        element: withLoadingComponent(<Cart />)
-                    },
-                ]
+                path: "product/details/:id",  // 商品详情
+                element: withLoadingComponent(<ProductDetails />)
             },
             {
-                path: "user",
-                children: [
-                    {
-                        path: "service",
-                        element: withLoadingComponent(<UserService />)
-                    },
-                    {
-                        path: "service/password",
-                        element: withLoadingComponent(<UserServicePassword />)
-                    },
-                    {
-                        path: "service/telephone",
-                        element: withLoadingComponent(<UserServiceTelephone />)
-                    },
-                    {
-                        path: "account",
-                        element: withLoadingComponent(<UserAccount />)
-                    },
-                    {
-                        path: "address",
-                        element: withLoadingComponent(<UserAddress />)
-                    },
-                ]
+                path: "my/center",  // 我的中心
+                element: withLoadingComponent(<MyCenter />)
             },
             {
-                path: "order/product_details/",
+                path: "my/carts",  // 我的购物车
+                element: withLoadingComponent(<MyCart />)
+            },
+            {
+                path: "my/service",  // 我的服务
+                element: withLoadingComponent(<MyService />)
+            },
+            {
+                path: "my/service/password", // 我的服务=> 修改密码
+                element: withLoadingComponent(<MyServicePassword />)
+            },
+            {
+                path: "my/service/telephone", // 我的服务=> 修改手机号
+                element: withLoadingComponent(<MyServiceTelephone />)
+            },
+            {
+                path: "my/account", // 我的个人信息
+                element: withLoadingComponent(<MyAccount />)
+            },
+            {
+                path: "my/addresses", // 我的地址
+                element: withLoadingComponent(<MyAddress />)
+            },
+            {
+                path: "my/chat",  // 我的聊天
+                element: withLoadingComponent(<MyChat />)
+            },
+            {
+                path: "my/orders",  // 我的订单
+                element: withLoadingComponent(<MyOrders />)
+            },
+            {
+                path: "order/pay", // 订单支付
+                element: withLoadingComponent(<OrderPay />)
+            },
+            {
+                path: "order/details/:id", // 订单详情
                 element: withLoadingComponent(<OrderDetails />)
-            },
-            {
-                path: "order/confirm/:id",
-                element: withLoadingComponent(<ConfirmOrder />)
-            },
-            {
-                path: "product_sort/:id",
-                element: withLoadingComponent(<Details />)
             },
         ]
     },

@@ -25,69 +25,69 @@ export default function LayoutView() {
                         icon={<AppstoreOutlined/>}
                         onClick={() => navigateTo(`/layout/home?userId=${userId}`)}
                     >
-                        商品的首页
+                        首页
                     </Menu.Item>
 
                     <Menu.Item
-                        key="/layout/product"
+                        key="/layout/products/sort"
                         icon={<InsertRowAboveOutlined/>}
-                        onClick={() => navigateTo(`/layout/product?userId=${userId}`)}
+                        onClick={() => navigateTo(`/layout/products/sort?userId=${userId}`)}
                     >
                         商品分类页
                     </Menu.Item>
 
                     <Menu.Item
-                        key="/layout/personal/center"
+                        key="/layout/my/center"
                         icon={<AppstoreOutlined/>}
-                        onClick={() => navigateTo(`/layout/personal/center?userId=${userId}`)}
+                        onClick={() => navigateTo(`/layout/my/center?userId=${userId}`)}
                     >
                         我的个人中心
                     </Menu.Item>
 
                     <Menu.Item
-                        key="/layout/personal/order"
+                        key="/layout/my/orders"
                         icon={<AppstoreOutlined/>}
-                        onClick={() => navigateTo(`/layout/personal/order?userId=${userId}`)}
+                        onClick={() => navigateTo(`/layout/my/orders?userId=${userId}`)}
                     >
                         我的订单
                     </Menu.Item>
 
                     <Menu.Item
-                        key="/layout/personal/cart"
+                        key="/layout/my/carts"
                         icon={<AppstoreOutlined/>}
-                        onClick={() => navigateTo(`/layout/personal/cart?userId=${userId}`)}
+                        onClick={() => navigateTo(`/layout/my/carts?userId=${userId}`)}
                     >
                         我的购物车
                     </Menu.Item>
 
                     <Menu.Item
-                        key="/layout/user/pass"
+                        key="/layout/my/service"
                         icon={<AppstoreOutlined/>}
-                        onClick={() => navigateTo(`/layout/user/service?userId=${userId}`)}
+                        onClick={() => navigateTo(`/layout/my/service?userId=${userId}`)}
                     >
                         登录与安全
                     </Menu.Item>
 
                     <Menu.Item
-                        key="/layout/user/account"
+                        key="/layout/my/account"
                         icon={<AppstoreOutlined/>}
-                        onClick={() => navigateTo(`/layout/user/account?userId=${userId}`)}
+                        onClick={() => navigateTo(`/layout/my/account?userId=${userId}`)}
                     >
                         个人信息
                     </Menu.Item>
 
                     <Menu.Item
-                        key="/layout/user/address"
+                        key="/layout/my/addresses"
                         icon={<AppstoreOutlined/>}
-                        onClick={() => navigateTo(`/layout/user/address?userId=${userId}`)}
+                        onClick={() => navigateTo(`/layout/my/addresses?userId=${userId}`)}
                     >
                         收货地址
                     </Menu.Item>
 
                     <Menu.Item
-                        key="/layout/chat"
+                        key="/layout/my/chat"
                         icon={<AppstoreOutlined/>}
-                        onClick={() => navigateTo(`/layout/chat?userId=${userId}`)}
+                        onClick={() => navigateTo(`/layout/my/chat?userId=${userId}`)}
                     >
                         聊天
                     </Menu.Item>
