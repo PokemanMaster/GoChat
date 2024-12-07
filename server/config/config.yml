@@ -1,22 +1,15 @@
-server:
-  user:
-    name: user
-    loadBalance: false
-    addr:
-      - 127.0.0.1:9000
-
 mysql:
   driverName: mysql
-  host: 127.0.0.1
+  host: 47.113.104.184
   port: 3306
-  database: im
+  database: gochat
   username: root
   password: qq81880234
   charset: utf8mb4
 
 redis:
   addr: 47.113.104.184:6379
-  password: 123456
+  password: 123123
   DB: 0
   poolSize: 30
   minIdleConn: 30
@@ -31,7 +24,7 @@ oss:
   Endpoint: "oss-cn-hangzhou.aliyuncs.com"
   AccessKeyId: "LTAI5tNCXPJwS3MstKoKgixh"
   AccessKeySecret: "YhHE8OyCMsqfjwOnxQ1oO7paYlDjVHX"
-  Bucket : "ginchat"
+  Bucket : "gochat"
 
 timeout:
   DelayHeartbeat: 3   #延迟心跳时间  单位秒

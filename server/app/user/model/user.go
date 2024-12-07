@@ -17,9 +17,9 @@ type User struct {
 	ClientIp      string    `gorm:"type:varchar(100);comment:'客户端IP'" json:"client_ip"`
 	ClientPort    string    `gorm:"type:varchar(10);comment:'客户端端口'" json:"client_port"`
 	Salt          string    `gorm:"type:varchar(200);comment:'加密盐'" json:"salt"`
-	LoginTime     time.Time `gorm:"comment:'登录时间'" json:"login_time"`
-	HeartbeatTime time.Time `gorm:"comment:'心跳时间'" json:"heartbeat_time"`
-	LoginOutTime  time.Time `gorm:"comment:'登出时间';column:login_out_time" json:"login_out_time"`
+	LoginTime     time.Time `gorm:"comment:'登录时间';default:null" json:"login_time"`
+	HeartbeatTime time.Time `gorm:"comment:'心跳时间';default:null" json:"heartbeat_time"`
+	LoginOutTime  time.Time `gorm:"comment:'登出时间';column:login_out_time;default:null" json:"login_out_time"`
 	IsLogout      bool      `gorm:"comment:'是否登出'" json:"is_logout"`
 	DeviceInfo    string    `gorm:"type:varchar(500);comment:'设备信息'" json:"device_info"`
 }

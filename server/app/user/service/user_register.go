@@ -83,6 +83,8 @@ func (service *UserRegisterService) UserRegister() *resp.Response {
 	user.LevelID = 1
 	user.Money = 0
 	user.HeartbeatTime = time.Now()
+	user.LoginTime = time.Now()
+	user.LoginOutTime = time.Now()
 	err = db.DB.Create(&user).Error
 	if err != nil {
 		zap.L().Error("创建用户失败", zap.String("app.user.service.user_register", err.Error()))

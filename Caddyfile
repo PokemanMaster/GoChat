@@ -6,7 +6,7 @@ http:// {
 
 www.lvyouwang.xyz {
     route /api/* {
-        reverse_proxy 47.113.104.184:3000
+        reverse_proxy 47.113.104.184:9000
     }
     route /* {
         root * /usr/share/caddy

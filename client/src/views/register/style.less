@@ -1,20 +1,105 @@
-.body {
-  background-size: cover; /* Ensures the image covers the entire screen */
-  background-position: center; /* Centers the image */
-  background-repeat: no-repeat; /* Prevents the image from repeating */
+.gochat {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("../../../public/picture/login.png");
   height: 100vh;
-  overflow: hidden;
+  margin: 0;
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
+  align-items: center;
 
-  h1 {
-    text-align: center;
+  .gochat-app {
+    background: linear-gradient(to right, #f4faff 60%, #ffffff 40%);
+    position: relative;
+    width: 1200px;
+    height: 700px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    justify-content: space-around;
+
+    .gochat-app-left {
+      width: 500px;
+      height: 500px;
+      margin-top: 50px;
+      background-repeat: no-repeat;
+      background-image: url("../../../public/picture/key.png");
+      z-index: 2;
+    }
+
+    .gochat-app-right {
+      width: 700px;
+      height: 700px;
+      z-index: 2;
+      text-align: center;
+
+      .right-logo {
+        padding-top: 20px;
+        width: 200px;
+      }
+
+      p {
+        color: #cbe1e5;
+        cursor: default;
+      }
+
+      .right-form {
+        display: flex;
+        flex-direction: column;
+
+        .right-form-username  {
+          width: 300px;
+          margin: 10px auto;
+
+        }
+
+        .right-form-password  {
+          width: 300px;
+          margin: 10px auto;
+        }
+
+        .right-form-repassword {
+          width: 300px;
+          margin: 10px auto;
+        }
+
+        .right-form-code {
+          width: 300px;
+          margin: 10px auto;
+        }
+
+        .right-form-submit {
+          width: 300px;
+          margin: 20px auto;
+        }
+
+        .right-form-register {
+          font-size: 13px;
+          color: #75838e;
+          padding-left: 220px;
+          cursor: pointer;
+        }
+      }
+
+      .right-link {
+        margin: 20px auto;
+        font-size: 12px;
+        cursor: default;
+      }
+    }
   }
 
-  p {
-    text-align: center;
+  .gochat-app::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    width: 800px;
+    height: 800px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    transform: translate(-40%, -50%) rotate(45deg);
   }
 }
-
-

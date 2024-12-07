@@ -6,7 +6,6 @@ import (
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/mid"
 	"github.com/PokemanMaster/GoChat/v1/server/resp"
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"strings"
@@ -80,10 +79,10 @@ func (service *UserLoginService) UserLogin(ctx *gin.Context) *resp.Response {
 		}
 	}
 
-	session := sessions.Default(ctx)
-	session.Options(sessions.Options{MaxAge: 3600 * 6})
-	session.Set("user_"+UserName, user)
-	session.Save()
+	//session := sessions.Default(ctx)
+	//session.Options(sessions.Options{MaxAge: 3600 * 6})
+	//session.Set("user_"+UserName, user)
+	//session.Save()
 
 	// 成功返回用户数据
 	return &resp.Response{

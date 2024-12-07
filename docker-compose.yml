@@ -1,50 +1,68 @@
-version: '4'
+version: '3.8'
 services:
   caddy:
     image: caddy:latest
     container_name: caddy
+    hostname: caddy
+    restart: unless-stopped
+    volumes:
+      - /home/html:/usr/share/caddy
+      - /home:/etc/caddy
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - /home/web/caddy/:/etc/caddy/
-      - /home/web/html/:/usr/share/caddy/
-    restart: always
   server:
     build:
       context: ./server
       dockerfile: Dockerfile
-    container_name: server  # 添加此行
-    restart: always
+    container_name: server
+    hostname: server
+    restart: unless-stopped
     depends_on:
       - mysql
       - redis
     ports:
-      - "3000:3000"
+      - "9000:9000"
+    volumes:
+      - /home/data/nginx:/common/nginx
   mysql:
     image: mysql:5.7
     container_name: mysql
     restart: unless-stopped
-    command: --default-authentication-plugin=mysql_native_password
     hostname: mysql
-    ports:
-      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
     volumes:
-      - ./data/mysql/data:/var/lib/mysql
-      - ./data/mysql/init:/docker-entrypoint-initdb.d
+      - /home/data/mysql/data:/var/lib/mysql
+      - /home/data/mysql/init:/docker-entrypoint-initdb.d
     environment:
       TZ: Asia/Shanghai
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: tourist
+      MYSQL_ROOT_PASSWORD: qq81880234
+      MYSQL_DATABASE: gochat
+    ports:
+      - "3306:3306"
   redis:
     image: redis:7.0.15
     container_name: redis
+    hostname: redis
     restart: unless-stopped
     volumes:
-      - ./data/redis/conf:/usr/local/etc/redis
-      - ./data/redis/data:/data
+      - /home/data/redis/conf:/usr/local/etc/redis
+      - /home/data/redis/data:/data
     command: redis-server /usr/local/etc/redis/redis.conf
     ports:
       - "6379:6379"
+  rabbitmq:
+    image: rabbitmq:4.0-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - /home/data/rabbitmq:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
 
