@@ -11,13 +11,13 @@ import (
 // Product 产品表结构 (Spu)
 type Product struct {
 	gorm.Model
-	Title      string `gorm:"type:varchar(200);not null;comment:'标题'"`
-	SubTitle   string `gorm:"type:varchar(200);comment:'副标题'"`
-	CategoryID uint   `gorm:"type:int unsigned;not null;index:idx_category_id;comment:'分类ID'"`
-	BrandID    uint   `gorm:"type:int unsigned;index:idx_brand_id;comment:'品牌ID'"` // 一些散装的可能没有品牌，比如花生之类的
-	SpgID      uint   `gorm:"type:int unsigned;index:idx_spg_id;comment:'品类ID'"`   // 电子产品可能包含：电脑、电视等等，相当于二级索引
-	Saleable   bool   `gorm:"not null;index:idx_saleable;comment:'是否上架'"`
-	Valid      bool   `gorm:"not null;index:idx_valid;comment:'是否有效'"`
+	Name        string `gorm:"type:varchar(200);not null;index:idx_name;comment:'商品名称'"`
+	CategoryID  uint   `gorm:"type:int unsigned;not null;comment:'商品类别ID'"`
+	BrandID     uint   `gorm:"type:int unsigned;comment:'品牌ID'"`
+	Image       string `gorm:"type:varchar(200);not null;comment:'商品的主图'"`
+	Description string `gorm:"type:json;comment:'商品描述图片（JSON数组形式存储）'"`
+	Rating      uint   `gorm:"type:int unsigned;not null;comment:'商品评分'"`
+	Saleable    bool   `gorm:"not null;comment:'是否上架'"`
 }
 
 // View 获取点击数

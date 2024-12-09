@@ -1,7 +1,7 @@
 package build
 
 import (
-	model2 "github.com/PokemanMaster/GoChat/v1/server/app/order/model"
+	Morder "github.com/PokemanMaster/GoChat/v1/server/app/order/model"
 	MProduct "github.com/PokemanMaster/GoChat/v1/server/app/product/model"
 	MTransport "github.com/PokemanMaster/GoChat/v1/server/app/transport/model"
 	"github.com/PokemanMaster/GoChat/v1/server/common/db"
@@ -18,12 +18,11 @@ type UserOrdersSerialization struct {
 	Price       float64 `json:"price"`
 	ActualPrice float64 `json:"actualPrice"`
 	Num         uint    `json:"num"`
-	Title       string  `json:"title"`
-	Images      string  `json:"images"`
+	Name        string  `json:"name"`
+	Image       string  `json:"image"`
 }
 
-// ResUserOrder 序列化某个用户的所有订单
-func ResUserOrder(item1 model2.Order, item2 model2.OrderDetail, item3 MProduct.ProductParam) UserOrdersSerialization {
+func ResUserOrder(item1 Morder.Order, item2 Morder.OrderDetail, item3 MProduct.Product) UserOrdersSerialization {
 	return UserOrdersSerialization{
 		ID:          item1.ID,
 		Code:        item1.Code,
@@ -33,16 +32,15 @@ func ResUserOrder(item1 model2.Order, item2 model2.OrderDetail, item3 MProduct.P
 		Num:         item2.Num,
 		Price:       item2.Price,
 		ActualPrice: item2.ActualPrice,
-		Images:      item3.Images,
-		Title:       item3.Title,
+		Name:        item3.Name,
+		Image:       item3.Image,
 	}
 }
 
-// ResUserOrders 序列化订单
-func ResUserOrders(items []model2.Order) (orders []UserOrdersSerialization) {
+func ResUserOrders(items []Morder.Order) (orders []UserOrdersSerialization) {
 	for _, item1 := range items {
-		item2 := model2.OrderDetail{}
-		item3 := MProduct.ProductParam{}
+		item2 := Morder.OrderDetail{}
+		item3 := MProduct.Product{}
 		err := db.DB.First(&item2, item1.ID).Error
 		err = db.DB.First(&item3, item2.ProductID).Error
 		if err != nil {
@@ -53,6 +51,8 @@ func ResUserOrders(items []model2.Order) (orders []UserOrdersSerialization) {
 	}
 	return orders
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // OrderSerialization 某个用户的某个订单
 type OrderSerialization struct {
@@ -84,7 +84,7 @@ type OrderSerialization struct {
 }
 
 // ResOrder 序列化订单
-func ResOrder(item1 model2.Order, item2 model2.OrderDetail, item3 MProduct.ProductParam, item4 MTransport.TransportDelivery) OrderSerialization {
+func ResOrder(item1 Morder.Order, item2 Morder.OrderDetail, item3 MProduct.ProductParam, item4 MTransport.TransportDelivery) OrderSerialization {
 	return OrderSerialization{
 		ID:          item1.ID,
 		Code:        item1.Code,
@@ -93,9 +93,7 @@ func ResOrder(item1 model2.Order, item2 model2.OrderDetail, item3 MProduct.Produ
 		Num:         item2.Num,
 		Price:       item2.Price,
 		ActualPrice: item2.ActualPrice,
-		Title:       item3.Title,
-		Param:       item3.Param,
-		Images:      item3.Images,
+		Images:      item3.Image,
 		AddressID:   item4.AddressID,
 	}
 }

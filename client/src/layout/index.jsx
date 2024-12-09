@@ -21,14 +21,6 @@ export default function LayoutView() {
                     mode="inline"
                 >
                     <Menu.Item
-                        key="/layout/home"
-                        icon={<AppstoreOutlined/>}
-                        onClick={() => navigateTo(`/layout/home?userId=${userId}`)}
-                    >
-                        首页
-                    </Menu.Item>
-
-                    <Menu.Item
                         key="/layout/products/sort"
                         icon={<InsertRowAboveOutlined/>}
                         onClick={() => navigateTo(`/layout/products/sort?userId=${userId}`)}

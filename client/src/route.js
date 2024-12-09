@@ -9,7 +9,6 @@ const MyCenter = lazy(() => import("../src/views/user/my_center"));
 const OrderDetails = lazy(() => import("../src/views/order/order_details"));
 const ProductDetails = lazy(() => import("../src/views/product/product_details"));
 const ProductSort = lazy(() => import("../src/views/product/product_sort"));
-const Home = lazy(() => import("../src/views/home"));
 const Login = lazy(() => import("../src/views/login"));
 const MyOrders = lazy(() => import("../src/views/order/my_orders"));
 const OrderPay = lazy(() => import("../src/views/order/order_pay"));
@@ -37,10 +36,6 @@ const router = [
         path: "/layout",
         element: <LayoutView />,
         children: [
-            {
-                path: "home",  // 首页
-                element: withLoadingComponent(<Home />)
-            },
             {
                 path: "products/sort",  // 商品分类
                 element: withLoadingComponent(<ProductSort />)

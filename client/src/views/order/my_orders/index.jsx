@@ -25,6 +25,7 @@ export default function Order() {
         if (UserInfo) {
             ListOrdersAPI(UserInfo.id).then((res) => {
                 if (res.data && res.data.items) {
+                    console.log(res.data.items)
                     setOrder(res.data.items);
                 } else {
                     setOrder([]);
@@ -48,10 +49,6 @@ export default function Order() {
         }
     }
 
-    function JsonParseFacade(value) {
-        const parsedValue = JSON.parse(value);
-        return parsedValue.facade;
-    }
 
     function filterOrdersByTab() {
         if (currentTab === "all") {
@@ -88,18 +85,12 @@ export default function Order() {
                 <div>
                     <div className="TopHeader">
                         <div className="CartHeader">
-                            <div className="Logo">
-                                <Link to="/">
-                                    {/*<img src={clogo} alt=""/>*/}
-                                </Link>
-                            </div>
                             <div className="CartHeaderContent">
                                 <p>我的订单</p>
                             </div>
                         </div>
                     </div>
-
-                    <div className="order-header">
+                    {order && order.length > 0 ? <div className="order-header">
                         <div className="header">
                             <h2>我的订单</h2>
                             <p>请耐心等待，或者致电了解更多</p>
@@ -134,9 +125,9 @@ export default function Order() {
                                     </div>
                                     <div className="order-items">
                                         <div className="item">
-                                            <img src={JsonParseFacade(item.images)} alt="Phone"/>
+                                            <img src={item.image} alt="Phone"/>
                                             <div className="item-info">
-                                                <p>{item.title}</p>
+                                                <p>{item.name}</p>
                                                 <p>{item.price}元 × {item.num}</p>
                                             </div>
                                         </div>
@@ -148,8 +139,8 @@ export default function Order() {
                                     </div>
                                 </div>
                             ))
-                        ) : <NotDataComponent text={"没有任何订单"}/>}
-                    </div>
+                        ) : <div></div>}
+                    </div> : <NotDataComponent text={"没有任何订单"}/>}
                 </div>
             ) : <NotLoginComponent/>}
         </>

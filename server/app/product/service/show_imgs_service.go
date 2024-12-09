@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/PokemanMaster/GoChat/v1/server/app/product/model"
-	"github.com/PokemanMaster/GoChat/v1/server/app/product/serializer"
 	"github.com/PokemanMaster/GoChat/v1/server/common/db"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
 	"github.com/PokemanMaster/GoChat/v1/server/resp"
@@ -30,6 +29,6 @@ func (service *ShowProductParamService) Show(id string) resp.Response {
 	}
 
 	return resp.Response{
-		Data: serializer.BuildProductParams(productsParam),
+		//Data: serializer.BuildProductParams(productsParam),
 	}
 }

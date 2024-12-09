@@ -1,14 +1,14 @@
 package serializer
 
 import (
-	model2 "github.com/PokemanMaster/GoChat/v1/server/app/category/model"
-	"github.com/PokemanMaster/GoChat/v1/server/app/product/model"
+	Mcategory "github.com/PokemanMaster/GoChat/v1/server/app/category/model"
+	Mproduct "github.com/PokemanMaster/GoChat/v1/server/app/product/model"
 )
 
 // ProductSerialization 商品序列化
 type ProductSerialization struct {
 	ID         uint   `json:"id"`
-	Title      string `json:"title"`       // 商品标题
+	Name       string `json:"name"`        // 商品标题
 	SubTitle   string `json:"subTitle"`    // 商品副标题
 	CategoryID uint   `json:"category_id"` // 分类ID
 	BrandID    uint   `json:"brandID"`     // 一些散装的可能没有品牌，比如花生之类的
@@ -18,21 +18,18 @@ type ProductSerialization struct {
 }
 
 // BuildProduct 序列化商品
-func BuildProduct(item model.Product) ProductSerialization {
+func BuildProduct(item Mproduct.Product) ProductSerialization {
 	return ProductSerialization{
 		ID:         item.ID,
 		CategoryID: item.CategoryID,
-		Title:      item.Title,
-		SubTitle:   item.SubTitle,
+		Name:       item.Name,
 		BrandID:    item.BrandID,
-		SpgID:      item.SpgID,
 		Saleable:   item.Saleable,
-		Valid:      item.Valid,
 	}
 }
 
 // BuildProducts 序列化商品列表
-func BuildProducts(items []model.Product) (products []ProductSerialization) {
+func BuildProducts(items []Mproduct.Product) (products []ProductSerialization) {
 	for _, item := range items {
 		product := BuildProduct(item)
 		products = append(products, product)
@@ -51,7 +48,7 @@ type ProductBrandSerialization struct {
 }
 
 // BuildProductBrand 序列化商品品牌
-func BuildProductBrand(item model.ProductBrand) ProductBrandSerialization {
+func BuildProductBrand(item Mproduct.ProductBrand) ProductBrandSerialization {
 	return ProductBrandSerialization{
 		ID:     item.ID,
 		Name:   item.Name,
@@ -61,7 +58,7 @@ func BuildProductBrand(item model.ProductBrand) ProductBrandSerialization {
 }
 
 // BuildProductBrands 序列化商品品牌
-func BuildProductBrands(items []model.ProductBrand) (categories []ProductBrandSerialization) {
+func BuildProductBrands(items []Mproduct.ProductBrand) (categories []ProductBrandSerialization) {
 	for _, item := range items {
 		category := BuildProductBrand(item)
 		categories = append(categories, category)
@@ -81,7 +78,7 @@ type ProductCategorySerialization struct {
 }
 
 // BuildProductCategory 序列化分类
-func BuildProductCategory(item model2.ProductCategory) ProductCategorySerialization {
+func BuildProductCategory(item Mcategory.ProductCategory) ProductCategorySerialization {
 	return ProductCategorySerialization{
 		ID:       item.ID,
 		Name:     item.Name,
@@ -92,7 +89,7 @@ func BuildProductCategory(item model2.ProductCategory) ProductCategorySerializat
 }
 
 // BuildProductCategorys 序列化分类列表
-func BuildProductCategorys(items []model2.ProductCategory) (categories []ProductCategorySerialization) {
+func BuildProductCategorys(items []Mcategory.ProductCategory) (categories []ProductCategorySerialization) {
 	for _, item := range items {
 		category := BuildProductCategory(item)
 		categories = append(categories, category)
@@ -106,33 +103,21 @@ func BuildProductCategorys(items []model2.ProductCategory) (categories []Product
 type ProductParamSerialization struct {
 	ID        uint    `json:"id"`
 	ProductID uint    `json:"product_id"`
-	Title     string  `json:"title"`
-	Images    string  `json:"images"`
+	Name      string  `json:"name"`
+	Image     string  `json:"image"`
 	Price     float64 `json:"price"`
-	Param     string  `json:"param"`
 	Saleable  bool    `json:"saleable"`
-	Valid     bool    `json:"valid"`
+	SoldCount uint    `json:"sold_count"`
 }
 
 // BuildProductParam 序列化商品图片
-func BuildProductParam(item model.ProductParam) ProductParamSerialization {
+func BuildProductParam(item Mproduct.Product, item2 Mproduct.ProductParam) ProductParamSerialization {
 	return ProductParamSerialization{
-		ID:        item.ID,
-		ProductID: item.ProductID,
-		Title:     item.Title,
-		Images:    item.Images,
-		Price:     item.Price,
-		Param:     item.Param,
+		ID:        item2.ID,
+		Name:      item.Name,
+		ProductID: item2.ProductID,
+		Image:     item.Image,
+		Price:     item2.Price,
 		Saleable:  item.Saleable,
-		Valid:     item.Valid,
 	}
-}
-
-// BuildProductParams 序列化商品图片列表
-func BuildProductParams(items []model.ProductParam) (Params []ProductParamSerialization) {
-	for _, item := range items {
-		Param := BuildProductParam(item)
-		Params = append(Params, Param)
-	}
-	return Params
 }

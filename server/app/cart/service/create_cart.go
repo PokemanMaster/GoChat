@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	MCart "github.com/PokemanMaster/GoChat/v1/server/app/cart/model"
-	"github.com/PokemanMaster/GoChat/v1/server/app/cart/serializer"
 	MProduct "github.com/PokemanMaster/GoChat/v1/server/app/product/model"
 	"github.com/PokemanMaster/GoChat/v1/server/common/cache"
 	"github.com/PokemanMaster/GoChat/v1/server/common/db"
@@ -23,7 +22,7 @@ type CreateCartService struct {
 // Create 创建购物车
 func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 	// 查询商品
-	productParam, code := MProduct.ShowProductParam(service.ProductID)
+	_, code := MProduct.ShowProductParam(service.ProductID)
 	if code != e.SUCCESS {
 		return &resp.Response{
 			Status: code,
@@ -89,6 +88,5 @@ func (service *CreateCartService) Create(ctx context.Context) *resp.Response {
 	return &resp.Response{
 		Status: code,
 		Msg:    e.GetMsg(code),
-		Data:   serializer.BuildCart(cart, productParam),
 	}
 }

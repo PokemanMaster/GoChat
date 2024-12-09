@@ -25,23 +25,10 @@ export default function ConfirmOrder() {
     }, [location.state]); // 将 location.state 添加到依赖数组
 
 
-    // 解析 JSON 格式图片
-    function JsonParseFacade(value) {
-        if (value) {
-            try {
-                const parsedValue = JSON.parse(value); // 解析 JSON 字符串
-                return parsedValue.facade || ""; // 返回 facade 数组，如果不存在则返回空字符串
-            } catch (error) {
-                console.error("JSON解析错误:", error);
-                return ""; // 返回空字符串或处理错误的方式
-            }
-        }
-        return ""; // 如果 value 是 undefined，返回空字符串
-    }
 
     const OrderDetails = [{
         id: "购物车总价",
-        images: order.images,
+        images: order.image,
         name: order.title,
         number: order.num,
         price: order.actualPrice * order.num
@@ -67,7 +54,7 @@ export default function ConfirmOrder() {
                 </div>
                 <div className="order-items">
                     <div className="item">
-                        <img src={JsonParseFacade(order.images)} alt="Item 2"/>
+                        <img src={order.images} alt="Item 2"/>
                         <div className="item-info">
                             <p>{order.title}</p>
                             <p>{order.actualPrice}元 × {order.num}</p>

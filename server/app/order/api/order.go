@@ -20,7 +20,7 @@ func CreateOrder(ctx *gin.Context) {
 	}
 }
 
-// ListOrders 订单详情接口
+// ListOrders 用户订单列表
 func ListOrders(ctx *gin.Context) {
 	services := service.ListOrdersService{}
 	err := ctx.ShouldBind(&services)

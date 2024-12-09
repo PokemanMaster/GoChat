@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/PokemanMaster/GoChat/v1/server/app/product/model"
-	"github.com/PokemanMaster/GoChat/v1/server/app/product/serializer"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/mid"
 	"github.com/PokemanMaster/GoChat/v1/server/resp"
@@ -27,7 +26,7 @@ func (service *SearchProductsService) Show() resp.Response {
 		}
 	}
 
-	productParam, code, err := model.SearchProductParam(validSearch)
+	_, code, err = model.SearchProductParam(validSearch)
 	if code != e.SUCCESS {
 		return resp.Response{
 			Status: code,
@@ -39,6 +38,6 @@ func (service *SearchProductsService) Show() resp.Response {
 	return resp.Response{
 		Status: code,
 		Msg:    e.GetMsg(code),
-		Data:   serializer.BuildProductParams(productParam),
+		//Data:   serializer.BuildProductParams(productParam),
 	}
 }

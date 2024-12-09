@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/PokemanMaster/GoChat/v1/server/app/product/model"
-	"github.com/PokemanMaster/GoChat/v1/server/app/product/serializer"
 	"github.com/PokemanMaster/GoChat/v1/server/common/cache"
 	"github.com/PokemanMaster/GoChat/v1/server/common/db"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
@@ -42,6 +41,6 @@ func (service *ListRankingService) List(ctx context.Context) resp.Response {
 	return resp.Response{
 		Status: code,
 		Msg:    e.GetMsg(code),
-		Data:   serializer.BuildProductParams(products),
+		//Data:   serializer.BuildProductParams(products),
 	}
 }

@@ -28,6 +28,7 @@ export default function OrderDetails() {
     // 展示收货地址信息
     const cart = location.state.Cart
     const WeChatPay = () => {
+        console.log(cart)
         CreatePayAPI({
             "ProductID": cart.product_id,
             "Code" : cart.code,
@@ -100,18 +101,6 @@ export default function OrderDetails() {
                             <h5>平台支付</h5>
                             <div className={"Platform"}>
                                 <Button onClick={WeChatPay}>微信支付</Button>
-                                <Button onClick={WeChatPay}>支付宝支付</Button>
-                                <Button onClick={WeChatPay}>云闪付</Button>
-                                <Button onClick={WeChatPay}>PayPal</Button>
-                            </div>
-                            <h5>银联支付</h5>
-                            <div className={"UnionPay"}>
-                                <Button onClick={WeChatPay}>江苏银行</Button>
-                                <Button onClick={WeChatPay}>中国银行</Button>
-                                <Button onClick={WeChatPay}>招商银行</Button>
-                                <Button onClick={WeChatPay}>工商银行</Button>
-                                <Button onClick={WeChatPay}>建设银行</Button>
-                                <Button onClick={WeChatPay}>农业银行</Button>
                             </div>
                         </div>
                     </Col>

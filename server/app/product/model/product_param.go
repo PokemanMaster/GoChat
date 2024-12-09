@@ -6,28 +6,23 @@ import (
 	"github.com/PokemanMaster/GoChat/v1/server/common/db"
 	"github.com/PokemanMaster/GoChat/v1/server/pkg/e"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 	"strconv"
-	"time"
 )
 
 // ProductParam 商品参数 (Sku)
 type ProductParam struct {
-	ID        uint   `gorm:"primaryKey;autoIncrement;not null;comment:'主键'"`
-	ProductID uint   `gorm:"not null;comment:'产品ID';index:idx_product_id"`
-	Title     string `gorm:"type:varchar(200);not null;comment:'标题'"`
-	//  desc: 商品描述图
-	//	facade：商品展示图
-	//{"desc": \["http://127.0.0.1/1.jpg", "http://127.0.0.1/2.jpg"\], "facade": \["http://127.0.0.1/3.jpg", "http://127.0.0.1/4.jpg"\]}
-	Images string `gorm:"type:json;comment:'商品图片'"`
-	//需要说明的是，当促销时，会有促销价格，需要再多一个额外的价格字段吗？
-	//这个要看业务场景，比如我们做的新零售系统，以会员制，每个会员等级享受折扣不同，就不适合都定义在商品表中，
-	//另外在客户部中定义「会员等级」字段。客户浏览商品的时候看到的价格就是该客户端的会员等级价格。
-	Price          float64   `gorm:"type:decimal(10,2) unsigned;not null;comment:'价格'"`
-	Param          string    `gorm:"type:json;not null;comment:'参数'"`            //{"CPU": "骁龙855", "内存": "128", "电池": 4000, "运存": 8, "屏幕尺寸": 6.39}
-	Saleable       bool      `gorm:"not null;index:idx_saleable;comment:'是否上架'"` // 1 表示上架，0 表示未上架
-	Valid          bool      `gorm:"not null;index:idx_valid;comment:'是否有效'"`
-	CreateTime     time.Time `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP;index:idx_create_time;comment:'添加时间'"`
-	LastUpdateTime time.Time `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;index:idx_last_update_time;comment:'最后修改时间'"`
+	gorm.Model
+	ProductID     uint    `gorm:"type:int;not null;index:idx_product_id;comment:'商品ID'"`
+	Image         string  `gorm:"type:varchar(200);not null;comment:'商品的次图'"`
+	Price         float64 `gorm:"type:decimal(10,2) unsigned;not null;comment:'商品价格'"`
+	DiscountPrice float64 `gorm:"type:decimal(10,2) unsigned;comment:'商品折扣价格'"`
+	Stock         uint    `gorm:"type:int;not null;comment:'库存数量'"`
+	SoldCount     uint    `gorm:"type:int;not null;default:0;comment:'已售数量'"`
+	Weight        float64 `gorm:"type:decimal(10,2);comment:'商品重量'"`
+	Color         string  `gorm:"type:varchar(20);comment:'颜色'"`
+	Size          string  `gorm:"type:varchar(20);comment:'尺寸'"`
+	Saleable      bool    `gorm:"not null;default:true;comment:'是否上架'"`
 }
 
 // SearchProductParam 搜索商品

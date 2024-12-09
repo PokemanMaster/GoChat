@@ -1,69 +1,89 @@
-.search {
-  width: 60%;
-  margin: 17px auto;
+.gochat-sort-body {
+  background-color: #fff;
+  height: 100%;
 }
 
-.genre {
-  background-color: #fff;
-  color: #9E9E9E;
-  padding: 10px;
-  font-size: 14px;
-  align-items: center;
-  cursor: default;
-  border-radius: 15px;
 
-  .genreList {
+.gochat-sort {
+  margin: 0 auto;
+  max-width: 1200px;
+
+  .gochat-sort-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header-logo {
+      width: 170px;
+    }
+
+    .header-search {
+      width: 300px;
+    }
+  }
+
+  .gochat-sort-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .gochat-sort-products {
+    width: 1200px;
     display: flex;
     flex-wrap: wrap;
-    list-style: none;
 
-    .active {
-      background-color: green;
-      border-radius: 15px;
-      color: #fff;
-    }
+    .products-layout {
+      width: 200px;
+      display: flex;
+      flex-direction: column;
+      margin: 10px 20px 5px 20px;
+      background-color: #fff;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 
-    li {
-      padding: 7px 14px;
+      .products-layout-image {
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .products-layout-introduce {
+        .introduce-name {
+          margin-left: 7px;
+          margin-top: 12px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .introduce-value {
+          display: flex;
+          justify-content: space-evenly;
+          align-items: center;
+          margin: 7px 0;
+
+          .introduce-price {
+            display: flex;
+            color: #e02e24;
+            justify-content: center;
+            font-size: 25px;
+            font-weight: 700;
+          }
+
+          .introduce-count {
+            display: flex;
+            justify-content: center;
+            font-size: 15px;
+          }
+        }
+      }
     }
   }
 }
 
-.Products {
-  .Product {
-    display: flex;
-    flex-direction: column;
-    margin: 10px 10px;
-    background-color: #fff;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 
-    .ProductImage {
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    .ProductIntroduce {
-      .ProductIntroduceName {
-        margin-left: 7px;
-        margin-top: 12px;
-        white-space: nowrap; /* 防止文字换行 */
-        overflow: hidden; /* 隐藏溢出的文字 */
-        text-overflow: ellipsis; /* 显示省略号 */
-      }
-
-      .ProductIntroduceValue {
-        display: flex;
-        color: #e02e24;
-        margin-top: 10px;
-        justify-content: center;
-        font-size: 25px;
-        font-weight: 700;
-      }
-    }
-  }
-}
 
 
 
