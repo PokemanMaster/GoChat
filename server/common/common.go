@@ -40,6 +40,8 @@ func Init() {
 		mid.BloomFilterGlobal.Add(itemID)
 	}
 
+	fmt.Println("初始化完成")
+
 	// 初始化日志
 	logger.InitLogger(
 		"./logs/app.log", // 日志文件路径
