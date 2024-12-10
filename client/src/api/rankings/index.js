@@ -10,21 +10,3 @@ export const ListRankingAPI = () => {
         },
     });
 };
-
-
-export const ListElecRankingAPI = () => {
-    return request("api/v1/elec-rankings", {
-        method: 'get', headers: {
-            'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json',
-        },
-    });
-}
-
-
-export const ListAcceRankingAPI = () => {
-    return request("api/v1/acce-rankings", {
-        method: 'get', headers: {
-            'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json',
-        },
-    });
-};

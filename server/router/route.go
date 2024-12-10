@@ -47,9 +47,7 @@ func Router() *gin.Engine {
 		v1.POST("/searches", api4.SearchProducts)            // 搜索商品
 
 		// 商品排行榜
-		v1.GET("rankings", api4.ListRanking)          // 排行榜/热门
-		v1.GET("rankings/elec", api4.ListElecRanking) // 排行榜/家电排行
-		v1.GET("rankings/acce", api4.ListAcceRanking) // 排行榜/配件排行
+		v1.GET("rankings", api4.ListRanking) // 热门商品排行榜
 
 		// 已登录的用户
 		authed := v1.Group("/")

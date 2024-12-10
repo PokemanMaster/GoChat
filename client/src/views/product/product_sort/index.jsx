@@ -1,32 +1,42 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
 import {Col, Layout, Menu, Row} from "antd";
 import Search from "antd/es/input/Search";
 import {ListProductsParamsAPI, SearchProductsAPI} from "../../../api/products";
 import {Link as MuiLink} from "@mui/material";
-import Sider from "antd/es/layout/Sider";
 import "./style.less";
 import Categories from "../../../components/product_sort/categories";
 import CarouselsComponent from "../../../components/product_carousels/carousels";
+import {ListRankingAPI} from "../../../api/rankings";
+import {useLocation, useNavigate} from "react-router-dom";
+import RecordComponent from "../../../components/record";
 
 // 商品分类页
 export default function Goods() {
     const navigateTo = useNavigate();
-    const [ListProducts, setListProducts] = useState([]); // Ensure it starts as an empty array
-    const [activeTab, setActiveTab] = useState(1);
-    const queryParams = new URLSearchParams(window.location.search);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
     const userId = queryParams.get('userId');
 
     // 初始化商品列表
+    const [ListProducts, setListProducts] = useState([]);
+    const [activeTab, setActiveTab] = useState(1);
     useEffect(() => {
         ListProductsParamsAPI({"Limit": 10, "Start": 0, "CategoryID": 1}).then(res => {
-            console.log(res.data.items)
             setListProducts(res.data.items || []);
         }).catch(err => {
             console.error(err);
             setListProducts([]);
         });
     }, []);
+
+    // 初始化排行商品
+    const [ListRanking, setListRanking] = useState([]);
+    useEffect(() => {
+        ListRankingAPI().then(res => {
+            console.log("ListRankingAPI", res.data)
+            setListRanking(res.data)
+        })
+    }, [])
 
     // 处理分类选择
     const ListCategoriesSelectFunc = (category_id) => {
@@ -44,7 +54,7 @@ export default function Goods() {
     function ShowProduct(value) {
         navigateTo(`/layout/product/details/${value.id}?userId=${userId}`, {
             state: {
-                item : value
+                item: value
             }
         });
     }
@@ -102,18 +112,33 @@ export default function Goods() {
                             );
                         })
                     ) : (
-                        <div>No products available</div> // Fallback message when there are no products
+                        <div>No products available</div>
+                    )}
+                </div>
+
+                {/* 排行榜商品 */}
+                <h1>热门商品</h1>
+                <div className={"gochat-sort-products"}>
+                    {ListRanking && ListRanking.length > 0 ? (
+                        ListRanking.map((item) => {
+                            return (
+                                <div onClick={() => ShowProduct(item)} className="products-layout" key={item.ID}>
+                                    <div className="products-layout-image">
+                                        <img src={item.Image} alt={""}/>
+                                    </div>
+                                    <div className="products-layout-introduce">
+                                        <div className="introduce-name">{item.Name}</div>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <div>No products available</div>
                     )}
                 </div>
 
                 {/* 备案号 */}
-                <Row style={{textAlign: 'center'}}>
-                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                        <MuiLink href="https://beian.miit.gov.cn/" underline="none" style={{color: "#333"}}>
-                            桂ICP备2023004200号-2
-                        </MuiLink>
-                    </Col>
-                </Row>
+                <RecordComponent></RecordComponent>
             </div>
         </div>
     );

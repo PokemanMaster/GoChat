@@ -58,9 +58,11 @@ func (service *CreateFriendService) Create() *resp.Response {
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Error:  err.Error(),
 		}
 	}
 
+	contact.ID = 0
 	contact.OwnerID = TargetID
 	contact.TargetID = UserID
 	contact.Type = 1
@@ -72,6 +74,7 @@ func (service *CreateFriendService) Create() *resp.Response {
 		return &resp.Response{
 			Status: e.ERROR_DATABASE,
 			Msg:    e.GetMsg(e.ERROR_DATABASE),
+			Error:  err.Error(),
 		}
 	}
 

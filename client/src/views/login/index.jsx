@@ -95,7 +95,7 @@ export default function Login() {
             const GoChatID = res.data.data.ID || "";
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user' + GoChatID, JSON.stringify(res.data.data));
-            navigateTo(`/layout/home?userId=${GoChatID}`)
+            navigateTo(`/layout/products/sort?userId=${GoChatID}`)
         }).catch(err => {
             if (err.response.data.status === 40001) {
                 handleOpen("账号或者密码不能为空")
