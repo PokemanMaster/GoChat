@@ -62,7 +62,8 @@ export default function Goods() {
     // 搜索
     function SearchProducts(value) {
         SearchProductsAPI({"search": value}).then(res => {
-            setListProducts(res.data || []); // Ensure it's an array
+            console.log(res.data)
+            setListProducts(res.data.items || []); // Ensure it's an array
         }).catch(err => {
             console.log(err);
             setListProducts([]); // If API fails, set to empty array
@@ -122,7 +123,7 @@ export default function Goods() {
                     {ListRanking && ListRanking.length > 0 ? (
                         ListRanking.map((item) => {
                             return (
-                                <div onClick={() => ShowProduct(item)} className="products-layout" key={item.ID}>
+                                <div className="products-layout" key={item.ID}>
                                     <div className="products-layout-image">
                                         <img src={item.Image} alt={""}/>
                                     </div>

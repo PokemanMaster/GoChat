@@ -26,14 +26,14 @@ type ProductParam struct {
 }
 
 // SearchProductParam 搜索商品
-func SearchProductParam(search string) ([]ProductParam, int, error) {
+func SearchProductParam(search string) ([]ProductParam, error) {
 	var productParam []ProductParam
 	err := db.DB.Where("title LIKE ?", "%"+search+"%").Find(&productParam).Error
 	if err != nil {
 		zap.L().Error("查询订单错误", zap.String("app.order.model", "order.go"))
-		return productParam, e.ERROR_DATABASE, err
+		return productParam, err
 	}
-	return productParam, e.SUCCESS, err
+	return productParam, nil
 }
 
 // ShowProductParam 获取商品参数

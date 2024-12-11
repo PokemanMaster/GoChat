@@ -11,13 +11,13 @@ import (
 )
 
 // ValidateSearchInput 防止sql注入
-func ValidateSearchInput(input string) (string, int, error) {
+func ValidateSearchInput(input string) (string, error) {
 	// 允许字母、数字、空格和中文字符
 	re := regexp.MustCompile(`^[\p{L}\p{N} ]+$`)
 	if !re.MatchString(input) {
-		return "", e.ERROR_DATABASE, errors.New("invalid search input")
+		return "", errors.New("invalid search input")
 	}
-	return input, e.SUCCESS, nil
+	return input, nil
 }
 
 func GenerateRandomKey() string {
